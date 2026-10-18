@@ -1,3 +1,8 @@
+// ============================================================================
+// ECOCAMPUS RESOLVE ACCOUNT API — APP/API/RESOLVE-ACCOUNT/ROUTE.TS
+// Live Flutterwave Account Resolution Integration
+// ============================================================================
+
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
