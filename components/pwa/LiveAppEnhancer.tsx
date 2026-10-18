@@ -87,6 +87,7 @@ export default function LiveAppEnhancer() {
     };
   }, []);
 
+  // Real-Time Dynamic Sync Polling (Every 2 seconds for automated updates)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -157,7 +158,7 @@ export default function LiveAppEnhancer() {
           lastKnownBalanceRef.current = updatedActive.balanceKobo;
         }
       } catch {}
-    }, 3500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);

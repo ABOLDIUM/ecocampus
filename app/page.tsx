@@ -34,7 +34,7 @@ export default function EcoCampusDashboardPage() {
   const [toastAlert, setToastAlert] = useState<{ title: string; message: string } | null>(null);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
-  useEffect(() => {
+  const loadActiveUserData = () => {
     const loadedUsers = getUsers();
     const active = getActiveUser();
 
@@ -45,19 +45,36 @@ export default function EcoCampusDashboardPage() {
 
     setCurrentUser(active);
 
+    const other = loadedUsers.find((u) => u.id !== active.id);
+    if (other && !recipientAccount) {
+      setRecipientAccount(other.accountNumber);
+      handleAccountInput(other.accountNumber, "ECOCAMPUS");
+    }
+  };
+
+  useEffect(() => {
+    loadActiveUserData();
+
     const hour = new Date().getHours();
     if (hour < 12) setGreetingText("Good morning");
     else if (hour < 17) setGreetingText("Good afternoon");
     else setGreetingText("Good evening");
 
-    const other = loadedUsers.find((u) => u.id !== active.id);
-    if (other) {
-      setRecipientAccount(other.accountNumber);
-      handleAccountInput(other.accountNumber, "ECOCAMPUS");
-    }
-
     const timer = window.setTimeout(() => setShowSplash(false), 600);
-    return () => window.clearTimeout(timer);
+
+    // Auto-refresh dynamic data when cross-device sync triggers storage events
+    const handleStorageUpdate = () => {
+      loadActiveUserData();
+    };
+
+    window.addEventListener("storage", handleStorageUpdate);
+    const backgroundPoller = setInterval(loadActiveUserData, 2000);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("storage", handleStorageUpdate);
+      clearInterval(backgroundPoller);
+    };
   }, [router]);
 
   function playNotificationSound() {
@@ -73,9 +90,7 @@ export default function EcoCampusDashboardPage() {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.5);
-    } catch {
-      // AudioContext blocked
-    }
+    } catch {}
   }
 
   function triggerNotification(title: string, message: string) {
@@ -168,6 +183,7 @@ export default function EcoCampusDashboardPage() {
 
     saveUsers(all);
     setCurrentUser(all[idx]);
+    window.dispatchEvent(new Event("storage"));
     triggerNotification("Wallet Credited", "Successfully funded ₦5,000.00 via Verve Card.");
   }
 
@@ -189,6 +205,7 @@ export default function EcoCampusDashboardPage() {
       const refreshedUsers = getUsers();
       const updatedSelf = refreshedUsers.find((u) => u.id === currentUser?.id) || currentUser;
       setCurrentUser(updatedSelf);
+      window.dispatchEvent(new Event("storage"));
 
       setFeedback({
         type: "success",
@@ -228,6 +245,7 @@ export default function EcoCampusDashboardPage() {
 
       saveUsers(all);
       setCurrentUser(all[idx]);
+      window.dispatchEvent(new Event("storage"));
 
       setFeedback({
         type: "success",
@@ -481,7 +499,7 @@ export default function EcoCampusDashboardPage() {
         </div>
       </section>
 
-      {/* Secondary Service Grid (Utility replacing one investment tile) */}
+      {/* Secondary Service Grid */}
       <section aria-label="Services Grid" style={{ marginBottom: "0.875rem" }}>
         <div
           style={{
