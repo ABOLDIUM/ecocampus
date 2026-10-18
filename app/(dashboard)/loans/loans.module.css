@@ -1,0 +1,861 @@
+/* ============================================================================
+   ECOCAMPUS FINANCING PORTAL & LOAN ENGINE — CSS MODULE
+   Sprint 2: Zero-Interest Undergrad & NYSC Corper Credit Facility
+   Electric Green (#00E676) × Deep Navy (#001F3F) | LEARN. GROW. ACHIEVE.
+   ============================================================================ */
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background-color: var(--color-bg-base, #F8FAFC);
+  padding: 1.25rem 1rem 6rem;
+  font-family: var(--font-family-body, 'Inter', -apple-system, sans-serif);
+  color: var(--color-text-primary, #0A1628);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ── Top Bar ──────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  border: 1px solid rgba(0, 31, 63, 0.1);
+  color: var(--color-navy-900, #001F3F);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.backBtn:hover {
+  background: #f1f5f9;
+  transform: translateX(-2px);
+}
+
+.headerTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  letter-spacing: -0.02em;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.cbnBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(0, 119, 73, 0.08);
+  border: 1px solid rgba(0, 119, 73, 0.2);
+  color: #007749;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* ── Hero Strategic Comparison Banner (EcoCampus vs NELFUND) ──────────────── */
+.heroComparison {
+  background: linear-gradient(145deg, #001F3F 0%, #0A1628 65%, #002855 100%);
+  border-radius: 20px;
+  padding: 1.35rem;
+  color: white;
+  box-shadow: 0 12px 32px rgba(0, 31, 63, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroComparison::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.heroTag {
+  background: rgba(0, 230, 118, 0.15);
+  border: 1px solid rgba(0, 230, 118, 0.4);
+  color: var(--color-primary, #00E676);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.heroSpeed {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.heroSpeed strong {
+  color: #00E676;
+}
+
+.heroTitle {
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+
+.heroSub {
+  font-size: 0.78rem;
+  color: #CBD5E1;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
+/* Strategic comparison matrix */
+.comparisonGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.compCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.compColTitle {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.compColEco .compColTitle {
+  color: #00E676;
+}
+
+.compColNel .compColTitle {
+  color: #EF4444;
+}
+
+.compItem {
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #E2E8F0;
+}
+
+.compItem.dim {
+  color: #94A3B8;
+}
+
+/* ── Campus Score Radar & Transparency Card ──────────────────────────────── */
+.scoreCard {
+  background: white;
+  border-radius: 18px;
+  padding: 1.25rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.25rem;
+}
+
+.scoreHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.scoreHeading {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.scoreBadgeTier {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.scoreVisualRow {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.scoreGauge {
+  width: 84px;
+  height: 84px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scoreGaugeNumber {
+  position: absolute;
+  text-align: center;
+}
+
+.scoreNumberVal {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--color-navy-900, #001F3F);
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+  line-height: 1;
+}
+
+.scoreNumberMax {
+  font-size: 0.62rem;
+  color: #64748B;
+  font-weight: 700;
+}
+
+.scoreStatsCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.scoreStatItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+}
+
+.scoreStatLabel {
+  color: #64748B;
+}
+
+.scoreStatVal {
+  font-weight: 700;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.scoreBreakdownDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.breakdownBarRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.breakdownLabelRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+}
+
+.breakdownName {
+  color: #475569;
+  font-weight: 600;
+}
+
+.breakdownPts {
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.barTrack {
+  height: 6px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00C853, #00E676);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Active Loan Banner (if user already has active facility) ─────────────── */
+.activeLoanCard {
+  background: linear-gradient(135deg, #0A1628 0%, #001F3F 100%);
+  border-radius: 18px;
+  padding: 1.25rem;
+  color: white;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 31, 63, 0.2);
+}
+
+.activeLoanHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.activeLoanTag {
+  background: rgba(0, 230, 118, 0.2);
+  color: #00E676;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.activeLoanRef {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-family: monospace;
+}
+
+.activeLoanAmounts {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.85rem;
+}
+
+.activeLoanBalTitle {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.activeLoanBalVal {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: white;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.activeLoanNextDue {
+  text-align: right;
+  font-size: 0.72rem;
+  color: #CBD5E1;
+}
+
+.activeLoanNextDue strong {
+  color: #00E676;
+}
+
+.repayBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #001F3F;
+  border: none;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 230, 118, 0.3);
+}
+
+.repayBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 230, 118, 0.4);
+}
+
+/* ── Tab Switcher: Student vs NYSC Corper ─────────────────────────────────── */
+.tabRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #E2E8F0;
+  border-radius: 14px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 11px;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.tabBtnActive {
+  background: white;
+  color: var(--color-navy-900, #001F3F);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Loan Calculator Card ────────────────────────────────────────────────── */
+.calcCard {
+  background: white;
+  border-radius: 20px;
+  padding: 1.35rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem;
+}
+
+.calcCardTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  margin-bottom: 0.25rem;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.calcCardSub {
+  font-size: 0.78rem;
+  color: #64748B;
+  margin-bottom: 1.25rem;
+}
+
+.sliderGroup {
+  margin-bottom: 1.25rem;
+}
+
+.sliderLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.sliderLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.sliderAmountVal {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-navy-900, #001F3F);
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.sliderInput {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  outline: none;
+  background: #E2E8F0;
+  accent-color: #00C853;
+  cursor: pointer;
+}
+
+.sliderRangeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #94A3B8;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+/* Key Metrics Strip inside Calculator */
+.metricsStrip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.75rem 0.5rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.metricTitle {
+  font-size: 0.66rem;
+  color: #64748B;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.metricValue {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.metricZeroInterest {
+  color: #059669;
+  font-weight: 900;
+}
+
+/* Form Groups */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.formInput, .formSelect {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+  font-size: 0.88rem;
+  color: #0F172A;
+  background: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.formInput:focus, .formSelect:focus {
+  outline: none;
+  border-color: #00C853;
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.15);
+}
+
+/* Target Selector (Bursary vs Student Wallet) */
+.disbursementOptionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.disburseOptionCard {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.disburseOptionCardActive {
+  border-color: #00C853;
+  background: #F0FDF4;
+}
+
+.disburseOptTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.disburseOptSub {
+  font-size: 0.68rem;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+/* ── GSI Mandate Callout & Security ───────────────────────────────────────── */
+.gsiCallout {
+  background: #F8FAFC;
+  border: 1px dashed #CBD5E1;
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.gsiIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.gsiText {
+  font-size: 0.72rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.gsiText strong {
+  color: var(--color-navy-900, #001F3F);
+}
+
+/* Primary CTA Button */
+.ctaBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #001F3F;
+  border: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.9rem;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 230, 118, 0.35);
+}
+
+.ctaBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 230, 118, 0.45);
+}
+
+.ctaBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Interactive GSI Mandate Modal ────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 63, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalCard {
+  background: white;
+  border-radius: 24px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid #E2E8F0;
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modalTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.closeModalBtn {
+  background: #F1F5F9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+}
+
+.mandateBox {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 0.85rem;
+  font-size: 0.72rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.signaturePadArea {
+  border: 2px dashed #94A3B8;
+  border-radius: 12px;
+  height: 110px;
+  background: #FAF5FF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.signaturePadAreaSigned {
+  border-style: solid;
+  border-color: #00C853;
+  background: #F0FDF4;
+}
+
+.sigText {
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  font-size: 1.8rem;
+  color: #001F3F;
+}
+
+.nibssBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #64748B;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.6rem;
+  background: #F1F5F9;
+  border-radius: 8px;
+}
+
+/* ── Live Core Banking Disbursement Animation State ───────────────────────── */
+.disbursementState {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.spinnerCircle {
+  width: 64px;
+  height: 64px;
+  border: 5px solid #E2E8F0;
+  border-top-color: #00E676;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.25rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.successIcon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #ECFDF5;
+  border: 2px solid #00E676;
+  color: #00C853;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Bottom Nav */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 31, 63, 0.08);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.55rem 0.5rem 0.75rem;
+  z-index: 50;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.bottomNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748B;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bottomNavItemActive {
+  color: #007749;
+}

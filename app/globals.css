@@ -14,4 +14,35 @@
 html,
 body {
   min-height: 100%;
+  font-family: var(--ec-font-body);
+  background: var(--ec-bg-page);
+  color: var(--ec-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(0, 200, 83, 0.2);
+  color: var(--ec-text-primary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ec-bg-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ec-green-vivid);
+  border-radius: var(--ec-radius-pill);
 }

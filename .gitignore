@@ -3,6 +3,7 @@
 /.pnp
 .pnp.js
 
+dev-docs
 # Next.js build output
 /.next/
 /out/

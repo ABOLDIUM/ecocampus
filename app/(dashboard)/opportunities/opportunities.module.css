@@ -1,0 +1,559 @@
+/* ============================================================================
+   ECOCAMPUS OPPORTUNITY HUB & CAREER ACCELERATOR — CSS MODULE
+   Sprint 4: Ecobank Talent Pipeline, NYSC PPA Matcher & Subsidized Digital Skills
+   Electric Green (#00E676) × Deep Navy (#001F3F) | LEARN. GROW. ACHIEVE.
+   ============================================================================ */
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background-color: var(--color-bg-base, #F8FAFC);
+  padding: 1.25rem 1rem 6rem;
+  font-family: var(--font-family-body, 'Inter', -apple-system, sans-serif);
+  color: var(--color-text-primary, #0A1628);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ── Top Header ───────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  border: 1px solid rgba(0, 31, 63, 0.1);
+  color: var(--color-navy-900, #001F3F);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.backBtn:hover {
+  background: #f1f5f9;
+  transform: translateX(-2px);
+}
+
+.headerTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  letter-spacing: -0.02em;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.talentBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(0, 119, 73, 0.08);
+  border: 1px solid rgba(0, 119, 73, 0.2);
+  color: #007749;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+}
+
+/* ── Hero Strategic Banner ────────────────────────────────────────────────── */
+.heroBanner {
+  background: linear-gradient(145deg, #001F3F 0%, #0A1628 65%, #002855 100%);
+  border-radius: 20px;
+  padding: 1.35rem;
+  color: white;
+  box-shadow: 0 12px 32px rgba(0, 31, 63, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroTagRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.heroTag {
+  background: rgba(0, 230, 118, 0.18);
+  border: 1px solid rgba(0, 230, 118, 0.4);
+  color: #00E676;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.heroStipendAvg {
+  font-size: 0.72rem;
+  color: #94A3B8;
+}
+
+.heroStipendAvg strong {
+  color: #00E676;
+}
+
+.heroTitle {
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.heroSub {
+  font-size: 0.76rem;
+  color: #CBD5E1;
+  line-height: 1.45;
+  margin-bottom: 0.9rem;
+}
+
+.heroPerksRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+}
+
+.perkItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.perkVal {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #00E676;
+}
+
+.perkLabel {
+  font-size: 0.62rem;
+  color: #CBD5E1;
+}
+
+/* ── Track Switcher Tabs ──────────────────────────────────────────────────── */
+.tabRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #E2E8F0;
+  border-radius: 14px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  border-radius: 11px;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.tabBtnActive {
+  background: white;
+  color: var(--color-navy-900, #001F3F);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Category Filter Pills ────────────────────────────────────────────────── */
+.categoryPills {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.25rem;
+  scrollbar-width: none;
+}
+
+.categoryPills::-webkit-scrollbar {
+  display: none;
+}
+
+.categoryPill {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.categoryPillActive {
+  background: #001F3F;
+  color: #00E676;
+  border-color: #001F3F;
+  box-shadow: 0 2px 8px rgba(0, 31, 63, 0.15);
+}
+
+/* ── Opportunities Listings Grid ─────────────────────────────────────────── */
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.oppCard {
+  background: white;
+  border-radius: 18px;
+  padding: 1.15rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.oppCard:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.oppCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.companyBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.companyLogoBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.companyName {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.oppTypeBadge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.oppTypeNysc {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: #FDE68A;
+}
+
+.oppTitle {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.oppDesc {
+  font-size: 0.75rem;
+  color: #64748B;
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+}
+
+.oppDetailsStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  background: #F8FAFC;
+  border: 1px solid #F1F5F9;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.72rem;
+}
+
+.detailChip {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #475569;
+}
+
+.detailChip strong {
+  color: var(--color-navy-900, #001F3F);
+}
+
+.oppActionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.65rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.stipendHighlight {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #007749;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.applyBtn {
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #001F3F;
+  border: none;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 230, 118, 0.25);
+}
+
+.applyBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 230, 118, 0.35);
+}
+
+/* ── Digital Skills Course Cards ─────────────────────────────────────────── */
+.courseCard {
+  background: white;
+  border-radius: 18px;
+  padding: 1.15rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.courseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.courseScoreBoostTag {
+  background: #F0FDF4;
+  border: 1px solid #86EFAC;
+  color: #007749;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.coursePricingRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.subsidizedPrice {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #007749;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.retailPriceCrossed {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  text-decoration: line-through;
+}
+
+/* ── FastTrack Modal ──────────────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 63, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalCard {
+  background: white;
+  border-radius: 24px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid #E2E8F0;
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modalTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.closeModalBtn {
+  background: #F1F5F9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+}
+
+.fastTrackCredentialsBox {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.credentialRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  margin-bottom: 0.4rem;
+}
+
+.credLabel {
+  color: #64748B;
+}
+
+.credValue {
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+}
+
+.primaryModalBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #001F3F;
+  border: none;
+  font-weight: 800;
+  font-size: 0.92rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 230, 118, 0.35);
+}
+
+.primaryModalBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 230, 118, 0.45);
+}
+
+/* Bottom Nav */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 31, 63, 0.08);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.55rem 0.5rem 0.75rem;
+  z-index: 50;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.bottomNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748B;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bottomNavItemActive {
+  color: #007749;
+}
