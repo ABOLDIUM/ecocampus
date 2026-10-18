@@ -6,6 +6,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SupportWidget } from "@/components/support/SupportWidget";
+import LiveAppEnhancer from "@/components/pwa/LiveAppEnhancer";
 
 export const metadata: Metadata = {
   title: "EcoCampus — Student FinTech & Ecobank Digital Banking",
@@ -45,6 +46,7 @@ export default function RootLayout({
       >
         {children}
         <SupportWidget />
+        <LiveAppEnhancer />
       </body>
     </html>
   );

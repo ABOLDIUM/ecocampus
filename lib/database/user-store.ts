@@ -96,6 +96,12 @@ export function getUsers(): EcoUser[] {
 export function saveUsers(users: EcoUser[]): void {
   if (typeof window !== "undefined") {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+    // Automatically push changes to the backend sync route for teammate testing
+    fetch("/api/users-sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ users }),
+    }).catch(() => {});
   }
 }
 
