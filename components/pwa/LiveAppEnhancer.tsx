@@ -229,11 +229,11 @@ export default function LiveAppEnhancer() {
             transform: "translateX(-50%)",
             zIndex: 99998,
             width: "92%",
-            maxWidth: "410px",
+            maxWidth: "380px",
             background: "#0B192C",
             color: "#ffffff",
             borderRadius: "16px",
-            padding: "14px 16px",
+            padding: "14px 18px",
             boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
             border: "1px solid rgba(0, 130, 198, 0.45)",
             display: "flex",
@@ -242,13 +242,8 @@ export default function LiveAppEnhancer() {
             gap: "12px",
           }}
         >
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "13px", fontWeight: 700, color: "#A3D900" }}>
-              Install EcoCampus Full-Screen App
-            </div>
-            <div style={{ fontSize: "11.5px", color: "#cbd5e1", marginTop: "2px" }}>
-              Get instant sound alerts, faster login & full-screen mobile banking.
-            </div>
+          <div style={{ fontSize: "14px", fontWeight: 700, color: "#A3D900" }}>
+            Install EcoCampus App
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <button
@@ -262,7 +257,6 @@ export default function LiveAppEnhancer() {
                 fontSize: "12px",
                 fontWeight: 700,
                 cursor: "pointer",
-                whiteSpace: "nowrap",
               }}
             >
               Install
@@ -277,7 +271,7 @@ export default function LiveAppEnhancer() {
                 cursor: "pointer",
                 padding: "4px",
               }}
-              aria-label="Close install banner"
+              aria-label="Close"
             >
               ✕
             </button>
