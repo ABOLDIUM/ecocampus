@@ -120,6 +120,23 @@ export function setActiveUserId(id: string): void {
   }
 }
 
+export function setActiveUser(userOrId: string | EcoUser): void {
+  if (typeof window === "undefined") return;
+  if (typeof userOrId === "string") {
+    localStorage.setItem(ACTIVE_USER_KEY, userOrId);
+    return;
+  }
+  const users = getUsers();
+  const existingIdx = users.findIndex((u) => u.id === userOrId.id);
+  if (existingIdx !== -1) {
+    users[existingIdx] = userOrId;
+  } else {
+    users.unshift(userOrId);
+  }
+  saveUsers(users);
+  localStorage.setItem(ACTIVE_USER_KEY, userOrId.id);
+}
+
 export function registerNewUser(data: {
   fullName: string;
   firstName: string;

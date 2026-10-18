@@ -1,6 +1,24 @@
+// ============================================================================
+// ECOCAMPUS NIGERIAN INSTITUTIONS DATA — LIB/DATA/NIGERIAN-INSTITUTIONS.TS
+// ============================================================================
+
 export interface UniversityRecord {
   name: string;
   ownership: "Federal" | "State";
+}
+
+export interface NigerianInstitution extends UniversityRecord {
+  id: string;
+  code: string;
+  shortName: string;
+  acronym: string;
+  state: string;
+  category: "FEDERAL" | "STATE" | "PRIVATE";
+  type: "FEDERAL" | "STATE" | "PRIVATE";
+  bursaryAccount: string;
+  bankName: string;
+  bankCode: string;
+  matricFormatHint?: string;
 }
 
 export const PUBLIC_UNIVERSITIES: UniversityRecord[] = [
@@ -152,8 +170,38 @@ export const PUBLIC_UNIVERSITIES: UniversityRecord[] = [
   { name: "University of Aeronautics and Aerospace Engineering, Ezza", ownership: "State" },
   { name: "University of Innovation, Science and Technology, Omuma", ownership: "State" },
   { name: "Taraba State University of Tropical Agriculture", ownership: "State" },
-  { name: "Jigawa State University of Medical and Allied Health Sciences", ownership: "State" }
+  { name: "Jigawa State University of Medical and Allied Health Sciences", ownership: "State" },
 ];
+
+// Enrich PUBLIC_UNIVERSITIES into NUC_UNIVERSITIES so pages expecting id, code, shortName, or bursaryAccount never crash
+export const NUC_UNIVERSITIES: NigerianInstitution[] = PUBLIC_UNIVERSITIES.map((uni, idx) => {
+  const words = uni.name.replace(/[^a-zA-Z\s]/g, "").split(/\s+/).filter(Boolean);
+  const acronym = words
+    .filter((w) => !["of", "and", "in", "the"].includes(w.toLowerCase()))
+    .map((w) => w[0]?.toUpperCase() || "")
+    .join("");
+  const slug = uni.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const upperType = uni.ownership.toUpperCase() as "FEDERAL" | "STATE";
+  const acctSuffix = String(10000000 + idx * 7919).slice(0, 8);
+
+  return {
+    ...uni,
+    id: slug,
+    code: acronym || `UNI${idx + 1}`,
+    shortName: acronym || uni.name,
+    acronym: acronym || `UNI${idx + 1}`,
+    state: "Nigeria",
+    category: upperType,
+    type: upperType,
+    bursaryAccount: `00${acctSuffix}`,
+    bankName: "Ecobank Nigeria",
+    bankCode: "050",
+    matricFormatHint: "e.g. 24/203MBB/472",
+  };
+});
+
+export const NIGERIAN_INSTITUTIONS: NigerianInstitution[] = NUC_UNIVERSITIES;
+export const UNIVERSITIES: NigerianInstitution[] = NUC_UNIVERSITIES;
 
 export const NYSC_STATE_PREFIXES: Record<string, string> = {
   FC: "FCT Abuja",
@@ -202,3 +250,5 @@ export function generateNyscStateCode(stateCode = "FC", batch = "26A"): string {
   const serial = Math.floor(1000 + Math.random() * 9000);
   return `${stateCode.toUpperCase()}/${batch.toUpperCase()}/${serial}`;
 }
+
+export default NUC_UNIVERSITIES;
