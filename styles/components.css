@@ -1,0 +1,75 @@
+/* ==========================================================================
+   EcoCampus Shared Component Classes (No Inline CSS)
+   ========================================================================== */
+
+.ec-shell-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 5.5rem;
+}
+
+.ec-card {
+  background-color: var(--ec-bg-surface);
+  border: 1px solid var(--ec-border-subtle);
+  border-radius: var(--ec-radius-lg);
+  box-shadow: var(--ec-shadow-sm);
+  padding: 1.25rem;
+}
+
+.ec-balance-hero {
+  background: var(--ec-gradient-balance);
+  color: #ffffff;
+  border-radius: var(--ec-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--ec-shadow-md);
+}
+
+.ec-badge-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--ec-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: var(--ec-green-100);
+  color: var(--ec-green-900);
+  border: 1px solid var(--ec-green-500);
+}
+
+.ec-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--ec-radius-md);
+  border: none;
+  background: var(--ec-gradient-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.ec-btn-primary:hover {
+  opacity: 0.94;
+}
+
+.ec-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--ec-radius-md);
+  border: 1px solid var(--ec-blue-700);
+  background-color: var(--ec-bg-surface);
+  color: var(--ec-blue-800);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  text-decoration: none;
+}

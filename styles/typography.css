@@ -1,0 +1,24 @@
+/* ==========================================================================
+   EcoCampus Typography Rules
+   ========================================================================== */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ec-text-primary);
+  background-color: var(--ec-bg-page);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ec-motto-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ec-blue-800);
+}
+
+.ec-mono-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}

@@ -1,0 +1,429 @@
+.splashOverlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #ffffff 0%, #f0f7ff 55%, #e8faed 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.splashCard {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 50px rgba(0, 59, 115, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 380px;
+  width: 100%;
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 6px;
+  background-color: var(--ec-blue-100);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  width: 68%;
+  height: 100%;
+  background: var(--ec-gradient-primary);
+  border-radius: 999px;
+  animation: pulseSlide 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseSlide {
+  from {
+    transform: translateX(-25%);
+  }
+  to {
+    transform: translateX(45%);
+  }
+}
+
+.userSwitcherBar {
+  background-color: var(--ec-blue-900);
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+  border-radius: var(--ec-radius-md);
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.switcherLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.switcherControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userSelect {
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--ec-radius-sm);
+  border: 1px solid var(--ec-blue-500);
+  background-color: #ffffff;
+  color: var(--ec-text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.topGreetingBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.greetingLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatarCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ec-gradient-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.greetingTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--ec-text-primary);
+}
+
+.greetingSub {
+  font-size: 0.78rem;
+  color: var(--ec-text-secondary);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.notifPill {
+  background-color: var(--ec-bg-surface);
+  border: 1px solid var(--ec-border-subtle);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--ec-radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ec-blue-800);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.notifCount {
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+}
+
+.balanceCard {
+  background: linear-gradient(135deg, #138a36 0%, #0f6e4b 55%, #003b73 100%);
+  color: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.35rem 1.5rem;
+  box-shadow: var(--ec-shadow-md);
+  margin-bottom: 1.25rem;
+}
+
+.balanceTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.84rem;
+}
+
+.balanceLabelGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyeToggleBtn {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--ec-radius-pill);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.balanceMainRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.balanceAmount {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.addMoneyBtn {
+  background-color: #ffffff;
+  color: var(--ec-green-900);
+  border: none;
+  border-radius: var(--ec-radius-pill);
+  padding: 0.55rem 1.15rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.accountMetaBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+}
+
+.dashboardMainGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.cardSectionTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ec-blue-900);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.transferRowGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.quickTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.85rem 0.5rem;
+  background-color: var(--ec-bg-page);
+  border: 1px solid var(--ec-border-subtle);
+  border-radius: var(--ec-radius-md);
+  text-decoration: none;
+  color: var(--ec-text-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.quickTile:hover {
+  border-color: var(--ec-green-600);
+  background-color: var(--ec-green-50);
+}
+
+.tileIconBadge {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  background-color: var(--ec-green-100);
+  color: var(--ec-green-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+.txList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.txItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--ec-border-subtle);
+}
+
+.txItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.txTitle {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ec-text-primary);
+}
+
+.txMeta {
+  font-size: 0.74rem;
+  color: var(--ec-text-muted);
+}
+
+.txCredit {
+  color: var(--ec-green-700);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.txDebit {
+  color: var(--ec-text-primary);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.formLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ec-text-secondary);
+}
+
+.formInput {
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--ec-radius-sm);
+  border: 1px solid var(--ec-border-subtle);
+  font-size: 0.88rem;
+}
+
+.resolvedBanner {
+  background-color: var(--ec-green-100);
+  color: var(--ec-green-900);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--ec-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.errorBanner {
+  background-color: var(--ec-danger-bg);
+  color: var(--ec-danger-text);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--ec-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border-top: 1px solid var(--ec-border-subtle);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.6rem 0.5rem;
+  z-index: 100;
+}
+
+.bottomNavItem {
+  text-decoration: none;
+  color: var(--ec-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.bottomNavActive {
+  color: var(--ec-green-700);
+}
+
+@media (max-width: 820px) {
+  .dashboardMainGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Full-Screen Native Mobile Phone Responsiveness */
+@media (max-width: 640px) {
+  .appViewport {
+    max-width: 100% !important;
+    width: 100vw !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 1rem 0.9rem 5.5rem 0.9rem !important;
+  }
+
+  .bottomNav {
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 1.1rem 1.1rem 0 0 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem) !important;
+  }
+}

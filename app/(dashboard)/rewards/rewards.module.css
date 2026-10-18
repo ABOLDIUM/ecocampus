@@ -1,0 +1,111 @@
+.rewardsContainer {
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f4f6fa;
+  padding: 1rem 0.875rem 5.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.backLink {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #003b73;
+  text-decoration: none;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bannerCard {
+  background: linear-gradient(135deg, #003b73 0%, #137a32 100%);
+  border-radius: 1.125rem;
+  padding: 1.25rem;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.bannerTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fde047;
+  margin-bottom: 0.35rem;
+}
+
+.bannerDesc {
+  font-size: 0.82rem;
+  opacity: 0.92;
+  margin-bottom: 1rem;
+}
+
+.codeBox {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.copyBtn {
+  display: block;
+  width: 100%;
+  background-color: #facc15;
+  color: #0f172a;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sectionCard {
+  background-color: #ffffff;
+  border-radius: 1.125rem;
+  padding: 1.125rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+}
+
+.streakGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.streakDay {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.2rem;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.streakDayActive {
+  background-color: #e8faed;
+  border-color: #179c3e;
+  color: #166534;
+  font-weight: 700;
+}

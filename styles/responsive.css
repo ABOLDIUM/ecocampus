@@ -1,0 +1,26 @@
+/* ==========================================================================
+   EcoCampus Responsive Grid & Mobile Fintech Navigation Layout
+   ========================================================================== */
+
+.ec-grid-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.ec-grid-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .ec-grid-quick-actions {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .ec-shell-container {
+    padding: 0.875rem 0.75rem 5.5rem;
+  }
+}

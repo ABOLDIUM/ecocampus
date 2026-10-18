@@ -1,0 +1,58 @@
+/* ==========================================================================
+   EcoCampus Design System Tokens (Derived from official EcoCampus Logo)
+   Official Motto: LEARN. GROW. ACHIEVE.
+   ========================================================================== */
+
+:root {
+  /* Brand Blues (Graduation Cap & 'Eco' Wordmark) */
+  --ec-blue-900: #00264d;
+  --ec-blue-800: #003b73;
+  --ec-blue-700: #00529b;
+  --ec-blue-600: #0066cc;
+  --ec-blue-500: #0a7cff;
+  --ec-blue-100: #e6f2ff;
+  --ec-blue-50: #f2f8ff;
+
+  /* Brand Greens ('Campus' Wordmark & Leaf Emblem Swooshes) */
+  --ec-green-900: #0b5322;
+  --ec-green-700: #137a32;
+  --ec-green-600: #179c3e;
+  --ec-green-500: #2cc956;
+  --ec-green-400: #68e370;
+  --ec-green-100: #e8faed;
+  --ec-green-50: #f3fcf5;
+
+  /* Neutral Surface & Text Palette */
+  --ec-bg-page: #f4f7fb;
+  --ec-bg-surface: #ffffff;
+  --ec-bg-subtle: #edf2f7;
+  --ec-text-primary: #0f172a;
+  --ec-text-secondary: #475569;
+  --ec-text-muted: #64748b;
+  --ec-border-subtle: #e2e8f0;
+  --ec-border-focus: #0066cc;
+
+  /* Semantic Status Colors */
+  --ec-success-bg: #dcfce7;
+  --ec-success-text: #166534;
+  --ec-warning-bg: #fef9c3;
+  --ec-warning-text: #854d0e;
+  --ec-danger-bg: #fee2e2;
+  --ec-danger-text: #991b1b;
+
+  /* Gradients */
+  --ec-gradient-primary: linear-gradient(135deg, #003b73 0%, #0066cc 55%, #179c3e 100%);
+  --ec-gradient-balance: linear-gradient(135deg, #003b73 0%, #0d6e52 55%, #179c3e 100%);
+  --ec-gradient-card-verve: linear-gradient(135deg, #00264d 0%, #00529b 60%, #137a32 100%);
+
+  /* Spacing & Radii */
+  --ec-radius-sm: 0.5rem;
+  --ec-radius-md: 0.875rem;
+  --ec-radius-lg: 1.25rem;
+  --ec-radius-pill: 9999px;
+
+  /* Shadows */
+  --ec-shadow-sm: 0 2px 8px rgba(0, 38, 77, 0.06);
+  --ec-shadow-md: 0 8px 24px rgba(0, 38, 77, 0.10);
+  --ec-shadow-lg: 0 16px 40px rgba(0, 38, 77, 0.14);
+}
