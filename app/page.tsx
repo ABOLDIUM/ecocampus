@@ -505,11 +505,6 @@ export default function EcoCampusDashboardPage() {
                   Copy
                 </button>
               </div>
-              {currentUser.cashbackKobo > 0 && (
-                <span className={styles.opayCashbackBadge}>
-                  +{formatKoboToNaira(currentUser.cashbackKobo, hideBalance)} cashback
-                </span>
-              )}
             </div>
           </section>
 

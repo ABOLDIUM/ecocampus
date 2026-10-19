@@ -278,13 +278,14 @@
 }
 
 .avatarRing {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--ec-gradient-green);
   padding: 2px;
   cursor: pointer;
   transition: transform var(--ec-duration-fast) var(--ec-ease-bounce);
+  flex-shrink: 0;
 }
 
 .avatarRing:hover {
@@ -302,7 +303,7 @@
   justify-content: center;
   color: #ffffff;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 0.88rem;
   font-family: var(--ec-font-display);
 }
 
@@ -310,8 +311,8 @@
   position: absolute;
   bottom: 1px;
   right: 1px;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--ec-green-neon);
   border: 2px solid var(--ec-bg-page);
@@ -324,27 +325,27 @@
 
 .greetingTitle {
   font-family: var(--ec-font-display);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--ec-text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.3;
+  line-height: 1.25;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .greetingSub {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--ec-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-shrink: 0;
 }
 
@@ -352,13 +353,13 @@
 .pioneerBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
   background: var(--ec-navy-900);
   color: var(--ec-green-neon);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
   font-family: var(--ec-font-display);
-  padding: 0.3rem 0.6rem;
+  padding: 0.22rem 0.5rem;
   border-radius: var(--ec-radius-pill);
   border: 1px solid rgba(0, 230, 118, 0.35);
   letter-spacing: 0.02em;
@@ -381,8 +382,8 @@
 /* Notification Bell */
 .notifBtn {
   position: relative;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--ec-bg-surface);
   border: 1px solid var(--ec-border);
@@ -393,6 +394,7 @@
   color: var(--ec-text-secondary);
   transition: all var(--ec-duration-fast) var(--ec-ease-smooth);
   box-shadow: var(--ec-shadow-xs);
+  flex-shrink: 0;
 }
 
 .notifBtn:hover {
@@ -516,12 +518,12 @@
   color: #007A4D;
   border: none;
   border-radius: 9999px;
-  padding: 0.52rem 1.05rem;
+  padding: 0.36rem 0.8rem;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -1508,7 +1510,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ── Media Queries ───────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .appViewport {
     max-width: 100% !important;
@@ -1520,5 +1521,73 @@
     right: 0 !important;
     transform: none !important;
     max-width: 100% !important;
+  }
+
+  /* Compact Hero & Header for mobile */
+  .topGreetingBar {
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .greetingLeft {
+    gap: 0.45rem;
+  }
+
+  .avatarRing {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avatarInner {
+    font-size: 0.8rem;
+  }
+
+  .greetingTitle {
+    font-size: 0.88rem;
+    line-height: 1.25;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .greetingSub {
+    font-size: 0.65rem;
+  }
+
+  .headerActions {
+    gap: 0.3rem;
+  }
+
+  .pioneerBadge {
+    font-size: 0.58rem;
+    padding: 0.18rem 0.4rem;
+  }
+
+  .notifBtn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .notifBtn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .opayHeroCard {
+    padding: 1.1rem 1rem 0.95rem 1rem;
+    border-radius: 16px;
+  }
+
+  .opayBalanceRow {
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .opayBalanceAmount {
+    font-size: 1.55rem;
+  }
+
+  .opayAddMoneyBtn {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.68rem;
   }
 }
