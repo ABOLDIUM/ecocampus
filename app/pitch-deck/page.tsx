@@ -1,6 +1,7 @@
 // ============================================================================
-// ECOCAMPUS MASTER PITCH DECK & TEAM REHEARSAL SUITE — APP/PITCH-DECK/PAGE.TSX
-// Print-to-PDF Ready | 9-Slide Presentation for Ecobank Hackathon Judges
+// ECOCAMPUS MASTER PITCH DECK & EXECUTIVE REHEARSAL SUITE — APP/PITCH-DECK/PAGE.TSX
+// Clean Light Corporate | 7-Slide Master Deck for Ecobank Hackathon Judges
+// Prepared for: ADEBANKE Oladejo, VICTOR Yalokwu, BABAWALE John
 // Official Motto: LEARN. GROW. ACHIEVE.
 // ============================================================================
 
@@ -11,6 +12,7 @@ import styles from "./pitch.module.css";
 
 interface SlideData {
   number: number;
+  category: string;
   title: string;
   hook: string;
   time: string;
@@ -24,235 +26,202 @@ interface SlideData {
 const SLIDES: SlideData[] = [
   {
     number: 1,
-    title: "EcoCampus — The Operating System for Nigerian Tertiary Education",
-    hook: "Transforming Ecobank Blaze from a basic youth debit card into an indispensable daily ecosystem where 2.5 million students live, learn, trade, and achieve.",
+    category: "Strategic Vision",
+    title: "EcoCampus: The Youth Financial Operating System",
+    hook: "Transforming Ecobank Blaze from a basic youth debit card into an indispensable daily ecosystem where 2.5 million Nigerian undergraduates and 350,000 corps members live, trade, upskill, and launch their careers.",
     time: "45 Seconds",
     bullets: [
       {
-        heading: "Ecobank Blaze 2.0 Strategic Tie-In:",
+        heading: "Beyond a Loan Platform (An Integrated Financial Ecosystem):",
+        text: "EcoCampus is not a single-purpose lending app; it is a full financial and career operating system bridging tertiary liquidity, campus commerce, and post-graduate corporate employment into one unified mobile experience.",
+      },
+      {
+        heading: "Ecobank Blaze 2.0 Integration:",
         text: "While traditional banks treat students as low-yield accounts with zero activity, EcoCampus embeds Ecobank directly into the daily campus workflow—from bursary tuition financing to hostel commerce and corporate job placement.",
       },
       {
         heading: "Early-Adopter Virality & Identity:",
-        text: "Featuring individual Pioneer Member numbers (e.g., #000247) and gamified Campus Credit Scores that establish psychological pride and immediate network effects across campuses.",
-      },
-      {
-        heading: "The Core Motto:",
-        text: "LEARN. GROW. ACHIEVE. Connecting education, financial liquidity, and post-graduate employment into one unified mobile experience.",
+        text: "Featuring individual Pioneer Member credentials (e.g., #000247) and gamified Campus Credit Scores (0–1000) that establish psychological pride and immediate network effects across campuses.",
       },
     ],
-    visualSuggestion: "Left: Heavy bold typography, Ecobank Blaze co-branded badge, and Team introduction credentials; Right: Device mockup showcasing the live Home Dashboard with the #000247 pioneer badge and 720 Campus Score ring.",
+    visualSuggestion: "Left: Heavy bold typography, Ecobank Blaze co-branded badge, and executive team credentials; Right: High-resolution mobile mockup showcasing the live Home Dashboard with the #000247 pioneer badge and 720 Campus Score ring.",
     imageSrc: "/pitch/dashboard.png",
-    imageCaption: "Live Production Dashboard: Pioneer Badge #000247, 720 Campus Score, and GSI Banner",
-    script: "Good day, esteemed judges—Adebanke Oladejo, Victor Yalokwu, and Babawale John. Today, we are proud to introduce EcoCampus: the next-generation financial and career operating system built natively on Ecobank. Traditional youth banking in Nigeria has historically been reduced to handing students a plastic debit card with zero stickiness. EcoCampus takes the Ecobank Blaze youth vision and transforms it into the daily platform where 2.5 million Nigerian undergraduates live online. By combining rapid-disbursement zero-interest loans, fraud-free campus escrow commerce, and direct corporate recruitment pipelines, we are onboarding the next generation of lifelong corporate banking customers today.",
+    imageCaption: "Live Production Dashboard: Pioneer Badge #000247, 720 Campus Score, and live Ecobank Rails",
+    script: "Good day, esteemed judges—Adebanke Oladejo, Victor Yalokwu, and Babawale John. Today, we are proud to introduce EcoCampus: the next-generation youth financial and career operating system built natively on Ecobank. Traditional youth banking in Nigeria has historically been reduced to issuing a plastic debit card with zero engagement. EcoCampus transforms the Ecobank Blaze youth vision into the daily platform where 2.5 million undergraduates and 350,000 corps members manage their financial and academic lives. By integrating 24-48hr zero-interest tuition liquidity, fraud-free campus escrow commerce, and direct corporate recruitment pipelines, we onboard the next generation of lifelong corporate and commercial banking clients today.",
   },
   {
     number: 2,
-    title: "The Problem — Bureaucratic Paralysis, Campus Scams & The NYSC Cliff",
-    hook: "Nigerian students aren't dropping out because they lack ambition; they're dropping out because institutional support systems are broken, predatory, and disconnected.",
+    category: "Problem Architecture",
+    title: "The Macro Crisis: Structural Failure in Tertiary Education Financing",
+    hook: "Nigerian students aren't failing because they lack ambition; they are trapped by broken, slow, and predatory institutional frameworks.",
     time: "60 Seconds",
     bullets: [
       {
-        heading: "The NELFUND Bottleneck:",
-        text: "Federal student loans through NELFUND suffer from 3-to-6 months of bureaucratic delay, extensive paperwork, and single-purpose limitations that fail students during emergency semester exam deadlines.",
+        heading: "The NELFUND Distribution Bottleneck:",
+        text: "Federal student loans suffer from 3-to-6 months of administrative delay, extensive paper verification, and single-purpose limitations that fail students during emergency semester exam deadlines.",
       },
       {
         heading: "Predatory 30% APR Loan Sharks:",
-        text: "Desperate students turn to unregulated digital loan sharks charging 25%–35% monthly interest, resulting in debt traps, aggressive harassment of campus contacts, and severe mental distress.",
+        text: "Desperate students turn to unregulated digital loan sharks charging 25%–35% monthly interest, resulting in vicious debt traps, aggressive contact list harassment, and academic dropout.",
       },
       {
         heading: "Rampant Peer-to-Peer Campus Fraud:",
-        text: "Buying and selling textbooks, project laptops, and hostel gear through campus WhatsApp groups carries extreme fraud risk, with fake payment receipts and delivery ghosting.",
+        text: "Buying and selling textbooks, project laptops, and hostel gear through campus WhatsApp groups carries extreme fraud risk, with fake bank alerts and delivery ghosting.",
       },
       {
         heading: "The Post-Graduation NYSC Cliff:",
-        text: "350,000 annual corps members face a federal ₦77,000 monthly allowance that is insufficient for rising urban living costs, with zero equipment financing to transition into remote technology or modern professional employment.",
+        text: "350,000 annual corps members face rising urban living costs on a ₦77,000 monthly allowance, with zero access to equipment financing to transition into knowledge-economy jobs.",
       },
     ],
-    visualSuggestion: "Left: High-contrast comparison metrics highlighting NELFUND's 3–6 month delay vs predatory 30% APR apps; Right: Red-accented problem matrix contrasting bureaucratic red-tape with campus commerce risks.",
+    visualSuggestion: "Left: High-contrast comparison metrics highlighting NELFUND's 3–6 month delay vs predatory 30% APR apps; Right: Live production screenshot of the Underwriting and Risk Evaluation dashboard showing instant qualification vs federal backlog.",
     imageSrc: "/pitch/loans.png",
-    imageCaption: "The Real Gap: NELFUND's 3-6 month delay vs EcoCampus 24-48hr disbursement",
-    script: "To understand why EcoCampus matters, look at the reality facing a 200-level student in a Nigerian public university today. When tuition deadlines approach, NELFUND takes three to six months to process applications—too late to sit for exams. Their only alternative? Digital loan sharks charging 30% monthly interest with ruthless public shaming. Meanwhile, campus commerce is entirely unprotected on WhatsApp groups, and fresh graduates entering NYSC face urban living costs with a ₦77,000 allowance that cannot cover an essential work laptop. This is not just a student problem; it is a structural crisis in human capital development.",
+    imageCaption: "Live Underwriting & Risk Evaluation: Real-Time Eligibility vs 3-6 Month Federal Backlog",
+    script: "To grasp why EcoCampus is essential, look at the reality confronting a 200-level student in Nigeria today. When tuition deadlines hit, NELFUND takes three to six months to process applications—far too late to sit for exams. Their desperate alternative? Predatory digital loan apps charging 30% monthly interest with ruthless public shaming. Meanwhile, campus commerce on WhatsApp carries constant risk of fake bank alerts, and 350,000 annual graduates entering NYSC face urban living costs with an allowance that cannot purchase a work laptop. This is not simply a student dilemma; it is a structural barrier to African human capital development.",
   },
   {
     number: 3,
-    title: "The Target User — Meet Ajugu, 200L MBBS Student & Future NYSC Corper",
-    hook: "The 2.5 million digitally-native undergraduates and 350,000 annual corps members who traditional commercial banks ignore until they graduate.",
-    time: "45 Seconds",
-    bullets: [
-      {
-        heading: "The Undergrad Persona (Ajugu David):",
-        text: "20-year-old 200-level Medicine and Surgery student at University of Abuja. Outstanding 4.25 CGPA. Needs ₦100,000 for clinical equipment and tuition before portal closure. Currently unserved by traditional credit bureaus because he has no formal salary history.",
-      },
-      {
-        heading: "The Student Entrepreneur & Trader:",
-        text: "Trades medical textbooks and refurbished laptops to fund living expenses. Desperately needs buyer verification and payment protection to avoid campus transaction scams.",
-      },
-      {
-        heading: "The Aspiring Tech NYSC Corper:",
-        text: "Preparing for NYSC deployment in Abuja FCT. Needs equipment advance for a workstation laptop to secure a competitive remote Place of Primary Assignment (PPA).",
-      },
-    ],
-    visualSuggestion: "Left: User persona profile card with verified badges (UNIABUJA/2024/472, CGPA 4.25, Tier 1 Prime); Right: User journey diagram illustrating transition from 200L undergrad to NYSC corper and Ecobank corporate salary earner.",
-    imageSrc: "/pitch/dashboard.png",
-    imageCaption: "Persona Profile: University of Abuja MBBS Student, Pioneer Member #000247",
-    script: "Meet our primary user: Ajugu David, a 200-level MBBS student at the University of Abuja. Ajugu has a stellar 4.25 CGPA, but traditional commercial banks consider him un-bankable because he has no payslip or collateral. When he needs ₦100,000 for clinical lab kits, traditional systems fail him. In his spare time, Ajugu buys and sells medical textbooks to junior students, but lives in constant fear of fake transfer receipts. In two years, Ajugu will be an NYSC corps member needing equipment financing for his career. By solving Ajugu's problems today, Ecobank captures him for the next 30 years of his professional life.",
-  },
-  {
-    number: 4,
-    title: "Our Solution — Three Differentiating Pillars Built on Ecobank",
-    hook: "More than a loan app: a complete student lifecycle operating system with zero-interest financing, fraud-proof escrow commerce, and career fast-tracks.",
-    time: "60 Seconds",
-    bullets: [
-      {
-        heading: "Pillar 1: Zero-Interest 200L+ & NYSC Financing Engine:",
-        text: "Undergrads access ₦20,000 to ₦250,000 at 0.0% APR with 24–48 hour disbursement directly into the university bursary to eliminate fund diversion. NYSC corpers receive up to ₦500,000 equipment advances with automated splits from their ₦77k monthly allowance.",
-      },
-      {
-        heading: "Pillar 2: EcoMarketplace with Ecobank Smart Escrow:",
-        text: "Peer-to-peer campus commerce protected by a 4-digit OTP handover inspection code. Buyer funds remain securely locked in the Ecobank Escrow Vault until physical campus inspection.",
-      },
-      {
-        heading: "Pillar 3: Opportunity Hub & Career Accelerator:",
-        text: "Exclusive recruitment pipelines with Ecobank Nigeria, Paystack MFB, and federal ministries, coupled with subsidized 'Learn & Earn' digital certifications that directly boost credit limits.",
-      },
-    ],
-    visualSuggestion: "Left: Three-pillar architectural diagram showing how Loans, Marketplace, and Opportunities feed the central Campus Score; Right: Side-by-side screenshots of the Loan Engine, Smart Escrow Drawer, and FastTrack modal.",
-    imageSrc: "/pitch/loans_success.png",
-    imageCaption: "Instant Disbursement State: Direct Bursary Credit & NIBSS GSI Mandate Ref",
-    script: "EcoCampus solves this crisis through three tightly integrated pillars. Pillar One: The Zero-Interest Financing Engine. For 200-level students and above, we disburse loans in 24 to 48 hours at zero percent interest, paid straight to the school bursary. For corpers, we offer equipment financing with automated deductions from their Federal allowance. Pillar Two: EcoMarketplace. We introduce Ecobank Smart Escrow: when you buy a laptop or textbook on campus, your money is locked in Ecobank's vault and only released when you physically inspect the item and hand over a 4-digit OTP. Pillar Three: Opportunity Hub. We bridge students directly into internships at Ecobank and Paystack while subsidizing AWS and SQL certifications that raise their credit limits.",
-  },
-  {
-    number: 5,
-    title: "Product Architecture & Enterprise Tech Stack",
-    hook: "Enterprise banking rails engineered with Next.js 15, TypeScript, NIBSS Central Switch integration, and CBN-compliant Global Standing Instructions.",
+    category: "Core Product",
+    title: "The Core Engine: Zero-Interest Financing & Safe Campus Escrow",
+    hook: "Moving beyond single-purpose lending into daily banking utility, verified academic standing, and zero-default risk infrastructure.",
     time: "75 Seconds",
     bullets: [
       {
-        heading: "Modern Frontend & Fluid Performance:",
-        text: "Built on Next.js 15 (App Router), React 19, and scoped CSS modules with zero third-party UI framework bloat. Engineered for sub-100ms client transitions on mobile networks.",
+        heading: "Zero-Interest Undergrad (200L+) & NYSC Advances:",
+        text: "Undergrads access ₦20,000 to ₦250,000 at 0.0% APR disbursed in 24 to 48 hours straight to university bursaries, eliminating fund diversion. NYSC corps members access up to ₦500,000 equipment advances automated via allowance splits.",
       },
       {
-        heading: "Proprietary Campus Score Credit Engine (0–1000):",
-        text: "Transparent, real-time algorithmic underwriting: 35% Academic Standing & CGPA, 25% Savings discipline and streak consistency, 25% Institutional KYC biometrics, and 15% Campus Marketplace reputation.",
+        heading: "CBN Global Standing Instruction (GSI) via NIBSS:",
+        text: "Digital mandate executed under CBN Circular BSD/DIR/GEN/LAB/13/053. Borrowers authorize automated multi-account recourse across all 30+ commercial banks via BVN, bringing institutional default risk near zero without traditional collateral.",
       },
       {
-        heading: "CBN-Compliant Global Standing Instruction (GSI):",
-        text: "Digital mandate execution under CBN Circular BSD/DIR/GEN/LAB/13/053. Borrowers authorize automated multi-account recourse across all 30+ Nigerian commercial banks via NIBSS, bringing default risk near zero.",
+        heading: "EcoMarketplace with Ecobank Smart Escrow:",
+        text: "Peer-to-peer campus commerce protected by a 4-digit cryptographic OTP handover code. Buyer funds remain securely locked in the Ecobank Escrow Vault until physical inspection on campus.",
       },
       {
-        heading: "Two-Legged Escrow State Machine:",
-        text: "FUNDS_IN_ESCROW -> PHYSICAL_HANDOVER -> OTP_VERIFIED -> INSTANT_SETTLEMENT. Automatic +25 Campus Score credit boost upon settlement.",
+        heading: "Proprietary Campus Score (0–1000):",
+        text: "Transparent multi-factor algorithmic underwriting: 35% Academic Standing (CGPA), 25% Savings discipline, 25% Institutional KYC biometrics, and 15% Campus Marketplace reputation.",
       },
     ],
-    visualSuggestion: "Left: Full technical architecture diagram illustrating Client PWA -> Ecobank OmniCore API Gateway -> NIBSS GSI Switch -> Core Banking Ledger; Right: Screenshot of the GSI Mandate Authorization modal with digital signature pad.",
-    imageSrc: "/pitch/escrow.png",
-    imageCaption: "Escrow State Machine: 4-Digit Handover Code (8423) and Safe Meeting Point",
-    script: "For Chief Information Officer Adebanke Oladejo and CTO Babawale John, let us look under the hood. EcoCampus is not a mockup; it is a fully functional Next.js 15 and TypeScript application. Our Campus Score engine evaluates students across four transparent dimensions—academic performance, transaction discipline, KYC verification, and marketplace reputation. For risk management, we don't rely on trust; we implement the Central Bank of Nigeria's Global Standing Instruction mandate via NIBSS. If a student defaults upon graduation, Ecobank has automated legal recourse across any bank account linked to their BVN. In the marketplace, our two-legged escrow state machine holds funds until a 4-digit cryptographic OTP is exchanged at verified campus meeting zones.",
+    visualSuggestion: "Left: Three-pillar architectural diagram showing how Loans, Marketplace, and Opportunities feed the central Campus Score; Right: Production screenshot of the EcoMarket with Ecobank Escrow Protected badge and inspection handover codes.",
+    imageSrc: "/pitch/marketplace.png",
+    imageCaption: "EcoMarket with Ecobank Escrow Protection: Verified Students, Inspection Codes & Safe P2P Trade",
+    script: "For Chief Information Officer Adebanke Oladejo and CTO Babawale John, let us examine the operational engine. EcoCampus is not a loan platform—it is an ecosystem. Pillar One: Zero-interest financing disbursed directly to school bursaries in 24 to 48 hours. Pillar Two: Risk management without collateral. We implement the Central Bank of Nigeria's Global Standing Instruction mandate via NIBSS. If a borrower defaults post-graduation, Ecobank holds legally enforceable automated recourse across any bank account linked to their BVN. Pillar Three: EcoMarketplace with Ecobank Smart Escrow. When students trade laptops or textbooks, funds remain locked in Ecobank's vault until an in-person 4-digit OTP exchange, completely eliminating fake-transfer fraud while mobilizing sticky non-interest-bearing deposit float.",
+  },
+  {
+    number: 4,
+    category: "Talent Retention",
+    title: "The Talent Bridge: Mitigating African Brain Drain Through Opportunity Hub",
+    hook: "Capital without career placement accelerates emigration; EcoCampus pairs educational financing with local corporate placement across Ecobank's Pan-African network.",
+    time: "60 Seconds",
+    bullets: [
+      {
+        heading: "Direct Corporate Recruitment FastTracks:",
+        text: "Pre-screened academic high-achievers (CGPA 3.5+) matched directly with graduate trainee programs at Ecobank Nigeria, Paystack MFB, and multinational corporate partners.",
+      },
+      {
+        heading: "Subsidized Digital Skills ('Learn & Earn'):",
+        text: "Sponsored industry certifications (Next.js, Python for Financial Engineering, SQL, AWS) subsidized through corporate CSR that directly boost the student's Campus Credit Score and loan limits.",
+      },
+      {
+        heading: "NYSC High-Allowance PPA Matcher:",
+        text: "Connecting corps members to technology-driven places of primary assignment offering monthly agency top-up stipends (₦160,000 - ₦180,000/mo) to guarantee loan liquidation and high savings accumulation.",
+      },
+      {
+        heading: "Stemming the Brain-Drain Wave:",
+        text: "Retaining top African technical and financial talent within the domestic and Pan-African economy by providing clear, funded domestic career trajectories.",
+      },
+    ],
+    visualSuggestion: "Left: Talent retention pipeline showing Undergrad Upskilling -> Corporate Internship Matching -> Retained African Workforce; Right: Production screenshot of the Opportunity Hub showing Ecobank and Paystack FastTrack applications.",
+    imageSrc: "/pitch/opportunities.png",
+    imageCaption: "Opportunity Hub: Ecobank FastTrack, Paystack MFB, and Subsidized Digital Skills Tracks",
+    script: "Financing tuition is meaningless if graduating scholars face 40% youth underemployment and are forced into the 'Japa' brain-drain wave. Pillar Three of EcoCampus is the Opportunity Hub. We bridge students directly into high-paying graduate careers. Ecobank Nigeria and corporate partners like Paystack MFB access pre-screened, high-CGPA candidates through our verified FastTrack pipeline. We subsidize practical digital certifications—from Next.js to financial engineering—that immediately boost the student's Campus Score. By guaranteeing that financing is paired with career placement, we ensure loans are repaid while retaining Africa's brightest minds inside the continent.",
+  },
+  {
+    number: 5,
+    category: "Commercial Viability",
+    title: "Why Ecobank Wins: Compounding SROI & Commercial Balance Sheet Offsets",
+    hook: "While zero-interest student lending operates at zero direct profit, the Social Return on Investment and commercial balance sheet offsets create an unbeatable institutional moat.",
+    time: "75 Seconds",
+    bullets: [
+      {
+        heading: "Generational Lifetime Value (LTV) at Near-Zero CAC:",
+        text: "Retail banking CAC in Nigeria exceeds ₦12,000 per user. EcoCampus acquires students at near-zero organic CAC through campus word-of-mouth. Beneficiaries enter deep generational brand loyalty with 30+ year customer retention as they graduate into corporate salary earners, mortgage holders, and SME commercial banking clients.",
+      },
+      {
+        heading: "Sticky Escrow Vault Deposit Float:",
+        text: "Tens of thousands of active campus marketplace transactions generate a massive, non-interest-bearing operational liquidity pool residing directly inside Ecobank's escrow vault.",
+      },
+      {
+        heading: "100% Post-Graduate Salary Domiciliation:",
+        text: "Graduates who obtained tuition liquidity and corporate internships naturally maintain their primary professional salary accounts with Ecobank, yielding long-term retail deposit stickiness.",
+      },
+      {
+        heading: "Sustainable NYSC Facility Margin:",
+        text: "Corper equipment advances carry a modest 3.5% facility fee, automated via NIBSS Direct Debit with zero recovery cost and zero debt collection friction.",
+      },
+    ],
+    visualSuggestion: "Left: Flywheel infographic showing Student Acquisition -> Campus Escrow Float -> NYSC Advance -> Corporate Salary Domiciliation; Right: High-contrast unit economics card showing CAC reduction, deposit mobilization, and 30-year retention horizon.",
+    imageSrc: "/pitch/dashboard.png",
+    imageCaption: "Lifetime Retention Model: From 200L Student to Ecobank Corporate Salary Account Domiciliation",
+    script: "Head of Products Victor Yalokwu will appreciate our unit economics. While student loans operate at zero direct profit, the commercial offsets are compounding. First: Customer Acquisition Cost arbitrage. Retail banks spend over ₦12,000 to acquire a customer who may churn within months. EcoCampus acquires 200-level undergraduates at near-zero CAC because the product is viral. When these students graduate into corporate employment, their primary salary accounts are domiciled with Ecobank for the next 30 years. Second: Deposit Float. Hundreds of thousands of daily campus trades lock liquidity in Ecobank's Escrow Vault, generating interest-free operational float. Third: NYSC advances yield a sustainable 3.5% facility fee collected automatically via NIBSS. This is the ultimate lifetime customer acquisition engine.",
   },
   {
     number: 6,
-    title: "Business Model & Market Viability — The Lifetime Value Flywheel",
-    hook: "How Ecobank turns zero-interest student financing into a multi-billion naira deposit mobilization and customer acquisition machine.",
+    category: "Continental Scale",
+    title: "The Pan-African Blueprint: The Premier PPP Execution Partner for NELFUND & AU",
+    hook: "Positioning Ecobank not merely as a commercial lender, but as the premier institutional execution engine for sovereign and continental educational funds.",
     time: "60 Seconds",
     bullets: [
       {
-        heading: "CAC-to-LTV Arbitrage (For Victor Yalokwu):",
-        text: "Traditional retail banking CAC in Nigeria exceeds ₦12,000 per customer. EcoCampus acquires students at near-zero organic CAC through campus word-of-mouth and retains them through NYSC and early career employment.",
+        heading: "Turnkey Implementation Partner for NELFUND:",
+        text: "Solves the federal student loan fund's 3-to-6 month distribution lag by providing the vetted digital disbursement, student KYC, and GSI loan monitoring interface.",
       },
       {
-        heading: "Deposit Mobilization & Escrow Float:",
-        text: "Tens of thousands of active marketplace transactions generate substantial, sticky interest-free deposit float residing within Ecobank's protected escrow vault.",
+        heading: "African Union Educational Initiative Alignment:",
+        text: "Scalable across Ecobank's unmatched footprint of 33 African nations, enabling cross-border tuition settlement, regional scholarship disbursement, and multi-country academic mobility via Ecobank RapidTransfer.",
       },
       {
-        heading: "Subsidized NYSC Advance Margins:",
-        text: "Corper equipment financing carries a sustainable single-digit 3.5% facility fee, automated via NIBSS Direct Debit with zero collection overhead.",
+        heading: "ESG & Concessional Development Capital:",
+        text: "Positions Ecobank at the forefront of UN Sustainable Development Goals (SDG 4: Quality Education, SDG 8: Decent Work & Economic Growth), unlocking international concessional funding and development finance institution (DFI) partnerships.",
       },
       {
-        heading: "Corporate Recruitment Partnerships:",
-        text: "Corporate partners (tech firms, FMCGs) pay placement and talent pipeline fees to access pre-screened, high-CGPA candidates through the Opportunity Hub.",
+        heading: "Pan-African Financial Integration:",
+        text: "Seamless cross-border student remittances across West and Central African scholar corridors, eliminating currency friction.",
       },
     ],
-    visualSuggestion: "Left: Flywheel infographic showing Student Acquisition -> Campus Escrow Float -> NYSC Advance -> Corporate Salary Domiciliation; Right: Financial unit economics breakdown table showing CAC reduction and deposit growth.",
-    imageSrc: "/pitch/marketplace.png",
-    imageCaption: "EcoMarketplace: P2P Campus Commerce with Escrow Float Mobilization",
-    script: "Head of Products Victor Yalokwu will appreciate our unit economics. Traditional retail banks spend over ₦12,000 to acquire a customer who may churn in six months. EcoCampus acquires 200-level students at near-zero CAC because the product is viral—students tell classmates how they got tuition disbursed in 24 hours. Where does the monetization lie? First, the immense deposit float from our Escrow Vault creates free liquidity for Ecobank. Second, the 3.5% facility margin on NYSC advances is collected automatically via NIBSS with zero recovery costs. And third, when these students graduate into Flutterwave, Paystack, or Ecobank, their corporate salary accounts are already domiciled with Ecobank for life.",
+    visualSuggestion: "Left: Pan-African expansion blueprint highlighting 33 Ecobank countries and RapidTransfer cross-border tuition rails; Right: Screenshot of the GSI-authorized institutional credit framework.",
+    imageSrc: "/pitch/loans.png",
+    imageCaption: "Federal GSI Integration & Institutional Verification Architecture",
+    script: "Beyond retail banking, EcoCampus positions Ecobank as the premier Public-Private Partnership execution partner for sovereign and Pan-African entities. NELFUND possesses statutory funding but lacks agile digital delivery rails. EcoCampus is the ready-made execution engine that automates student verification, bursary disbursement, and GSI loan tracking. Furthermore, across Ecobank's 33 African markets, EcoCampus provides the blueprint for the African Union's Educational Initiative—enabling cross-border student remittances and regional tuition settlements through Ecobank RapidTransfer. By backing EcoCampus, Ecobank leads continental financial integration and youth economic empowerment.",
   },
   {
     number: 7,
-    title: "Competitive Advantage — Why EcoCampus Wins Against Alternatives",
-    hook: "Loan apps are predatory; NELFUND is too slow; WhatsApp trades are unsafe. EcoCampus is the only integrated student ecosystem in Nigeria.",
-    time: "60 Seconds",
-    bullets: [
-      {
-        heading: "Versus NELFUND (Speed & Purpose):",
-        text: "NELFUND takes 3 to 6 months and only covers school fees. EcoCampus disburses within 24–48 hours, covers living stipends, and provides equipment financing for entrepreneurs and corpers.",
-      },
-      {
-        heading: "Versus FairMoney, PalmPay & Quick Credit Apps (Affordability):",
-        text: "Predatory apps charge 25%–35% monthly interest with public shaming. EcoCampus charges 0.0% interest for undergrads, using GSI mandates instead of harassment.",
-      },
-      {
-        heading: "Versus Campus WhatsApp Groups (Security):",
-        text: "WhatsApp commerce has zero buyer protection. EcoCampus enforces verified student badges and locks funds in Ecobank Escrow until in-person inspection.",
-      },
-      {
-        heading: "Versus Traditional Banks (Ecosystem Stickiness):",
-        text: "Traditional youth accounts offer only a debit card. EcoCampus offers daily utility: skills training, career fast-tracks, and campus score progression.",
-      },
-    ],
-    visualSuggestion: "Left: Comprehensive feature matrix comparing EcoCampus vs NELFUND vs Predatory Fintechs vs WhatsApp; Right: Screenshot of the EcoCampus vs NELFUND comparison banner on the live loans dashboard.",
-    imageSrc: "/pitch/loans.png",
-    imageCaption: "Feature-by-Feature Matrix: EcoCampus vs NELFUND vs Digital Loan Apps",
-    script: "When we look at the competitive landscape, EcoCampus has no direct peer. Against NELFUND, we win on speed: 48 hours versus six months. Against commercial loan apps like FairMoney or PalmPay, we win on ethics: zero percent interest and GSI security versus 30% predatory interest and debt shaming. Against campus WhatsApp marketplaces, we win on safety: our inspection OTP eliminates fake bank alerts completely. And against traditional banks who simply hand out debit cards, we provide the platform where students actually build their careers.",
-  },
-  {
-    number: 8,
-    title: "Future Roadmap — Reimagining Possibilities for Pan-African Youth",
-    hook: "Scaling from University of Abuja to 170+ Nigerian universities and 33 Ecobank African affiliate markets.",
+    category: "Execution & The Ask",
+    title: "Execution Roadmap & The Ask: Reimagining Possibilities for African Youth",
+    hook: "EcoCampus is fully engineered, tested, and operational today. We present a clear, 3-phase execution roadmap and a concrete partnership ask.",
     time: "45 Seconds",
     bullets: [
       {
-        heading: "Phase 1: Pilot & University Expansion (Months 1–6):",
-        text: "Launch pilot across 5 major federal institutions (UniAbuja, UNILAG, UI, OAU, ABU Zaria). Target: 100,000 verified student accounts and ₦500M in escrow GMV.",
+        heading: "Phase 1 (Months 1–6) — 5-University Flagship Pilot:",
+        text: "Deploy at University of Abuja, UNILAG, UI, OAU, and ABU Zaria. Target: 100,000 verified student accounts, ₦500M in escrow GMV, and direct school bursary integration.",
       },
       {
-        heading: "Phase 2: National NYSC Camp Rollout (Months 7–12):",
-        text: "Direct partnership with NYSC orientation camps nationwide. Co-branded Ecobank Blaze debit cards issued on Day 1 of camp with pre-approved equipment advances.",
+        heading: "Phase 2 (Months 7–12) — National NYSC Camp Rollout:",
+        text: "Nationwide deployment across 37 NYSC orientation camps, issuing co-branded Ecobank Blaze cards with pre-approved equipment advances.",
       },
       {
-        heading: "Phase 3: Pan-African Cross-Border Expansion (Year 2):",
-        text: "Leverage Ecobank's presence across 33 African nations to power cross-border tuition and student remittances via Ecobank RapidTransfer, connecting West and Central African scholars.",
+        heading: "Phase 3 (Year 2+) — Pan-African Continental Scale:",
+        text: "Replicate the model in Ghana, Kenya, Côte d'Ivoire, and Senegal via Ecobank's unified banking rails and RapidTransfer student remittance.",
+      },
+      {
+        heading: "The Ask to Ecobank Leadership:",
+        text: "(1) Core Banking Sandbox API access for Ecobank OmniCore & NIBSS GSI Switch; (2) Greenlight for the 5-university campus pilot under Ecobank Blaze sponsorship; (3) Official onboarding of Opportunity Hub into Ecobank Group HR graduate recruitment.",
       },
     ],
-    visualSuggestion: "Left: 3-phase horizontal roadmap timeline with milestone KPIs and user acquisition targets; Right: Screenshot of the Opportunity Hub showcasing the FastTrack Application and Learn & Earn certifications.",
+    visualSuggestion: "Left: 3-phase horizontal roadmap with clear user acquisition and escrow targets; Right: The 3-part partnership ask for Ecobank executive leadership.",
     imageSrc: "/pitch/opportunities.png",
-    imageCaption: "Phase 2 & 3 Acceleration: Opportunity Hub, Internships & Digital Skills",
-    script: "Our roadmap aligns directly with Ecobank's 'Reimagining Possibilities' vision. In Phase One, we launch across five flagship universities, targeting 100,000 students and ₦500 million in escrow commerce. In Phase Two, we partner with NYSC to issue co-branded Ecobank Blaze cards to all 350,000 corps members during camp registration, bundling our equipment advance with their state deployment. In Phase Three, we take this across Ecobank's 33 African countries, enabling seamless cross-border tuition payments and student remittances through Ecobank RapidTransfer. We are building the Pan-African student banking infrastructure of tomorrow.",
-  },
-  {
-    number: 9,
-    title: "Conclusion & Call to Action — Partnering to Build Africa's Future",
-    hook: "When you give Nigerian students the tools to Learn, Grow, and Achieve, they won't just bank with Ecobank—they will build the continent's future.",
-    time: "30 Seconds",
-    bullets: [
-      {
-        heading: "Fully Implemented & Demo Ready:",
-        text: "Every feature—from GSI mandate signing to escrow OTP release and FastTrack job matching—is live, tested, and operational today.",
-      },
-      {
-        heading: "The Ask:",
-        text: "Partner with Ecobank Digital Banking and Paystack MFB to greenlight the Phase 1 campus pilot and integrate live core banking sandbox endpoints.",
-      },
-      {
-        heading: "Official Motto:",
-        text: "LEARN. GROW. ACHIEVE. With Ecobank.",
-      },
-    ],
-    visualSuggestion: "Left: Bold call to action with executive partnership contact details; Right: High-impact phone mockup showcasing the EcoCampus app, Ecobank Blaze co-branding, and live test QR code.",
-    imageSrc: "/pitch/fast_track.png",
-    imageCaption: "FastTrack Verified Credentials: Ready for Immediate Pilot Deployment",
-    script: "To conclude: EcoCampus is not a theoretical concept or a slide deck fantasy. It is fully engineered, running live on local host right now, and ready for pilot deployment. By backing EcoCampus, Ecobank solves tertiary education financing, eliminates campus commerce fraud, and captures Nigeria's most ambitious youth demographic before graduation. Let's partner together to launch the EcoCampus pilot and empower the next generation of African leaders to Learn, Grow, and Achieve. Thank you!",
+    imageCaption: "Fully Functional Production Platform: Ready for Immediate Pilot Deployment",
+    script: "To conclude: EcoCampus is not a concept or theoretical presentation. Every feature—from GSI mandate execution to escrow OTP validation and FastTrack career matching—is fully functional in our codebase right now. Our ask to Ecobank executive leadership today is three-fold: First, grant sandbox API credentials to connect with Ecobank OmniCore and the NIBSS GSI Switch. Second, greenlight our Phase 1 pilot across 5 flagship universities under Ecobank Blaze sponsorship. And third, partner with our Opportunity Hub to hire Nigeria's brightest student talent. Together, let us empower the next generation of African leaders to Learn, Grow, and Achieve. Thank you!",
   },
 ];
 
@@ -269,32 +238,48 @@ export default function PitchDeckPage() {
           <a href="/" className={styles.backLink}>
             &larr; Back to App
           </a>
-          <span className={styles.ecobankBadge}>ECOBANK HACKATHON DECK</span>
+          <span className={styles.ecobankBadge}>ECOBANK HACKATHON 2026</span>
           <h1 className={styles.deckMainTitle}>EcoCampus Master Pitch Deck & Speaker Rehearsal Suite</h1>
         </div>
 
         <div className={styles.controlsRow}>
-          <button className={styles.printBtn} onClick={handlePrint}>
-            <span>🖨️</span> Save Deck as PDF (Print)
+          <a
+            href="/EcoCampus_Master_Pitch_Deck.pptx"
+            download="EcoCampus_Master_Pitch_Deck.pptx"
+            className={styles.downloadPptxBtn}
+            id="download-pptx-btn"
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download PowerPoint (.pptx)
+          </a>
+
+          <button className={styles.printBtn} onClick={handlePrint} id="print-pdf-btn">
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Save as PDF (Print)
           </button>
         </div>
       </nav>
 
-      {/* ── 9-Slide Deck Presentation ────────────────────────────────────── */}
+      {/* ── 7-Slide Deck Presentation ────────────────────────────────────── */}
       <main className={styles.deckWrapper}>
         {SLIDES.map((slide) => (
           <article key={slide.number} className={styles.slideCard} id={`slide-${slide.number}`}>
             {/* Slide Header Bar */}
             <div className={styles.slideHeaderBar}>
-              <span className={styles.slideNumberPill}>Slide {slide.number} of 9</span>
+              <span className={styles.slideNumberPill}>Slide {slide.number} of 7</span>
               <div className={styles.speakingTimePill}>
-                <span>⏱️ Presentation Time:</span>
+                <span>Presentation Time:</span>
                 <strong>{slide.time}</strong>
               </div>
             </div>
 
             {/* Slide Body */}
             <div className={styles.slideBody}>
+              <div className={styles.categoryTag}>{slide.category}</div>
               <h2 className={styles.slideTitle}>{slide.title}</h2>
 
               {/* Punchy Core Hook */}
@@ -308,10 +293,10 @@ export default function PitchDeckPage() {
                 <div className={styles.bulletsCol}>
                   {slide.bullets.map((b, idx) => (
                     <div key={idx} className={styles.bulletItem}>
-                      <span className={styles.bulletDot}>✦</span>
+                      <span className={styles.bulletDot} />
                       <div>
                         <strong className={styles.bulletHeading}>{b.heading}</strong>
-                        <span>{b.text}</span>
+                        <span className={styles.bulletText}>{b.text}</span>
                       </div>
                     </div>
                   ))}
@@ -321,7 +306,7 @@ export default function PitchDeckPage() {
                 <div className={styles.visualPreviewCol}>
                   <div className={styles.visualHeader}>
                     <span>On-Screen Visual Layout</span>
-                    <span style={{ color: "#00E676" }}>Verified Asset</span>
+                    <span className={styles.visualVerified}>Production Screen</span>
                   </div>
 
                   <div className={styles.imageFrame}>
@@ -332,7 +317,7 @@ export default function PitchDeckPage() {
                     />
                   </div>
 
-                  <div style={{ fontSize: "0.72rem", color: "#CBD5E1", fontWeight: 700 }}>
+                  <div className={styles.imageCaption}>
                     {slide.imageCaption}
                   </div>
 
@@ -345,7 +330,7 @@ export default function PitchDeckPage() {
               {/* Speaker Notes Script */}
               <div className={styles.speakerScriptBox}>
                 <div className={styles.scriptLabel}>
-                  <span>🎙️</span> Speaker Rehearsal Script ({slide.time})
+                  Speaker Rehearsal Script ({slide.time})
                 </div>
                 <p className={styles.scriptText}>
                   &ldquo;{slide.script}&rdquo;

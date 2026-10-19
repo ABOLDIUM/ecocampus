@@ -215,7 +215,7 @@ export default function LoansMasterPage() {
         </section>
       )}
 
-      {/* ── Campus Credit Score ─────────────────────────────────────────── */}
+      {/* ── Campus Credit Score ───────────────────────────────────────────
       <section className={styles.scoreCard}>
         <div className={styles.scoreHeader}>
           <div className={styles.scoreHeading}>
@@ -268,7 +268,7 @@ export default function LoansMasterPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── Facility Selector Tabs ───────────────────────────────────────── */}
       <div className={styles.tabRow}>

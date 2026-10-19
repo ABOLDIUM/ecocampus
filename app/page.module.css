@@ -503,10 +503,10 @@
 
 .opayBalanceAmount {
   font-family: var(--ec-font-display, inherit);
-  font-size: 2.15rem;
+  font-size: 1.9rem;
   font-weight: 800;
   color: #ffffff;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   user-select: none;
 }

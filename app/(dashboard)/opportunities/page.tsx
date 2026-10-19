@@ -32,7 +32,6 @@ interface JobOpportunity {
   stipend: string;
   location: string;
   deadline: string;
-  perks: string[];
   description: string;
 }
 
@@ -61,7 +60,6 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     stipend: "₦180,000/mo",
     location: "Abuja / Lagos (Hybrid)",
     deadline: "Nov 30, 2026",
-    perks: ["Full-Time Conversion", "Work Laptop", "Healthcare"],
     description: "Enterprise fintech and omnichannel core banking systems engineering.",
   },
   {
@@ -75,7 +73,6 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     stipend: "₦160,000/mo",
     location: "Lagos (Remote Friendly)",
     deadline: "Dec 15, 2026",
-    perks: ["Team Mentorship", "Learning Stipend", "Flexible Hours"],
     description: "High-performance payment switches, webhooks, and direct debit integrations.",
   },
   {
@@ -90,7 +87,6 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     stipend: "₦77k Fed + ₦65k Allowance",
     location: "Abuja (FCT)",
     deadline: "Batch A 2026",
-    perks: ["Housing Included", "Research Grant", "Commendation"],
     description: "Place of Primary Assignment (PPA) with monthly agency allowance and quarters.",
   },
   {
@@ -104,7 +100,6 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     stipend: "₦150,000/mo",
     location: "Remote (Nigeria)",
     deadline: "Nov 28, 2026",
-    perks: ["Direct Deposit", "Global Design Network", "Software Licenses"],
     description: "Digital checkout design, user experience flows, and mobile banking interfaces.",
   },
   {
@@ -118,7 +113,6 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     stipend: "₦175,000/mo",
     location: "Remote",
     deadline: "Dec 05, 2026",
-    perks: ["MacBook Provided", "AWS Certification Voucher", "Placement"],
     description: "Container orchestration, CI/CD pipelines, and cloud systems engineering.",
   },
 ];
@@ -369,15 +363,6 @@ export default function OpportunitiesHubPage() {
 
                 <h3 className={styles.oppTitle}>{job.title}</h3>
                 <p className={styles.oppDesc}>{job.description}</p>
-
-                {/* Minimalist Tags without tick bullet marks */}
-                <div className={styles.tagsRow}>
-                  {job.perks.map((p, idx) => (
-                    <span key={idx} className={styles.tagPill}>
-                      {p}
-                    </span>
-                  ))}
-                </div>
 
                 <div className={styles.oppActionRow}>
                   <div>
