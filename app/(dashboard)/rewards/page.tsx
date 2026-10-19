@@ -1,6 +1,6 @@
 // ============================================================================
 // ECOCAMPUS REWARDS & CASHBACK HUB — APP/(DASHBOARD)/REWARDS/PAGE.TSX
-// EcoRewards featuring Working Daily Check-in Streak, Cashback Collection & Account Type Verification
+// Clean, Professional Student Loyalty & Cashback System
 // Official Motto: LEARN. GROW. ACHIEVE.
 // ============================================================================
 
@@ -8,9 +8,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { formatKoboToNaira } from "@/lib/formatting/currency";
 import { getActiveUser, getUsers, saveUsers, EcoUser } from "@/lib/database/user-store";
-import styles from "../transfers/transfer.module.css";
+import { BottomNav } from "@/components/navigation/BottomNav";
+import styles from "./rewards.module.css";
+
+const DAYS_OF_WEEK = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
 
 export default function RewardsPage() {
   const router = useRouter();
@@ -32,12 +36,28 @@ export default function RewardsPage() {
     }
   }, [router]);
 
+  function playAlertSound() {
+    try {
+      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.4);
+    } catch { /* AudioContext unsupported */ }
+  }
+
   if (!user) return null;
 
   function handleClaimDailyReward() {
     const today = new Date().toISOString().split("T")[0];
     if (user!.lastCheckInDate === today) {
-      setFeedback({ type: "error", message: "You have already claimed your daily reward today. Come back tomorrow!" });
+      setFeedback({ type: "error", message: "You have already claimed your daily reward today. Check back tomorrow!" });
       return;
     }
 
@@ -45,10 +65,9 @@ export default function RewardsPage() {
     const idx = all.findIndex((u) => u.id === user!.id);
     if (idx === -1) return;
 
-    // Increment streak and credit ₦50.00 (5000 kobo) reward
-    const rewardKobo = 5000;
+    const rewardKobo = 5000; // ₦50.00
     all[idx].balanceKobo += rewardKobo;
-    all[idx].cashbackKobo += rewardKobo;
+    all[idx].cashbackKobo = (all[idx].cashbackKobo || 0) + rewardKobo;
     all[idx].checkInStreak = (all[idx].checkInStreak || 0) + 1;
     all[idx].lastCheckInDate = today;
 
@@ -57,195 +76,190 @@ export default function RewardsPage() {
       reference: `ECO-RWD-${Math.floor(100000 + Math.random() * 900000)}`,
       type: "CREDIT",
       category: "REWARD",
-      title: `Daily Check-In Reward (Day ${all[idx].checkInStreak})`,
+      title: `Daily Check-In Bonus (Day ${all[idx].checkInStreak})`,
       counterpartyName: "EcoRewards Program",
-      counterpartyAccount: "REWARD-VAULT",
+      counterpartyAccount: "REWARDS-VAULT",
       amountKobo: rewardKobo,
       status: "SUCCESSFUL",
-      narration: "Daily active streak bonus",
+      narration: "Daily active streak credit",
       createdAt: "Just now",
     });
 
     saveUsers(all);
-    setUser(all[idx]);
+    setUser({ ...all[idx] });
     setClaimedToday(true);
-    setFeedback({ type: "success", message: `Day ${all[idx].checkInStreak} Streak Claimed! ₦50.00 added to your wallet.` });
-  }
-
-  function handleToggleAccountType(newType: "student" | "cooper") {
-    const all = getUsers();
-    const idx = all.findIndex((u) => u.id === user!.id);
-    if (idx === -1) return;
-
-    all[idx].accountType = newType;
-    saveUsers(all);
-    setUser(all[idx]);
+    playAlertSound();
     setFeedback({
       type: "success",
-      message: `Account verified successfully as: ${newType === "student" ? "Undergraduate Student" : "NYSC Corps Member"}.`,
+      message: `Day ${all[idx].checkInStreak} Streak Claimed! ₦50.00 credited to your wallet.`,
     });
   }
 
+  function handleRedeemCashback() {
+    if (!user || (user.cashbackKobo || 0) <= 0) {
+      setFeedback({ type: "error", message: "No accumulated cashback to redeem right now." });
+      return;
+    }
+
+    const all = getUsers();
+    const idx = all.findIndex((u) => u.id === user.id);
+    if (idx === -1) return;
+
+    const redeemedKobo = all[idx].cashbackKobo;
+    // Move cashback to active balance
+    all[idx].cashbackKobo = 0;
+
+    all[idx].transactions.unshift({
+      id: `tx-red-${Date.now()}`,
+      reference: `ECO-RED-${Math.floor(100000 + Math.random() * 900000)}`,
+      type: "CREDIT",
+      category: "REWARD",
+      title: "Cashback Redeemed to Wallet",
+      counterpartyName: "EcoRewards Vault",
+      counterpartyAccount: "REWARDS-VAULT",
+      amountKobo: redeemedKobo,
+      status: "SUCCESSFUL",
+      narration: "Cashback converted to spendable balance",
+      createdAt: "Just now",
+    });
+
+    saveUsers(all);
+    setUser({ ...all[idx] });
+    playAlertSound();
+    setFeedback({
+      type: "success",
+      message: `Successfully redeemed ${formatKoboToNaira(redeemedKobo)} into your main wallet!`,
+    });
+  }
+
+  const currentStreak = user.checkInStreak || 0;
+  const streakDayIndex = (currentStreak % 7);
+
   return (
-    <main className={styles.transferContainer} style={{ maxWidth: "480px", margin: "0 auto", padding: "1.25rem", minHeight: "100dvh" }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-        <a
-          href="/"
-          style={{
-            textDecoration: "none",
-            backgroundColor: "#f0fdf4",
-            border: "1px solid #bbf7d0",
-            color: "#007749",
-            fontWeight: 700,
-            fontSize: "0.8rem",
-            padding: "0.4rem 0.85rem",
-            borderRadius: "999px",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.3rem",
-            boxShadow: "0 2px 6px rgba(0, 119, 73, 0.08)",
-          }}
-        >
-          &larr; Dashboard
-        </a>
-        <h1 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-          EcoRewards &amp; Verification
-        </h1>
-        <div style={{ width: 40 }} />
+    <main className={styles.rewardsContainer}>
+      {/* Header */}
+      <header className={styles.rewardsHeader}>
+        <Link href="/" className={styles.backBtn} aria-label="Back to dashboard">
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Dashboard
+        </Link>
+        <h1 className={styles.headerTitle}>EcoRewards</h1>
+        <div className={styles.headerSpacer} />
       </header>
 
-      {/* Account Verification Badge Box */}
-      <div
-        style={{
-          background: "#ffffff",
-          borderRadius: "1.25rem",
-          padding: "1.25rem",
-          border: "1px solid #e2e8f0",
-          marginBottom: "1.25rem",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.65rem" }}>
-          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-            Account Status Verification[cite: 1]
-          </h3>
-          <span
-            style={{
-              fontSize: "0.68rem",
-              fontWeight: 800,
-              background: user.accountType === "student" ? "#ecfdf5" : "#eff6ff",
-              color: user.accountType === "student" ? "#065f46" : "#1d4ed8",
-              padding: "0.2rem 0.6rem",
-              borderRadius: "999px",
-            }}
-          >
-            {user.accountType === "student" ? "STUDENT TIER" : "NYSC CORPS TIER"}
-          </span>
-        </div>
-        <p style={{ fontSize: "0.78rem", color: "#475569", margin: "0 0 0.85rem 0", lineHeight: 1.4 }}>
-          EcoRewards tailors zero-interest loans and cashback bonuses based on whether you are currently an undergraduate student or serving NYSC Corps member[cite: 1].
-        </p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
-          <button
-            type="button"
-            onClick={() => handleToggleAccountType("student")}
-            style={{
-              padding: "0.65rem",
-              borderRadius: "0.75rem",
-              fontWeight: 800,
-              fontSize: "0.75rem",
-              border: user.accountType === "student" ? "2px solid #007749" : "1px solid #cbd5e1",
-              background: user.accountType === "student" ? "#ecfdf5" : "#ffffff",
-              color: user.accountType === "student" ? "#065f46" : "#475569",
-              cursor: "pointer",
-            }}
-          >
-            I am a Student
-          </button>
-          <button
-            type="button"
-            onClick={() => handleToggleAccountType("cooper")}
-            style={{
-              padding: "0.65rem",
-              borderRadius: "0.75rem",
-              fontWeight: 800,
-              fontSize: "0.75rem",
-              border: user.accountType === "cooper" ? "2px solid #0b2545" : "1px solid #cbd5e1",
-              background: user.accountType === "cooper" ? "#eff6ff" : "#ffffff",
-              color: user.accountType === "cooper" ? "#1d4ed8" : "#475569",
-              cursor: "pointer",
-            }}
-          >
-            I am a Corps Member (NYSC)
-          </button>
-        </div>
-      </div>
-
+      {/* Feedback banner */}
       {feedback && (
         <div
-          style={{
-            padding: "0.7rem 0.9rem",
-            borderRadius: "0.75rem",
-            fontSize: "0.78rem",
-            fontWeight: 700,
-            marginBottom: "1rem",
-            background: feedback.type === "success" ? "#ecfdf5" : "#fef2f2",
-            color: feedback.type === "success" ? "#065f46" : "#b91c1c",
-            border: `1px solid ${feedback.type === "success" ? "#10b981" : "#f87171"}`,
-          }}
+          className={`${styles.feedbackBanner} ${
+            feedback.type === "success" ? styles.feedbackSuccess : styles.feedbackError
+          }`}
         >
+          {feedback.type === "success" ? (
+            <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )}
           {feedback.message}
         </div>
       )}
 
-      {/* Daily Streak & Cashback Vault */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #033121 0%, #007749 100%)",
-          borderRadius: "1.25rem",
-          padding: "1.35rem",
-          color: "#ffffff",
-          marginBottom: "1.25rem",
-          boxShadow: "0 12px 26px rgba(0, 119, 73, 0.25)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-          <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.8px", opacity: 0.85 }}>
-            Active Daily Streak
-          </span>
-          <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "#a7f3d0" }}>
-            🔥 {user.checkInStreak} Days Active
-          </span>
+      {/* ── Rewards Content (Balance & 7-Day Streak) ── */}
+      <div className={styles.rewardsContent}>
+        {/* Hero Cashback Balance Card */}
+        <div className={styles.balanceCard}>
+          <div className={styles.balanceCardHeader}>
+            <span className={styles.balanceLabel}>Accumulated Cashback</span>
+            <span className={styles.streakPill}>
+              🔥 {currentStreak} Days Active
+            </span>
+          </div>
+
+          <div className={styles.balanceAmount}>
+            {formatKoboToNaira(user.cashbackKobo || 0)}
+          </div>
+
+          <div className={styles.balanceActions}>
+            <button
+              type="button"
+              className={styles.redeemBtn}
+              onClick={handleRedeemCashback}
+              disabled={(user.cashbackKobo || 0) <= 0}
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Redeem to Main Wallet
+            </button>
+          </div>
         </div>
 
-        <div style={{ fontSize: "1.8rem", fontWeight: 900, fontFamily: "monospace", marginBottom: "0.5rem" }}>
-          {formatKoboToNaira(user.cashBankKobo || user.cashbackKobo)} accumulated cashback
-        </div>
+        {/* Daily Check-In Streak Section */}
+        <section className={styles.streakSection}>
+          <div className={styles.sectionHeaderRow}>
+            <h2 className={styles.sectionTitle}>7-Day Streak Rewards</h2>
+            <span style={{ fontSize: "0.72rem", color: "#007749", fontWeight: 700 }}>
+              +₦50 daily &middot; +₦200 on Day 7
+            </span>
+          </div>
 
-        <p style={{ fontSize: "0.76rem", opacity: 0.9, margin: "0 0 1rem 0" }}>
-          Check in daily to build your active streak and collect your ₦50.00 daily cashback bonus.
-        </p>
+          <div className={styles.streakDaysGrid}>
+            {DAYS_OF_WEEK.map((dayName, idx) => {
+              const isCompleted = idx < streakDayIndex;
+              const isToday = idx === streakDayIndex;
+              return (
+                <div
+                  key={dayName}
+                  className={`${styles.streakDayItem} ${
+                    isCompleted ? styles.streakDayItemDone : isToday ? styles.streakDayItemActive : ""
+                  }`}
+                >
+                  <span className={styles.streakDayLabel}>{dayName}</span>
+                  <span className={styles.streakDayAmount}>
+                    {idx === 6 ? "₦200" : "₦50"}
+                  </span>
+                  {isCompleted && (
+                    <svg width="12" height="12" fill="none" stroke="#007749" strokeWidth="3" viewBox="0 0 24 24" style={{ marginTop: "3px" }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
-        <button
-          type="button"
-          disabled={claimedToday}
-          onClick={handleClaimDailyReward}
-          style={{
-            width: "100%",
-            backgroundColor: claimedToday ? "rgba(255,255,255,0.2)" : "#ffffff",
-            color: claimedToday ? "#ffffff" : "#007749",
-            padding: "0.75rem",
-            borderRadius: "0.75rem",
-            fontWeight: 800,
-            fontSize: "0.82rem",
-            border: "none",
-            cursor: claimedToday ? "not-allowed" : "pointer",
-          }}
-        >
-          {claimedToday ? "✓ Daily Reward Claimed Today" : "Claim Daily ₦50.00 Cashback"}
-        </button>
+          <button
+            type="button"
+            className={styles.claimDailyBtn}
+            onClick={handleClaimDailyReward}
+            disabled={claimedToday}
+          >
+            {claimedToday ? (
+              <>
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Daily Reward Claimed Today
+              </>
+            ) : (
+              <>
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                </svg>
+                Claim Today&apos;s ₦50.00 Bonus
+              </>
+            )}
+          </button>
+        </section>
       </div>
+
+      {/* Persistent Bottom Navigation */}
+      <BottomNav activeTab="rewards" />
     </main>
   );
 }

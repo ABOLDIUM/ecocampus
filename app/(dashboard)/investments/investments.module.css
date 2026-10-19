@@ -1,0 +1,612 @@
+/* ============================================================================
+   ECOCAMPUS INVESTMENT & STOCK EXCHANGE — INVESTMENTS.MODULE.CSS
+   Professional Grade Fintech Wealth Management (Bamboo / Ecobank Capital style)
+   ============================================================================ */
+
+.investContainer {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem 1rem 5.5rem;
+  min-height: 100dvh;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .investContainer {
+    max-width: 1400px;
+    margin: 0;
+    margin-left: 250px;
+    padding: 2rem 2.5rem 4rem 2.5rem;
+    min-height: 100vh;
+  }
+}
+
+/* ── Responsive Dual-Column Grid ──────────────────────────────────────────── */
+.investGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.investColPrimary,
+.investColSecondary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .investGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .investColSecondary {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+
+.investHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+  padding-top: 0.25rem;
+}
+
+.backBtn {
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #007749;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.backBtn:hover {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.headerTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.marketStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* ── Primary Hero Element: Ecobank Capital Fund ──────────────────────────── */
+.ecobankHeroCard {
+  background: linear-gradient(135deg, #004d30 0%, #007749 50%, #003622 100%);
+  border-radius: 1.35rem;
+  padding: 1.35rem 1.25rem;
+  color: #ffffff;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 12px 28px rgba(0, 119, 73, 0.22);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ecobankHeroCard::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ecobankCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.ecobankBadgeWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ecobankTag {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.fundTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem 0;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.fundSub {
+  font-size: 0.74rem;
+  color: #d1fae5;
+  margin: 0 0 0.9rem 0;
+  line-height: 1.4;
+}
+
+.fundMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fundMetricItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.fundMetricLabel {
+  font-size: 0.62rem;
+  color: #a7f3d0;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.fundMetricVal {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-top: 0.15rem;
+}
+
+.fundActionRow {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.fundInvestBtn {
+  flex: 1;
+  background-color: #ffffff;
+  color: #007749;
+  border: none;
+  padding: 0.68rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s ease;
+}
+
+.fundInvestBtn:hover {
+  background-color: #f0fdf4;
+  transform: translateY(-1px);
+}
+
+/* ── Portfolio Overview Strip ─────────────────────────────────────────────── */
+.portfolioCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.15rem;
+  padding: 1.15rem;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.portfolioHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.portfolioLabel {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.portfolioValue {
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0.2rem 0 0.5rem;
+}
+
+.portfolioSubRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+  color: #64748b;
+  padding-top: 0.4rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.gainBadge {
+  color: #059669;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+/* ── Market Watchlist Section ─────────────────────────────────────────────── */
+.marketSection {
+  margin-bottom: 1.15rem;
+}
+
+.marketSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.marketSectionTitle {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.filterScroll {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.65rem;
+  scrollbar-width: none;
+}
+
+.filterScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.filterChip {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filterChipActive {
+  background: #007749;
+  border-color: #007749;
+  color: #ffffff;
+}
+
+/* Stock Card */
+.stockList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.stockCard {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stockCard:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.stockCardSelected {
+  border-color: #007749 !important;
+  background-color: #f0fdf4 !important;
+  box-shadow: 0 0 0 1px #007749;
+}
+
+.stockCardEcobank {
+  border-color: #86efac;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.stockLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stockRankBadge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.75rem;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.stockRankBadgeEcobank {
+  background: #007749;
+  color: #ffffff;
+}
+
+.stockTickerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stockTicker {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.stockLeadBadge {
+  background: #007749;
+  color: #ffffff;
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+}
+
+.stockHoldingBadge {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.stockName {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin: 0.15rem 0 0;
+}
+
+.stockRight {
+  text-align: right;
+}
+
+.stockPrice {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.stockChange {
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin-top: 0.15rem;
+}
+
+.stockChangePositive {
+  color: #059669;
+}
+
+.stockChangeNegative {
+  color: #dc2626;
+}
+
+/* ── Trade Sheet / Card ──────────────────────────────────────────────────── */
+.tradeCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.15rem;
+  padding: 1.15rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  margin-bottom: 1.15rem;
+}
+
+.tradeCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.tradeTitle {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.tradeSub {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin: 0.15rem 0 0;
+}
+
+.tradeFormGroup {
+  margin-bottom: 0.85rem;
+}
+
+.tradeLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 0.35rem;
+}
+
+.tradeInput {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  outline: none;
+  background: #ffffff;
+  transition: border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.tradeInput:focus {
+  border-color: #007749;
+  box-shadow: 0 0 0 3px rgba(0, 119, 73, 0.1);
+}
+
+.tradeSummaryBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.65rem;
+  font-size: 0.78rem;
+  color: #334155;
+  margin-bottom: 0.9rem;
+}
+
+.tradeSummaryVal {
+  font-weight: 900;
+  color: #0f172a;
+  font-size: 0.86rem;
+}
+
+.tradeBtnGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.buyBtn {
+  background-color: #007749;
+  color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 800;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.buyBtn:hover {
+  background-color: #005a37;
+}
+
+.sellBtn {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 800;
+  font-size: 0.82rem;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sellBtn:hover {
+  background-color: #e2e8f0;
+}
+
+/* Feedback */
+.feedbackBanner {
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.feedbackSuccess {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.feedbackError {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}

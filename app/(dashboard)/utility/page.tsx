@@ -74,7 +74,7 @@ export default function UtilityPage() {
       type: "DEBIT",
       category: "BILL",
       title: `${catObj?.name || "Utility Bill"}`,
-      counterpartyName: selectedCategory === "SCHOOL_FEES" ? `${user.institutionName} Bursary Account` : "Ecobank Utility Gateway",
+      counterpartyName: selectedCategory === "SCHOOL_FEES" ? `${all[idx].institutionName} Bursary Account` : "Ecobank Utility Gateway",
       counterpartyAccount: referenceNumber || "GEN-REF-001",
       amountKobo: costKobo,
       status: "SUCCESSFUL",

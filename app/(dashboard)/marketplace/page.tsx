@@ -19,6 +19,7 @@ import {
   EcoUser,
   EscrowOrder,
 } from "@/lib/database/user-store";
+import { BottomNav } from "@/components/navigation/BottomNav";
 import styles from "./marketplace.module.css";
 
 interface MarketplaceItem {
@@ -34,7 +35,7 @@ interface MarketplaceItem {
   verifiedType: string;
   sellerRating: string;
   pickupLocation: string;
-  icon: string;
+  imageUrl: string;
 }
 
 const DEFAULT_LISTINGS: MarketplaceItem[] = [
@@ -43,90 +44,90 @@ const DEFAULT_LISTINGS: MarketplaceItem[] = [
     title: "Gray's Anatomy 42nd Edition (Clean Copy, No Markings)",
     priceNaira: 4500,
     category: "medical",
-    categoryLabel: "🔬 Lab & Med Kits",
+    categoryLabel: "Medical Textbooks",
     condition: "Clean Copy",
     sellerName: "Dr. Aliyu M.",
     sellerAccount: "3091827491",
     sellerInstitution: "University of Abuja (MBBS 400L)",
-    verifiedType: "🎓 Verified Student",
-    sellerRating: "★ 4.9 (18 trades)",
+    verifiedType: "Verified Student",
+    sellerRating: "4.9 (18 trades)",
     pickupLocation: "Medical College Foyer",
-    icon: "📖",
+    imageUrl: "/marketplace/grays-anatomy.jpg",
   },
   {
     id: "mkt-2",
     title: "HP ProBook 650 G4 Core i5 (8GB RAM, 256GB SSD)",
     priceNaira: 165000,
     category: "electronics",
-    categoryLabel: "💻 Electronics",
+    categoryLabel: "Electronics",
     condition: "Like New",
     sellerName: "Aboldium Tech Gadgets",
     sellerAccount: "2420918392",
     sellerInstitution: "Faculty of Engineering",
-    verifiedType: "🏬 Verified Campus Vendor",
-    sellerRating: "★ 5.0 (42 trades)",
+    verifiedType: "Verified Vendor",
+    sellerRating: "5.0 (42 trades)",
     pickupLocation: "Senate Building Quad",
-    icon: "💻",
+    imageUrl: "/marketplace/hp-probook.jpg",
   },
   {
     id: "mkt-3",
     title: "NYSC Khaki Uniform Complete Set (Size 38 + Jungle Boots)",
     priceNaira: 8500,
     category: "nysc",
-    categoryLabel: "🇳🇬 NYSC Gear",
+    categoryLabel: "NYSC Gear",
     condition: "Good Condition",
     sellerName: "Amina K.",
     sellerAccount: "3092716382",
     sellerInstitution: "NYSC FCT Abuja (FC/26A/1982)",
-    verifiedType: "🇳🇬 Verified Corper",
-    sellerRating: "★ 4.8 (9 trades)",
+    verifiedType: "Verified Corper",
+    sellerRating: "4.8 (9 trades)",
     pickupLocation: "NYSC FCT Secretariat",
-    icon: "🪖",
+    imageUrl: "/marketplace/nysc-uniform.jpg",
   },
   {
     id: "mkt-4",
     title: "Littmann Classic III Stethoscope (Black Edition)",
     priceNaira: 38000,
     category: "medical",
-    categoryLabel: "🔬 Lab & Med Kits",
+    categoryLabel: "Medical Equipment",
     condition: "Like New",
     sellerName: "Chukwudi E.",
     sellerAccount: "3081928471",
     sellerInstitution: "Teaching Hospital Intern",
-    verifiedType: "🎓 Verified Student",
-    sellerRating: "★ 5.0 (14 trades)",
+    verifiedType: "Verified Student",
+    sellerRating: "5.0 (14 trades)",
     pickupLocation: "Clinical Ward Entrance",
-    icon: "🩺",
+    imageUrl: "/marketplace/stethoscope.jpg",
   },
   {
     id: "mkt-5",
     title: "Rechargeable Campus Desk Fan + Solar Mini Panel",
     priceNaira: 18500,
     category: "hostel",
-    categoryLabel: "🛏️ Hostel Essentials",
+    categoryLabel: "Hostel Essentials",
     condition: "Brand New",
     sellerName: "Boluwatife O.",
     sellerAccount: "3094829104",
     sellerInstitution: "Hostel Block C (300L Engr)",
-    verifiedType: "🎓 Verified Student",
-    sellerRating: "★ 4.9 (22 trades)",
+    verifiedType: "Verified Student",
+    sellerRating: "4.9 (22 trades)",
     pickupLocation: "Hostel Block C Common Room",
-    icon: "⚡",
+    imageUrl: "/marketplace/desk-fan.jpg",
   },
   {
     id: "mkt-6",
     title: "Casio fx-991EX ClassWiz Advanced Scientific Calculator",
     priceNaira: 12000,
     category: "textbooks",
-    categoryLabel: "📚 Textbooks",
+    categoryLabel: "Study Gear",
     condition: "Like New",
     sellerName: "Fatima S.",
     sellerAccount: "3095819283",
     sellerInstitution: "Faculty of Management Sciences",
-    verifiedType: "🎓 Verified Student",
-    sellerRating: "★ 4.7 (7 trades)",
+    verifiedType: "Verified Student",
+    sellerRating: "4.7 (7 trades)",
     pickupLocation: "Main Library Steps",
-    icon: "🔢",
+    imageUrl: "/marketplace/casio-calculator.jpg",
   },
 ];
 
@@ -251,15 +252,24 @@ export default function EcoMarketplacePage() {
       title: newTitle,
       priceNaira: Number(newPrice),
       category: newCategory,
-      categoryLabel: newCategory === "textbooks" ? "📚 Textbooks" : newCategory === "electronics" ? "💻 Electronics" : newCategory === "nysc" ? "🇳🇬 NYSC Gear" : "🛏️ Hostel",
+      categoryLabel:
+        newCategory === "textbooks"
+          ? "Textbooks"
+          : newCategory === "electronics"
+          ? "Electronics"
+          : newCategory === "nysc"
+          ? "NYSC Gear"
+          : newCategory === "medical"
+          ? "Medical"
+          : "Hostel",
       condition: newCondition,
       sellerName: user!.fullName,
       sellerAccount: user!.accountNumber,
       sellerInstitution: user!.institutionName || "University of Abuja",
-      verifiedType: user!.accountType === "student" ? "🎓 Verified Student" : "🇳🇬 Verified Corper",
-      sellerRating: "★ 5.0 (New Seller)",
+      verifiedType: user!.accountType === "student" ? "Verified Student" : "Verified Corper",
+      sellerRating: "5.0 (New Seller)",
       pickupLocation: newLocation,
-      icon: newCategory === "textbooks" ? "📚" : newCategory === "electronics" ? "💻" : newCategory === "nysc" ? "🪖" : "🛏️",
+      imageUrl: "/marketplace/hp-probook.jpg",
     };
 
     const updated = [newItem, ...listings];
@@ -282,12 +292,17 @@ export default function EcoMarketplacePage() {
     <main className={styles.container}>
       {/* ── Top Header ─────────────────────────────────────────────────── */}
       <header className={styles.header}>
-        <a href="/" className={styles.backBtn}>
-          <span>&larr;</span> Dashboard
-        </a>
-        <h1 className={styles.headerTitle}>EcoMarketplace</h1>
+        <div className={styles.headerLeft}>
+          <a href="/" className={styles.backBtn}>
+            <span>&larr;</span> Dashboard
+          </a>
+          <h1 className={styles.headerTitle}>EcoMarket</h1>
+        </div>
         <div className={styles.escrowBadge}>
-          <span>🛡️</span> Ecobank Escrow Protected
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>Ecobank Escrow Protected</span>
         </div>
       </header>
 
@@ -315,7 +330,11 @@ export default function EcoMarketplacePage() {
         <section className={styles.activeEscrowDrawer}>
           <div className={styles.activeEscrowHeader}>
             <span className={styles.activeEscrowBadge}>
-              <span>🔒</span> Funds Held in Ecobank Escrow
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Funds Held in Ecobank Escrow
             </span>
             <span className={styles.activeEscrowRef}>{activeEscrowOrders[0].reference}</span>
           </div>
@@ -325,7 +344,7 @@ export default function EcoMarketplacePage() {
           </div>
 
           <div className={styles.activeEscrowLocation}>
-            <span>📍 Meeting Point:</span>
+            <span>Meeting Point:</span>
             <strong>{activeEscrowOrders[0].pickupLocation}</strong>
           </div>
 
@@ -353,39 +372,12 @@ export default function EcoMarketplacePage() {
         </section>
       )}
 
-      {/* ── Hero Strategic Escrow Value Banner ──────────────────────────── */}
-      <section className={styles.escrowHeroBanner}>
-        <div className={styles.heroTagRow}>
-          <span className={styles.heroTag}>Ecobank Trust Layer</span>
-          <div className={styles.heroScoreBonus}>
-            <span>⚡</span> +25 Campus Score / Trade
-          </div>
-        </div>
-        <h2 className={styles.heroTitle}>Peer-to-Peer Campus Commerce with Zero Fraud</h2>
-        <p className={styles.heroSub}>
-          Buy textbooks, gadgets, and hostel gear from verified students and corpers. Your money stays protected in Ecobank Escrow until you physically inspect the item.
-        </p>
-
-        <div className={styles.escrowStepsStrip}>
-          <div className={styles.escrowStepItem}>
-            <span className={styles.escrowStepNum}>STEP 1</span>
-            <span className={styles.escrowStepText}>Lock funds in Escrow</span>
-          </div>
-          <div className={styles.escrowStepItem}>
-            <span className={styles.escrowStepNum}>STEP 2</span>
-            <span className={styles.escrowStepText}>Meet on campus & inspect</span>
-          </div>
-          <div className={styles.escrowStepItem}>
-            <span className={styles.escrowStepNum}>STEP 3</span>
-            <span className={styles.escrowStepText}>Release code to settle</span>
-          </div>
-        </div>
-      </section>
-
       {/* ── Search & Sell Actions ───────────────────────────────────────── */}
       <div className={styles.actionsRow}>
         <div className={styles.searchBarWrapper}>
-          <span className={styles.searchIcon}>🔍</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className={styles.searchIcon}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
           <input
             type="text"
             placeholder="Search verified items, sellers, departments..."
@@ -405,12 +397,12 @@ export default function EcoMarketplacePage() {
       {/* ── Category Filter Pills ────────────────────────────────────────── */}
       <div className={styles.categoryPills}>
         {[
-          { id: "all", label: "🌟 All Items" },
-          { id: "textbooks", label: "📚 Textbooks" },
-          { id: "electronics", label: "💻 Electronics" },
-          { id: "nysc", label: "🇳🇬 NYSC Gear" },
-          { id: "medical", label: "🔬 Lab & Med Kits" },
-          { id: "hostel", label: "🛏️ Hostel Essentials" },
+          { id: "all", label: "All Items" },
+          { id: "textbooks", label: "Textbooks" },
+          { id: "electronics", label: "Electronics" },
+          { id: "nysc", label: "NYSC Gear" },
+          { id: "medical", label: "Lab & Med Kits" },
+          { id: "hostel", label: "Hostel Essentials" },
         ].map((cat) => (
           <button
             key={cat.id}
@@ -422,50 +414,52 @@ export default function EcoMarketplacePage() {
         ))}
       </div>
 
-      {/* ── Listings Grid ────────────────────────────────────────────────── */}
+      {/* ── Listings Grid (Standard Product Listings) ─────────────────────── */}
       <div className={styles.listingsGrid}>
         {filteredListings.length === 0 ? (
           <div style={{ textAlign: "center", padding: "3rem 1rem", color: "#64748B" }}>
-            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📦</div>
-            <p style={{ fontWeight: 700, fontSize: "0.9rem" }}>No matching items found</p>
-            <p style={{ fontSize: "0.78rem" }}>Try searching another keyword or clear filters.</p>
+            <p style={{ fontWeight: 700, fontSize: "0.95rem", color: "#001F3F" }}>No matching items found</p>
+            <p style={{ fontSize: "0.8rem", color: "#64748B" }}>Try searching another keyword or choose another category.</p>
           </div>
         ) : (
           filteredListings.map((item) => (
             <article key={item.id} className={styles.itemCard}>
-              <div className={styles.itemCardHeader}>
-                <span className={styles.sellerBadge}>
-                  {item.verifiedType}
-                </span>
-                <span className={styles.conditionTag}>{item.condition}</span>
-              </div>
-
-              <div className={styles.itemMainRow}>
-                <div className={styles.itemThumbnail}>{item.icon}</div>
-                <div className={styles.itemInfoCol}>
-                  <h3 className={styles.itemTitle}>{item.title}</h3>
-                  <div className={styles.itemPrice}>₦{item.priceNaira.toLocaleString()}</div>
+              <div className={styles.itemImageWrapper}>
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className={styles.itemImage}
+                  loading="lazy"
+                />
+                <div className={styles.imageOverlayBadges}>
+                  <span className={styles.sellerBadge}>{item.verifiedType}</span>
+                  <span className={styles.conditionTag}>{item.condition}</span>
                 </div>
               </div>
 
-              <div className={styles.itemMetaRow}>
-                <div>
-                  <div style={{ fontWeight: 700, color: "#334155" }}>
-                    {item.sellerName} · <span style={{ color: "#007749" }}>{item.sellerRating}</span>
+              <div className={styles.itemBody}>
+                <div className={styles.itemCategory}>{item.categoryLabel}</div>
+                <h3 className={styles.itemTitle}>{item.title}</h3>
+                <div className={styles.itemPrice}>₦{item.priceNaira.toLocaleString()}</div>
+
+                <div className={styles.itemSellerRow}>
+                  <div className={styles.sellerDetails}>
+                    <span>{item.sellerName}</span>
+                    <span className={styles.sellerRating}>• {item.sellerRating}</span>
                   </div>
-                  <div className={styles.locationPin}>
-                    <span>📍</span> {item.pickupLocation} ({item.sellerInstitution.split("(")[0]})
+                  <div className={styles.pickupLocation}>
+                    {item.pickupLocation}
                   </div>
                 </div>
 
                 <button
-                  className={styles.buyEscrowBtn}
+                  className={styles.buyBtn}
                   onClick={() => {
                     setBuyItemTarget(item);
                     setIsBuyModalOpen(true);
                   }}
                 >
-                  <span>🔒</span> Buy with Escrow
+                  Buy
                 </button>
               </div>
             </article>
@@ -503,7 +497,7 @@ export default function EcoMarketplacePage() {
             </div>
 
             <div style={{ background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: "12px", padding: "0.85rem", marginBottom: "1.25rem", fontSize: "0.74rem", color: "#065F46", lineHeight: 1.45 }}>
-              🛡️ <strong>Zero Risk Protection:</strong> ₦{buyItemTarget.priceNaira.toLocaleString()} will be debited from your Ecobank account ({user.accountNumber}) and held safely in Ecobank Escrow. It will NOT be sent to the seller until you meet in person and provide your 4-digit code.
+              <strong>Ecobank Escrow Protection:</strong> ₦{buyItemTarget.priceNaira.toLocaleString()} will be debited from your Ecobank account ({user.accountNumber}) and held safely in Ecobank Escrow. It will NOT be sent to the seller until you meet in person and provide your 4-digit code.
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.78rem", marginBottom: "1.25rem", padding: "0 0.2rem" }}>
@@ -515,7 +509,7 @@ export default function EcoMarketplacePage() {
               className={styles.primaryModalBtn}
               onClick={handleConfirmEscrowBuy}
             >
-              Lock ₦{buyItemTarget.priceNaira.toLocaleString()} in Escrow &rarr;
+              Confirm Buy • Secure in Escrow &rarr;
             </button>
           </div>
         </div>
@@ -553,7 +547,7 @@ export default function EcoMarketplacePage() {
             </div>
 
             <div style={{ background: "#F0FDF4", border: "1px solid #86EFAC", padding: "0.75rem", borderRadius: "12px", marginBottom: "1.25rem", fontSize: "0.74rem", color: "#065F46" }}>
-              ✨ Releasing this escrow instantly settles ₦{releaseModalTarget.priceNaira.toLocaleString()} to {releaseModalTarget.sellerName} and boosts your Campus Score by <strong>+25 pts</strong>!
+              Releasing this escrow instantly settles ₦{releaseModalTarget.priceNaira.toLocaleString()} to {releaseModalTarget.sellerName} and boosts your Campus Score by <strong>+25 pts</strong>.
             </div>
 
             <button
@@ -612,11 +606,11 @@ export default function EcoMarketplacePage() {
                   onChange={(e) => setNewCategory(e.target.value as any)}
                   className={styles.formSelect}
                 >
-                  <option value="textbooks">📚 Textbooks & Course Packs</option>
-                  <option value="electronics">💻 Laptops & Electronics</option>
-                  <option value="nysc">🇳🇬 NYSC Corps Member Gear</option>
-                  <option value="medical">🔬 Medical & Lab Kits</option>
-                  <option value="hostel">🛏️ Hostel Essentials</option>
+                  <option value="textbooks">Textbooks & Study Materials</option>
+                  <option value="electronics">Laptops & Electronics</option>
+                  <option value="nysc">NYSC Uniform & Gear</option>
+                  <option value="medical">Medical & Lab Equipment</option>
+                  <option value="hostel">Hostel Essentials</option>
                 </select>
               </div>
 
@@ -647,7 +641,7 @@ export default function EcoMarketplacePage() {
               </div>
 
               <div style={{ background: "#F1F5F9", padding: "0.75rem", borderRadius: "12px", marginBottom: "1.25rem", fontSize: "0.72rem", color: "#475569" }}>
-                🔒 All listings are backed by <strong>Ecobank Smart Escrow</strong>. Buyer funds are collected upfront before you meet.
+                All listings are backed by <strong>Ecobank Smart Escrow</strong>. Buyer funds are collected upfront before you meet.
               </div>
 
               <button type="submit" className={styles.primaryModalBtn}>
@@ -659,35 +653,7 @@ export default function EcoMarketplacePage() {
       )}
 
       {/* ── Bottom Navigation ────────────────────────────────────────────── */}
-      <nav className={styles.bottomNav} aria-label="Main navigation">
-        <a href="/" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🏠</span>
-          <span>Home</span>
-        </a>
-        <a href="/marketplace" className={`${styles.bottomNavItem} ${styles.bottomNavItemActive}`}>
-          <span style={{ fontSize: "1.1rem" }}>🛍️</span>
-          <span>Market</span>
-        </a>
-        <a href="/opportunities" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>💼</span>
-          <span>Opportunities</span>
-        </a>
-        <a href="/loans" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🎓</span>
-          <span>Loans</span>
-        </a>
-        <button
-          type="button"
-          className={styles.bottomNavItem}
-          onClick={() => {
-            localStorage.removeItem("ecocampus_active_user_id_v5");
-            router.push("/login");
-          }}
-        >
-          <span style={{ fontSize: "1.1rem" }}>👤</span>
-          <span>Profile</span>
-        </button>
-      </nav>
+      <BottomNav activeTab="market" />
     </main>
   );
 }

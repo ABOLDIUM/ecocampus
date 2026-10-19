@@ -20,7 +20,20 @@ import {
   EcoUser,
   ActiveLoan,
 } from "@/lib/database/user-store";
+import { BottomNav } from "@/components/navigation/BottomNav";
 import styles from "./loans.module.css";
+
+// ── Official Central Bank of Nigeria (CBN) Emblem ────────────────────────────
+const IconCbnEmblem = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+    <circle cx="12" cy="12" r="11" fill="#005B36" stroke="#C5A059" strokeWidth="1.5" />
+    <path d="M12 5.5v12" stroke="#C5A059" strokeWidth="1.4" strokeLinecap="round" />
+    <path d="M7 8h10" stroke="#C5A059" strokeWidth="1.4" strokeLinecap="round" />
+    <path d="M7 8l-2 4h4l-2-4z" stroke="#C5A059" strokeWidth="1.1" fill="#C5A059" fillOpacity="0.3" strokeLinejoin="round" />
+    <path d="M17 8l-2 4h4l-2-4z" stroke="#C5A059" strokeWidth="1.1" fill="#C5A059" fillOpacity="0.3" strokeLinejoin="round" />
+    <path d="M9 18h6" stroke="#C5A059" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
 
 export default function LoansMasterPage() {
   const router = useRouter();
@@ -68,10 +81,10 @@ export default function LoansMasterPage() {
 
   if (!user) return null;
 
-  // NYSC monthly deduction calculated from ₦33k allowance
+  // NYSC monthly deduction calculated from ₦77k allowance
   const nyscTotalRepay = nyscAmount + Math.round(nyscAmount * 0.035);
   const nyscMonthlyDeduction = Math.round(nyscTotalRepay / nyscTenure);
-  const nyscAllowanceRemaining = 33000 - nyscMonthlyDeduction;
+  const nyscAllowanceRemaining = 77000 - nyscMonthlyDeduction;
 
   // Student monthly calculation (6 months 0% interest)
   const studentMonthly = Math.round(studentAmount / 6);
@@ -161,8 +174,9 @@ export default function LoansMasterPage() {
           <span>&larr;</span> Dashboard
         </a>
         <h1 className={styles.headerTitle}>EcoCampus Credit</h1>
-        <div className={styles.cbnBadge}>
-          <span>🛡️</span> CBN & NIBSS GSI
+        <div className={styles.cbnBadge} title="Regulated by Central Bank of Nigeria">
+          <IconCbnEmblem />
+          <span>CBN & NIBSS GSI</span>
         </div>
       </header>
 
@@ -171,7 +185,7 @@ export default function LoansMasterPage() {
         <section className={styles.activeLoanCard}>
           <div className={styles.activeLoanHeader}>
             <span className={styles.activeLoanTag}>
-              {user.activeLoan.type === "STUDENT_ZERO_INTEREST" ? "🎓 Active Student Loan" : "🇳🇬 Active NYSC Advance"}
+              {user.activeLoan.type === "STUDENT_ZERO_INTEREST" ? "Active Student Loan" : "Active NYSC Advance"}
             </span>
             <span className={styles.activeLoanRef}>Ref: {user.activeLoan.reference}</span>
           </div>
@@ -201,42 +215,11 @@ export default function LoansMasterPage() {
         </section>
       )}
 
-      {/* ── Strategic Comparison Hero: EcoCampus vs NELFUND ──────────────── */}
-      <section className={styles.heroComparison}>
-        <div className={styles.heroBadgeRow}>
-          <span className={styles.heroTag}>Ecobank Innovation</span>
-          <div className={styles.heroSpeed}>
-            Disbursement: <strong>24–48 Hours</strong>
-          </div>
-        </div>
-        <h2 className={styles.heroTitle}>Zero-Interest Tertiary Financing Built for Speed</h2>
-        <p className={styles.heroSub}>
-          NELFUND takes months of bureaucratic red-tape. EcoCampus delivers zero-interest direct bursary and living finance within 48 hours, fully secured with CBN Global Standing Instructions.
-        </p>
-
-        <div className={styles.comparisonGrid}>
-          <div className={`${styles.compCol} ${styles.compColEco}`}>
-            <span className={styles.compColTitle}>✨ EcoCampus</span>
-            <span className={styles.compItem}>⚡ 24–48hr Direct Bursary</span>
-            <span className={styles.compItem}>🎓 0.0% APR for 200L+</span>
-            <span className={styles.compItem}>🔒 NIBSS GSI Automated</span>
-            <span className={styles.compItem}>💻 Hardware & Corper Loans</span>
-          </div>
-          <div className={`${styles.compCol} ${styles.compColNel}`}>
-            <span className={styles.compColTitle}>❌ Traditional / NELFUND</span>
-            <span className={`${styles.compItem} ${styles.dim}`}>⏳ 3–6 Months Wait Time</span>
-            <span className={`${styles.compItem} ${styles.dim}`}>📄 Tedious Paperwork</span>
-            <span className={`${styles.compItem} ${styles.dim}`}>🚫 Tuition Only</span>
-            <span className={`${styles.compItem} ${styles.dim}`}>⚠️ High Default Risk</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Campus Score Live Breakdown (Algorithmic Underwriting) ────────── */}
+      {/* ── Campus Credit Score ─────────────────────────────────────────── */}
       <section className={styles.scoreCard}>
         <div className={styles.scoreHeader}>
           <div className={styles.scoreHeading}>
-            <span>📊</span> Campus Credit Score Engine
+            Campus Credit Score
           </div>
           <span className={styles.scoreBadgeTier}>Tier 1 • Prime Eligible</span>
         </div>
@@ -285,48 +268,6 @@ export default function LoansMasterPage() {
             </div>
           </div>
         </div>
-
-        <div className={styles.scoreBreakdownDetails}>
-          <div className={styles.breakdownBarRow}>
-            <div className={styles.breakdownLabelRow}>
-              <span className={styles.breakdownName}>Academic Performance & 200L+ Status (35%)</span>
-              <span className={styles.breakdownPts}>285 / 350 pts</span>
-            </div>
-            <div className={styles.barTrack}>
-              <div className={styles.barFill} style={{ width: "81%" }} />
-            </div>
-          </div>
-
-          <div className={styles.breakdownBarRow}>
-            <div className={styles.breakdownLabelRow}>
-              <span className={styles.breakdownName}>Daily Streak & Balance Discipline (25%)</span>
-              <span className={styles.breakdownPts}>195 / 250 pts</span>
-            </div>
-            <div className={styles.barTrack}>
-              <div className={styles.barFill} style={{ width: "78%" }} />
-            </div>
-          </div>
-
-          <div className={styles.breakdownBarRow}>
-            <div className={styles.breakdownLabelRow}>
-              <span className={styles.breakdownName}>Identity & Institutional Biometrics (25%)</span>
-              <span className={styles.breakdownPts}>210 / 250 pts</span>
-            </div>
-            <div className={styles.barTrack}>
-              <div className={styles.barFill} style={{ width: "84%" }} />
-            </div>
-          </div>
-
-          <div className={styles.breakdownBarRow}>
-            <div className={styles.breakdownLabelRow}>
-              <span className={styles.breakdownName}>Campus Marketplace History (15%)</span>
-              <span className={styles.breakdownPts}>110 / 150 pts</span>
-            </div>
-            <div className={styles.barTrack}>
-              <div className={styles.barFill} style={{ width: "73%" }} />
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* ── Facility Selector Tabs ───────────────────────────────────────── */}
@@ -335,13 +276,13 @@ export default function LoansMasterPage() {
           className={`${styles.tabBtn} ${activeTab === "student" ? styles.tabBtnActive : ""}`}
           onClick={() => setActiveTab("student")}
         >
-          <span>🎓</span> 200L+ Undergrad (0% APR)
+          Student
         </button>
         <button
           className={`${styles.tabBtn} ${activeTab === "nysc" ? styles.tabBtnActive : ""}`}
           onClick={() => setActiveTab("nysc")}
         >
-          <span>🇳🇬</span> NYSC Corper Advance
+          NYSC member
         </button>
       </div>
 
@@ -350,15 +291,12 @@ export default function LoansMasterPage() {
         <section className={styles.calcCard}>
           {activeTab === "student" ? (
             <>
-              <h3 className={styles.calcCardTitle}>Zero-Interest Undergraduate Facility</h3>
-              <p className={styles.calcCardSub}>
-                Strictly for 200L+ students in accredited tertiary institutions. Direct bursary settlement protects funds against diversion.
-              </p>
+              <h3 className={styles.calcCardTitle}>Student Loan (0% Interest)</h3>
 
               {/* Amount Slider */}
               <div className={styles.sliderGroup}>
                 <div className={styles.sliderLabelRow}>
-                  <span className={styles.sliderLabel}>Financing Amount</span>
+                  <span className={styles.sliderLabel}>Loan Amount</span>
                   <span className={styles.sliderAmountVal}>₦{studentAmount.toLocaleString()}</span>
                 </div>
                 <input
@@ -372,7 +310,7 @@ export default function LoansMasterPage() {
                 />
                 <div className={styles.sliderRangeLabels}>
                   <span>Min: ₦20,000</span>
-                  <span>Max Limit: ₦250,000</span>
+                  <span>Max: ₦250,000</span>
                 </div>
               </div>
 
@@ -384,7 +322,7 @@ export default function LoansMasterPage() {
                 </div>
                 <div className={styles.metricItem}>
                   <span className={styles.metricTitle}>Processing Fee</span>
-                  <span className={`${styles.metricValue} ${styles.metricZeroInterest}`}>₦0.00 Free</span>
+                  <span className={`${styles.metricValue} ${styles.metricZeroInterest}`}>Free</span>
                 </div>
                 <div className={styles.metricItem}>
                   <span className={styles.metricTitle}>Repayment</span>
@@ -401,10 +339,7 @@ export default function LoansMasterPage() {
                     onClick={() => setDisbursementMethod("BURSARY")}
                   >
                     <div className={styles.disburseOptTitle}>
-                      <span>🏫</span> Direct Bursary
-                    </div>
-                    <div className={styles.disburseOptSub}>
-                      Paid straight to {institution} Bursary Account. Zero diversion risk.
+                      Direct Bursary
                     </div>
                   </div>
                   <div
@@ -412,10 +347,7 @@ export default function LoansMasterPage() {
                     onClick={() => setDisbursementMethod("DIRECT_WALLET")}
                   >
                     <div className={styles.disburseOptTitle}>
-                      <span>💳</span> Student Wallet
-                    </div>
-                    <div className={styles.disburseOptSub}>
-                      Credited directly into your Ecobank account for books & lab gear.
+                      Student Wallet
                     </div>
                   </div>
                 </div>
@@ -460,10 +392,7 @@ export default function LoansMasterPage() {
             </>
           ) : (
             <>
-              <h3 className={styles.calcCardTitle}>NYSC Corper Equipment & Entrepreneur Advance</h3>
-              <p className={styles.calcCardSub}>
-                Subsidized credit for corps members. Repayment is automatically split from your Federal ₦33,000 monthly allowance via NIBSS.
-              </p>
+              <h3 className={styles.calcCardTitle}>NYSC Member Advance</h3>
 
               {/* Amount Slider */}
               <div className={styles.sliderGroup}>
@@ -489,8 +418,8 @@ export default function LoansMasterPage() {
               {/* Split Deduction Metrics */}
               <div className={styles.metricsStrip}>
                 <div className={styles.metricItem}>
-                  <span className={styles.metricTitle}>Subsidized Fee</span>
-                  <span className={styles.metricValue}>3.5% Flat</span>
+                  <span className={styles.metricTitle}>Fee</span>
+                  <span className={styles.metricValue}>3.5%</span>
                 </div>
                 <div className={styles.metricItem}>
                   <span className={styles.metricTitle}>Monthly Split</span>
@@ -548,9 +477,9 @@ export default function LoansMasterPage() {
                   onChange={(e) => setNyscTenure(Number(e.target.value))}
                   className={styles.formSelect}
                 >
-                  <option value={3}>3 Months (Fast Clear)</option>
-                  <option value={6}>6 Months (Recommended)</option>
-                  <option value={9}>9 Months (Low Monthly Split)</option>
+                  <option value={3}>3 Months</option>
+                  <option value={6}>6 Months</option>
+                  <option value={9}>9 Months</option>
                 </select>
               </div>
             </>
@@ -558,14 +487,13 @@ export default function LoansMasterPage() {
 
           {/* GSI Callout Banner */}
           <div className={styles.gsiCallout}>
-            <div className={styles.gsiIcon}>🏛️</div>
             <div className={styles.gsiText}>
-              <strong>CBN GSI (Global Standing Instruction) Protection:</strong> By proceeding, you will execute a legally binding GSI direct debit mandate registered on the NIBSS central switch. This guarantees zero non-performing loan risk for Ecobank.
+              <strong>CBN GSI Mandate:</strong> Automated repayment debit registered via NIBSS.
             </div>
           </div>
 
           <button className={styles.ctaBtn} onClick={handleInitiateLoan}>
-            <span>Proceed to GSI Mandate Signing &rarr;</span>
+            <span>Continue to Application &rarr;</span>
           </button>
         </section>
       )}
@@ -581,7 +509,7 @@ export default function LoansMasterPage() {
             {currentStageText}
           </p>
           <div style={{ marginTop: "1.5rem", display: "inline-block", background: "#F1F5F9", padding: "0.4rem 0.8rem", borderRadius: "999px", fontSize: "0.72rem", color: "#007749", fontWeight: 700 }}>
-            🔒 256-bit NIBSS Encrypted Gateway
+            256-bit NIBSS Encrypted Gateway
           </div>
         </section>
       )}
@@ -667,7 +595,7 @@ export default function LoansMasterPage() {
             </div>
 
             <div className={styles.nibssBadgeRow}>
-              <span>🏛️ CBN Circular: BSD/DIR/GEN/LAB/13/053</span>
+              <span>CBN Circular: BSD/DIR/GEN/LAB/13/053</span>
               <span style={{ color: "#059669", fontWeight: 800 }}>NIBSS Verified</span>
             </div>
 
@@ -705,35 +633,7 @@ export default function LoansMasterPage() {
       )}
 
       {/* ── Bottom Navigation ────────────────────────────────────────────── */}
-      <nav className={styles.bottomNav} aria-label="Main navigation">
-        <a href="/" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🏠</span>
-          <span>Home</span>
-        </a>
-        <a href="/marketplace" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🛍️</span>
-          <span>Market</span>
-        </a>
-        <a href="/opportunities" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>💼</span>
-          <span>Opportunities</span>
-        </a>
-        <a href="/loans" className={`${styles.bottomNavItem} ${styles.bottomNavItemActive}`}>
-          <span style={{ fontSize: "1.1rem" }}>🎓</span>
-          <span>Loans</span>
-        </a>
-        <button
-          type="button"
-          className={styles.bottomNavItem}
-          onClick={() => {
-            localStorage.removeItem("ecocampus_active_user_id_v5");
-            router.push("/login");
-          }}
-        >
-          <span style={{ fontSize: "1.1rem" }}>👤</span>
-          <span>Profile</span>
-        </button>
-      </nav>
+      <BottomNav activeTab="loans" />
     </main>
   );
 }

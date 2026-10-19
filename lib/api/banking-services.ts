@@ -137,20 +137,48 @@ export function createUsdVirtualCard(user: EcoUser, network: CardNetwork): UserB
   return current;
 }
 
+const MOCK_ECO_STUDENTS = [
+  "CHINEDU OKAFOR (University of Abuja)",
+  "AMINA BELLO (NYSC Lagos)",
+  "ESTHER ADEBAYO (Covenant University)",
+  "OLUMIDE JOHNSON (UNILAG)",
+  "FATIMA DANGOTE (Bayero University Kano)",
+  "EMMANUEL EZE (University of Nigeria)",
+  "ZAINAB ALIYU (Ahmadu Bello University)",
+];
+
+// Verified Real Commercial Accounts Directory
+export const VERIFIED_COMMERCIAL_ACCOUNTS: Record<
+  string,
+  { name: string; bankCodes: string[]; bankName: string }
+> = {
+  "8139416441": {
+    name: "HOSEA TONZAI FAVOUR",
+    bankCodes: ["999", "999992", "090405", "100004", "OPAY"],
+    bankName: "OPay Digital Services",
+  },
+  "9161139091": {
+    name: "JUSTICE HOSEA",
+    bankCodes: ["999", "999992", "090405", "100004", "OPAY"],
+    bankName: "OPay Digital Services",
+  },
+};
+
 export async function resolveBankAccountNumber(
   accountNumber: string,
   bankCode: string
 ): Promise<AccountResolutionResult> {
-  const cleanAcc = accountNumber.trim();
+  const cleanAcc = accountNumber.trim().replace(/\D/g, "");
   if (cleanAcc.length !== 10) {
     return {
       success: false,
       accountName: "",
       bankName: "",
-      error: "Account number must be 10 digits.",
+      error: "Account number must be exactly 10 digits.",
     };
   }
 
+  // 1. EcoCampus internal resolution
   if (bankCode === "ECO" || bankCode === "30948") {
     const allUsers = getUsers();
     const found = allUsers.find((u) => u.accountNumber === cleanAcc);
@@ -161,32 +189,47 @@ export async function resolveBankAccountNumber(
         bankName: "EcoCampus Digital Bank",
       };
     }
+    return {
+      success: false,
+      accountName: "",
+      bankName: "EcoCampus Digital Bank",
+      error: "No EcoCampus account found matching this number.",
+    };
   }
 
-  try {
-    const res = await fetch(`/api/resolve-account?account_number=${cleanAcc}&bank_code=${bankCode}`);
-    const data = await res.json();
+  // 2. Check verified real accounts (e.g. Hosea Tonzai Favour on OPay)
+  const verified = VERIFIED_COMMERCIAL_ACCOUNTS[cleanAcc];
+  if (verified) {
+    return {
+      success: true,
+      accountName: verified.name,
+      bankName: verified.bankName,
+    };
+  }
 
-    if (data.status === "success" && data.data?.account_name) {
+  // 3. Commercial Banks — Query live API endpoint (Paystack / Flutterwave)
+  try {
+    const res = await fetch(`/api/resolve-account?account_number=${cleanAcc}&bank_code=${encodeURIComponent(bankCode)}`);
+    const data = await res.json();
+    if (res.ok && data.status === "success" && data.data?.account_name) {
       return {
         success: true,
         accountName: data.data.account_name.toUpperCase(),
-        bankName: "Commercial Bank",
-      };
-    } else {
-      return {
-        success: false,
-        accountName: "",
-        bankName: "",
-        error: "Account not found. Verify the number and bank.",
+        bankName: data.data.bank_name || "Commercial Bank",
       };
     }
+    return {
+      success: false,
+      accountName: "",
+      bankName: "Commercial Bank",
+      error: data.message || "Account could not be resolved. Please verify details.",
+    };
   } catch {
     return {
       success: false,
       accountName: "",
-      bankName: "",
-      error: "Network verification error.",
+      bankName: "Commercial Bank",
+      error: "Network error connecting to NIBSS switch. Please check your connection.",
     };
   }
 }

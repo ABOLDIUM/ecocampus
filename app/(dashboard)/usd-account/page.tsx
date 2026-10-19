@@ -1,6 +1,6 @@
 // ============================================================================
-// ECOCAMPUS USD DOMICILIARY ACCOUNT MODULE — APP/(DASHBOARD)/USD-ACCOUNT/PAGE.TSX
-// Exclusively displays Ecobank USD Domiciliary Account, Live CBN/Ecobank FX & USD Card
+// ECOCAMPUS USD DOMICILIARY ACCOUNT & VIRTUAL CARD — APP/(DASHBOARD)/USD-ACCOUNT/PAGE.TSX
+// Stylistic Minimal Domiciliary Details, Hero USD Virtual Card & Wise-Style Conversion
 // Official Motto: LEARN. GROW. ACHIEVE.
 // ============================================================================
 
@@ -19,7 +19,8 @@ import {
   createUsdVirtualCard,
   saveUserBankingProducts,
 } from "@/lib/api/banking-services";
-import styles from "../transfers/transfer.module.css";
+import { BottomNav } from "@/components/navigation/BottomNav";
+import styles from "./usd-account.module.css";
 
 interface FxRateData {
   source: string;
@@ -28,24 +29,49 @@ interface FxRateData {
   updatedAt: string;
 }
 
+function playSuccessChime() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, now); // D5
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.38);
+  } catch {}
+}
+
 export default function UsdDomiciliaryAccountPage() {
   const router = useRouter();
   const [user, setUser] = useState<EcoUser | null>(null);
   const [products, setProducts] = useState<UserBankingProducts | null>(null);
   const [usdNetworkChoice, setUsdNetworkChoice] = useState<CardNetwork>("VISA");
   const [isUsdCardFlipped, setIsUsdCardFlipped] = useState(false);
-  const [hideBalance, setHideBalance] = useState(false);
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [imgError, setImgError] = useState(false);
 
+  // FX state
   const [fxData, setFxData] = useState<FxRateData>({
-    source: "CBN / Ecobank Live FX Desk",
+    source: "Ecobank Live FX Desk",
     cbnMidRate: 1585.5,
     ecobankRate: 1598.0,
     updatedAt: new Date().toISOString(),
   });
   const [loadingFx, setLoadingFx] = useState(false);
-  const [usdFundInput, setUsdFundInput] = useState("20");
+
+  // Conversion inputs (two-way sync)
+  const [usdAmount, setUsdAmount] = useState("20");
+  const [nairaAmount, setNairaAmount] = useState((20 * 1598).toString());
+  const [isConverting, setIsConverting] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
@@ -55,9 +81,15 @@ export default function UsdDomiciliaryAccountPage() {
       return;
     }
     setUser(active);
-    const loaded = getUserBankingProducts(active);
+
+    let loaded = getUserBankingProducts(active);
+    // Auto-open domiciliary account if not open so the user has immediate access
+    if (!loaded.domProfile.hasDomAccount) {
+      loaded = openUsdDomiciliaryAccount(active);
+    }
     setProducts(loaded);
-    setUsdNetworkChoice(loaded.domProfile.usdCardNetwork);
+    setUsdNetworkChoice(loaded.domProfile.usdCardNetwork || "VISA");
+
     fetchLiveExchangeRate();
   }, [router]);
 
@@ -65,17 +97,22 @@ export default function UsdDomiciliaryAccountPage() {
     setLoadingFx(true);
     try {
       const res = await fetch("/api/fx-rate");
-      const data = await res.json();
-      if (data.status === "success") {
-        setFxData({
-          source: data.source,
-          cbnMidRate: data.cbnMidRate,
-          ecobankRate: data.ecobankRate,
-          updatedAt: data.updatedAt,
-        });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.status === "success" && data.ecobankRate) {
+          setFxData({
+            source: data.source || "Ecobank Live FX Desk",
+            cbnMidRate: data.cbnMidRate || 1585.5,
+            ecobankRate: data.ecobankRate,
+            updatedAt: data.updatedAt,
+          });
+          // Update corresponding naira equivalent
+          const u = Number(usdAmount) || 20;
+          setNairaAmount(Math.round(u * data.ecobankRate).toString());
+        }
       }
     } catch {
-      // Keep fallback rate
+      // Fallback
     } finally {
       setLoadingFx(false);
     }
@@ -83,534 +120,389 @@ export default function UsdDomiciliaryAccountPage() {
 
   if (!user || !products) return null;
 
+  function handleUsdChange(val: string) {
+    setUsdAmount(val);
+    const num = parseFloat(val);
+    if (!isNaN(num)) {
+      setNairaAmount(Math.round(num * fxData.ecobankRate).toString());
+    } else {
+      setNairaAmount("");
+    }
+  }
+
+  function handleNairaChange(val: string) {
+    setNairaAmount(val);
+    const num = parseFloat(val);
+    if (!isNaN(num) && fxData.ecobankRate > 0) {
+      setUsdAmount((num / fxData.ecobankRate).toFixed(2));
+    } else {
+      setUsdAmount("");
+    }
+  }
+
   function handleCopy(text: string, label: string) {
     navigator.clipboard.writeText(text.replace(/\s+/g, ""));
     setCopiedText(label);
     setTimeout(() => setCopiedText(null), 2000);
   }
 
-  function handleOpenDomiciliary() {
-    const updated = openUsdDomiciliaryAccount(user!);
+  function handleIssueUsdCard() {
+    const updated = createUsdVirtualCard(user!, usdNetworkChoice);
     setProducts({ ...updated });
+    playSuccessChime();
     setFeedback({
       type: "success",
-      message: `Ecobank USD Domiciliary Account (${updated.domProfile.domAccountNumber}) opened successfully.`,
+      message: `Ecobank ${usdNetworkChoice} USD Virtual Card activated successfully!`,
     });
+    setTimeout(() => setFeedback(null), 5000);
   }
 
-  function handleFundDomiciliaryFromNaira(e: React.FormEvent) {
+  function handleConvertAndFund(e: React.FormEvent) {
     e.preventDefault();
     setFeedback(null);
 
-    const usdAmount = Number(usdFundInput);
-    if (isNaN(usdAmount) || usdAmount < 5) {
-      setFeedback({ type: "error", message: "Minimum domiciliary funding amount is $5.00." });
+    const targetUsd = parseFloat(usdAmount);
+    if (isNaN(targetUsd) || targetUsd < 1) {
+      setFeedback({ type: "error", message: "Minimum conversion is $1.00." });
       return;
     }
 
-    const requiredNaira = usdAmount * fxData.ecobankRate;
+    const requiredNaira = targetUsd * fxData.ecobankRate;
     const requiredKobo = Math.round(requiredNaira * 100);
 
     if (user!.balanceKobo < requiredKobo) {
       setFeedback({
         type: "error",
-        message: `Insufficient Naira balance. You need ${formatKoboToNaira(requiredKobo)} at ₦${fxData.ecobankRate.toLocaleString()}/$1.`,
+        message: `Insufficient Naira balance. You need ${formatKoboToNaira(requiredKobo)} for $${targetUsd.toFixed(2)}.`,
       });
       return;
     }
 
-    const allUsers = getUsers();
-    const idx = allUsers.findIndex((u) => u.id === user!.id);
-    if (idx === -1) return;
+    setIsConverting(true);
 
-    const addedCents = Math.round(usdAmount * 100);
-    allUsers[idx].balanceKobo -= requiredKobo;
-    allUsers[idx].usdBalanceCents = (allUsers[idx].usdBalanceCents || 0) + addedCents;
+    setTimeout(() => {
+      const allUsers = getUsers();
+      const idx = allUsers.findIndex((u) => u.id === user!.id);
+      if (idx === -1) {
+        setIsConverting(false);
+        return;
+      }
 
-    const ref = `ECO-FX-${Math.floor(100000 + Math.random() * 900000)}`;
-    allUsers[idx].transactions.unshift({
-      id: `tx-fx-${Date.now()}`,
-      reference: ref,
-      type: "DEBIT",
-      category: "TRANSFER",
-      title: `USD Domiciliary Funding ($${usdAmount.toFixed(2)})`,
-      counterpartyName: "Ecobank Domiciliary Desk",
-      counterpartyAccount: products!.domProfile.domAccountNumber,
-      amountKobo: requiredKobo,
-      status: "SUCCESSFUL",
-      narration: `FX Conversion @ ₦${fxData.ecobankRate}/$1`,
-      createdAt: "Just now",
-    });
+      const addedCents = Math.round(targetUsd * 100);
+      allUsers[idx].balanceKobo -= requiredKobo;
+      allUsers[idx].usdBalanceCents = (allUsers[idx].usdBalanceCents || 0) + addedCents;
 
-    saveUsers(allUsers);
-    setUser(allUsers[idx]);
+      const ref = `ECO-FX-${Math.floor(100000 + Math.random() * 900000)}`;
+      allUsers[idx].transactions.unshift({
+        id: `tx-fx-${Date.now()}`,
+        reference: ref,
+        type: "DEBIT",
+        category: "TRANSFER",
+        title: `USD Domiciliary Funding ($${targetUsd.toFixed(2)})`,
+        counterpartyName: "Ecobank Domiciliary Desk",
+        counterpartyAccount: products!.domProfile.domAccountNumber,
+        amountKobo: requiredKobo,
+        status: "SUCCESSFUL",
+        narration: `FX Conversion @ ₦${fxData.ecobankRate.toLocaleString()}/$1`,
+        createdAt: "Just now",
+      });
 
-    const updatedProducts = getUserBankingProducts(allUsers[idx]);
-    updatedProducts.domProfile.usdBalanceCents = allUsers[idx].usdBalanceCents;
-    saveUserBankingProducts(user!.id, updatedProducts);
-    setProducts({ ...updatedProducts });
+      saveUsers(allUsers);
+      setUser(allUsers[idx]);
 
-    setFeedback({
-      type: "success",
-      message: `Funded $${usdAmount.toFixed(2)} into your USD Domiciliary Account (${formatKoboToNaira(requiredKobo)} debited).`,
-    });
-  }
+      const updatedProducts = getUserBankingProducts(allUsers[idx]);
+      updatedProducts.domProfile.usdBalanceCents = allUsers[idx].usdBalanceCents;
+      saveUserBankingProducts(user!.id, updatedProducts);
+      setProducts({ ...updatedProducts });
 
-  function handleIssueUsdCard() {
-    if ((user?.usdBalanceCents || 0) < 500) {
+      setIsConverting(false);
+      playSuccessChime();
       setFeedback({
-        type: "error",
-        message: "Maintain at least $5.00 in your USD Domiciliary Account before issuing a Dollar Card.",
+        type: "success",
+        message: `Successfully converted ${formatKoboToNaira(requiredKobo)} to $${targetUsd.toFixed(2)} USD!`,
       });
-      return;
-    }
-    const updated = createUsdVirtualCard(user!, usdNetworkChoice);
-    setProducts({ ...updated });
-    setFeedback({
-      type: "success",
-      message: `Ecobank ${usdNetworkChoice} Virtual Dollar Card issued and linked to your USD Domiciliary Account.`,
-    });
+      setTimeout(() => setFeedback(null), 5000);
+    }, 750);
   }
+
+  const hasCard = products.domProfile.hasUsdCard;
 
   return (
-    <main className={styles.transferContainer} style={{ maxWidth: "480px", margin: "0 auto", padding: "1.25rem", minHeight: "100dvh" }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-        <a
-          href="/"
-          style={{
-            textDecoration: "none",
-            color: "#007749",
-            fontWeight: 700,
-            fontSize: "0.85rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.3rem",
-          }}
-        >
-          &larr; Dashboard
+    <main className={styles.container}>
+      {/* ── Top Header ─────────────────────────────────────────────────── */}
+      <header className={styles.header}>
+        <a href="/" className={styles.backBtn}>
+          <span>&larr;</span> Dashboard
         </a>
-        <h1 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-          USD Domiciliary Account
-        </h1>
-        <div style={{ width: 48 }} />
+        <h1 className={styles.headerTitle}>USD Account & Card</h1>
+        <div className={styles.cbnBadge}>
+          <span>CBN Licensed</span>
+        </div>
       </header>
 
+      {/* ── Feedback Notification ──────────────────────────────────────── */}
       {feedback && (
         <div
-          style={{
-            padding: "0.7rem 0.9rem",
-            borderRadius: "0.75rem",
-            fontSize: "0.78rem",
-            fontWeight: 700,
-            marginBottom: "1rem",
-            background: feedback.type === "success" ? "#ecfdf5" : "#fef2f2",
-            color: feedback.type === "success" ? "#065f46" : "#b91c1c",
-            border: `1px solid ${feedback.type === "success" ? "#10b981" : "#f87171"}`,
-          }}
+          className={`${styles.toastAlert} ${feedback.type === "success" ? styles.toastSuccess : styles.toastError}`}
+          role="status"
         >
-          {feedback.message}
+          <span>{feedback.message}</span>
+          <button
+            onClick={() => setFeedback(null)}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", fontWeight: 800 }}
+          >
+            ✕
+          </button>
         </div>
       )}
 
-      {!products.domProfile.hasDomAccount ? (
-        <div
-          style={{
-            background: "#ffffff",
-            borderRadius: "1.25rem",
-            padding: "1.35rem",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-            <span
-              style={{
-                fontSize: "0.68rem",
-                fontWeight: 800,
-                color: "#1d4ed8",
-                background: "#eff6ff",
-                padding: "0.25rem 0.65rem",
-                borderRadius: "999px",
-              }}
-            >
-              FOREIGN EXCHANGE ACCOUNT
-            </span>
-            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#64748b" }}>Ecobank Domiciliary</span>
-          </div>
-
-          <h2 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#0f172a", margin: "0 0 0.4rem 0" }}>
-            Open Your Ecobank USD Domiciliary Account
-          </h2>
-          <p style={{ fontSize: "0.8rem", color: "#475569", margin: "0 0 1.15rem 0", lineHeight: 1.5 }}>
-            Hold United States Dollars, convert funds from your Naira wallet at live CBN / Ecobank FX rates, and issue a USD virtual card for global tuition and subscriptions.
-          </p>
-
-          <div
-            style={{
-              background: "#f8fafc",
-              padding: "0.9rem",
-              borderRadius: "0.85rem",
-              fontSize: "0.78rem",
-              color: "#334155",
-              marginBottom: "1.25rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.45rem",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Currency:</span>
-              <strong>USD ($)</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Partner Bank:</span>
-              <strong>Ecobank Nigeria PLC (SWIFT: ECOCNGLA)</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Live CBN / Ecobank Rate:</span>
-              <strong style={{ color: "#007749" }}>₦{fxData.ecobankRate.toLocaleString()} / $1.00</strong>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleOpenDomiciliary}
-            style={{
-              width: "100%",
-              backgroundColor: "#0b2545",
-              color: "#ffffff",
-              padding: "0.85rem",
-              borderRadius: "0.85rem",
-              fontWeight: 800,
-              fontSize: "0.85rem",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Create USD Domiciliary Account
-          </button>
-        </div>
-      ) : (
-        <>
-          {/* USD Domiciliary Account Summary */}
-          <div
-            style={{
-              background: "linear-gradient(135deg, #0b2545 0%, #134074 100%)",
-              borderRadius: "1.25rem",
-              padding: "1.35rem",
-              color: "#ffffff",
-              marginBottom: "1.25rem",
-              boxShadow: "0 12px 28px rgba(11, 37, 69, 0.25)",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-              <span style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.8px", color: "#93c5fd" }}>
-                ECOBANK USD DOMICILIARY ACCOUNT
+      {/* ── Responsive Dual-Column USD Account & FX Desk ── */}
+      <div className={styles.usdGrid}>
+        {/* ── Left Column: USD Details & Virtual Card ── */}
+        <div className={styles.usdColPrimary}>
+          {/* ── Stylistic Minimal USD Account Details Strip ─────────────────── */}
+          <section className={styles.minimalAccountStrip}>
+            <div className={styles.acctBalanceCol}>
+              <span className={styles.acctBalanceLabel}>USD Balance</span>
+              <span className={styles.acctBalanceValue}>
+                {formatCentsToUsd(user.usdBalanceCents)}
               </span>
+            </div>
+
+            <div className={styles.acctDetailsCol}>
               <button
                 type="button"
-                onClick={() => setHideBalance((p) => !p)}
-                style={{
-                  background: "rgba(255,255,255,0.15)",
-                  border: "none",
-                  color: "#ffffff",
-                  fontSize: "0.68rem",
-                  fontWeight: 700,
-                  padding: "0.2rem 0.55rem",
-                  borderRadius: "999px",
-                  cursor: "pointer",
-                }}
+                className={styles.acctNumberBadge}
+                onClick={() => handleCopy(products.domProfile.domAccountNumber, "acct")}
+                title="Click to copy USD account number"
               >
-                {hideBalance ? "Show Balance" : "Hide Balance"}
+                <span>{products.domProfile.domAccountNumber}</span>
+                <span style={{ fontSize: "0.65rem", color: "#007749" }}>
+                  {copiedText === "acct" ? "Copied" : "Copy"}
+                </span>
               </button>
+              <span className={styles.swiftCode}>SWIFT: {products.domProfile.routingSwift || "ECOCNGLA"}</span>
+            </div>
+          </section>
+
+          {/* ── PRIMARY HERO ELEMENT: USD Virtual Card ──────────────────────── */}
+          <section className={styles.cardHeroSection}>
+            <div className={styles.cardHeaderRow}>
+              <span className={styles.cardSectionTitle}>USD Virtual Card</span>
+              {hasCard && (
+                <button
+                  type="button"
+                  className={styles.cardFlipHint}
+                  onClick={() => setIsUsdCardFlipped((p) => !p)}
+                >
+                  {isUsdCardFlipped ? "Show Front" : "Tap to Flip for CVV"}
+                </button>
+              )}
             </div>
 
-            <div
-              onClick={() => setHideBalance((p) => !p)}
-              style={{ fontSize: "1.8rem", fontWeight: 900, fontFamily: "monospace", marginBottom: "0.85rem", color: "#a7f3d0", cursor: "pointer" }}
-            >
-              {hideBalance ? "••••••••" : formatCentsToUsd(user.usdBalanceCents)}
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                fontSize: "0.76rem",
-                background: "rgba(0,0,0,0.25)",
-                padding: "0.55rem 0.8rem",
-                borderRadius: "0.65rem",
-              }}
-            >
-              <div>
-                <span style={{ opacity: 0.75 }}>USD Acct: </span>
-                <strong style={{ fontFamily: "monospace", letterSpacing: "1px" }}>
-                  {products.domProfile.domAccountNumber}
-                </strong>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleCopy(products.domProfile.domAccountNumber, "DOM_ACCT")}
-                style={{
-                  background: "#007749",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "4px",
-                  padding: "0.2rem 0.55rem",
-                  fontSize: "0.68rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                {copiedText === "DOM_ACCT" ? "Copied" : "Copy Acct"}
-              </button>
-            </div>
-          </div>
-
-          {/* Live FX Funding Box */}
-          <div
-            style={{
-              background: "#ffffff",
-              borderRadius: "1.25rem",
-              padding: "1.25rem",
-              border: "1px solid #e2e8f0",
-              marginBottom: "1.25rem",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.65rem" }}>
-              <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-                Fund USD Account from Naira Wallet
-              </h3>
-              <button
-                type="button"
-                onClick={fetchLiveExchangeRate}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#007749",
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                {loadingFx ? "Refreshing FX..." : "↻ Refresh Rate"}
-              </button>
-            </div>
-
-            <div
-              style={{
-                background: "#f0fdf4",
-                border: "1px solid #bbf7d0",
-                borderRadius: "0.75rem",
-                padding: "0.65rem 0.85rem",
-                fontSize: "0.75rem",
-                color: "#065f46",
-                marginBottom: "0.9rem",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <span>{fxData.source}</span>
-              <strong>$1.00 = ₦{fxData.ecobankRate.toLocaleString()}</strong>
-            </div>
-
-            <form onSubmit={handleFundDomiciliaryFromNaira}>
-              <div className={styles.formGroup} style={{ marginBottom: "0.75rem" }}>
-                <label className={styles.formLabel}>Amount to Credit in USD ($)</label>
-                <input
-                  type="number"
-                  min="5"
-                  max="5000"
-                  step="1"
-                  required
-                  className={styles.formInput}
-                  value={usdFundInput}
-                  onChange={(e) => setUsdFundInput(e.target.value)}
-                />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.78rem", color: "#475569", marginBottom: "0.9rem" }}>
-                <span>Naira Debit Equivalent:</span>
-                <strong style={{ color: "#0f172a" }}>
-                  ₦{(Number(usdFundInput || 0) * fxData.ecobankRate).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </strong>
-              </div>
-
-              <button
-                type="submit"
-                style={{
-                  width: "100%",
-                  backgroundColor: "#007749",
-                  color: "#ffffff",
-                  padding: "0.75rem",
-                  borderRadius: "0.75rem",
-                  fontWeight: 800,
-                  fontSize: "0.82rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Convert NGN &amp; Fund USD Account
-              </button>
-            </form>
-          </div>
-
-          {/* Companion USD Virtual Card */}
-          {!products.domProfile.hasUsdCard ? (
-            <div style={{ background: "#ffffff", borderRadius: "1.25rem", padding: "1.25rem", border: "1px solid #e2e8f0" }}>
-              <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: "#0f172a", margin: "0 0 0.35rem 0" }}>
-                Issue Companion USD Dollar Card
-              </h3>
-              <p style={{ fontSize: "0.78rem", color: "#475569", margin: "0 0 0.9rem 0" }}>
-                Generate a virtual USD Visa or Mastercard backed by your USD Domiciliary balance.
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem", marginBottom: "0.85rem" }}>
-                {(["VISA", "MASTERCARD"] as CardNetwork[]).map((net) => (
-                  <button
-                    key={net}
-                    type="button"
-                    onClick={() => setUsdNetworkChoice(net)}
-                    style={{
-                      padding: "0.55rem",
-                      borderRadius: "0.65rem",
-                      fontWeight: 800,
-                      fontSize: "0.74rem",
-                      border: usdNetworkChoice === net ? "2px solid #0b2545" : "1px solid #cbd5e1",
-                      background: usdNetworkChoice === net ? "#eff6ff" : "#ffffff",
-                      color: usdNetworkChoice === net ? "#0b2545" : "#475569",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {net} USD
-                  </button>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={handleIssueUsdCard}
-                style={{
-                  width: "100%",
-                  backgroundColor: "#0b2545",
-                  color: "#ffffff",
-                  padding: "0.75rem",
-                  borderRadius: "0.75rem",
-                  fontWeight: 800,
-                  fontSize: "0.8rem",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Activate {usdNetworkChoice} Dollar Card
-              </button>
-            </div>
-          ) : (
-            <div>
-              <h3 style={{ fontSize: "0.88rem", fontWeight: 800, color: "#0f172a", marginBottom: "0.65rem" }}>
-                Companion USD Virtual Card (Tap to Flip for CVV)
-              </h3>
+            {hasCard ? (
               <div
+                className={styles.cardPerspective}
                 onClick={() => setIsUsdCardFlipped((p) => !p)}
                 role="button"
                 tabIndex={0}
-                style={{ perspective: "1200px", width: "100%", height: "232px", cursor: "pointer", userSelect: "none" }}
+                aria-label="USD Card. Click to flip front and back."
               >
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    transformStyle: "preserve-3d",
-                    transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
-                    transform: isUsdCardFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                  }}
-                >
-                  {/* USD CARD FRONT */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      background: "linear-gradient(135deg, #0b2545 0%, #134074 55%, #007749 100%)",
-                      borderRadius: "1.25rem",
-                      padding: "1.35rem 1.5rem",
-                      color: "#ffffff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "rgba(255,255,255,0.16)", padding: "0.25rem 0.65rem", borderRadius: "999px" }}>
-                        <Image src="/brand/ecocampus-logo.png" alt="EcoCampus" width={20} height={20} style={{ objectFit: "contain" }} />
-                        <span style={{ fontSize: "0.68rem", fontWeight: 800 }}>EcoCampus USD</span>
+                <div className={`${styles.cardInner} ${isUsdCardFlipped ? styles.cardFlipped : ""}`}>
+                  {/* CARD FRONT */}
+                  <div className={styles.cardFront}>
+                    <div className={styles.cardTopRow}>
+                      <div className={styles.cardChip}>
+                        <Image
+                          src="/brand/ecocampus-logo.png"
+                          alt="EcoCampus"
+                          width={18}
+                          height={18}
+                          style={{ objectFit: "contain" }}
+                        />
+                        <span>EcoCampus USD</span>
                       </div>
                       {!imgError ? (
-                        <Image src="/brand/ecobank.png" alt="Ecobank" width={125} height={36} style={{ width: "auto", height: "34px", objectFit: "contain" }} onError={() => setImgError(true)} />
+                        <Image
+                          src="/brand/ecobank.png"
+                          alt="Ecobank"
+                          width={110}
+                          height={32}
+                          style={{ width: "auto", height: "30px", objectFit: "contain" }}
+                          onError={() => setImgError(true)}
+                        />
                       ) : (
                         <span style={{ fontWeight: 900, fontStyle: "italic" }}>Ecobank</span>
                       )}
                     </div>
 
-                    <div style={{ fontSize: "1.18rem", fontFamily: "monospace", letterSpacing: "2.8px", fontWeight: 700 }}>
+                    <div className={styles.cardNumberDisplay}>
                       {products.domProfile.usdCardNumber}
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                    <div className={styles.cardBottomRow}>
                       <div>
-                        <span style={{ fontSize: "0.55rem", opacity: 0.8, fontFamily: "monospace" }}>
-                          VALID THRU {products.domProfile.expiryDate} • TAP FOR CVV
-                        </span>
-                        <p style={{ margin: 0, fontWeight: 800, fontSize: "0.82rem" }}>{user.fullName.toUpperCase()}</p>
+                        <div className={styles.cardExpiry}>
+                          EXPIRES {products.domProfile.expiryDate || "11/29"} • TAP FOR CVV
+                        </div>
+                        <p className={styles.cardHolderName}>{user.fullName.toUpperCase()}</p>
                       </div>
-                      <span style={{ background: "#ffffff", color: "#0b2545", padding: "0.25rem 0.65rem", borderRadius: "6px", fontWeight: 900, fontSize: "0.8rem" }}>
-                        {products.domProfile.usdCardNetwork}
+                      <span className={styles.cardNetworkPill}>
+                        {products.domProfile.usdCardNetwork || "VISA"}
                       </span>
                     </div>
                   </div>
 
-                  {/* USD CARD BACK */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      transform: "rotateY(180deg)",
-                      background: "linear-gradient(135deg, #0b2545 0%, #134074 55%, #007749 100%)",
-                      borderRadius: "1.25rem",
-                      color: "#ffffff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      paddingBottom: "1.1rem",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div style={{ width: "100%", height: "46px", background: "#0f172a", marginTop: "1.25rem" }} />
-                    <div style={{ padding: "0 1.5rem" }}>
-                      <span style={{ fontSize: "0.6rem", opacity: 0.85 }}>AUTHORIZED SIGNATURE &amp; CVV</span>
-                      <div style={{ background: "#f8fafc", padding: "0.45rem 0.75rem", borderRadius: "4px", textAlign: "right", marginTop: "0.25rem" }}>
-                        <strong style={{ color: "#0f172a", fontFamily: "monospace", fontSize: "1rem", letterSpacing: "2px" }}>
-                          {products.domProfile.cvv}
-                        </strong>
+                  {/* CARD BACK */}
+                  <div className={styles.cardBack}>
+                    <div className={styles.magStripe} />
+                    <div className={styles.cvvContainer}>
+                      <span className={styles.cvvLabel}>Security Code (CVV)</span>
+                      <div className={styles.cvvBox}>
+                        <span className={styles.cvvValue}>{products.domProfile.cvv || "412"}</span>
                       </div>
                     </div>
-                    <div style={{ padding: "0 1.5rem", fontSize: "0.6rem", opacity: 0.85 }}>
-                      Ecobank USD Domiciliary Card • Tap to flip front
+                    <div className={styles.cardBackFooter}>
+                      Ecobank Global Virtual Card • Tap card to flip back
                     </div>
                   </div>
                 </div>
               </div>
+            ) : (
+              /* Issue Card Card if not yet issued */
+              <div className={styles.issueCardPrompt}>
+                <p style={{ fontSize: "0.82rem", color: "#475569", margin: "0 0 0.75rem 0", lineHeight: 1.45 }}>
+                  Generate your USD virtual debit card instantly to pay for international exams, Spotify, Coursera, and tech tools.
+                </p>
+                <div className={styles.networkSelectorRow}>
+                  {(["VISA", "MASTERCARD"] as CardNetwork[]).map((net) => (
+                    <button
+                      key={net}
+                      type="button"
+                      onClick={() => setUsdNetworkChoice(net)}
+                      className={`${styles.networkSelectBtn} ${usdNetworkChoice === net ? styles.networkSelectActive : ""}`}
+                    >
+                      {net} USD
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleIssueUsdCard}
+                  className={styles.activateCardBtn}
+                >
+                  Activate {usdNetworkChoice} USD Card &rarr;
+                </button>
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* ── Right Column: FX Conversion Desk ── */}
+        <div className={styles.usdColSecondary}>
+          {/* ── SIMPLIFIED CONVERSION SECTION (Wise / Revolut Style) ────────── */}
+          <section className={styles.conversionCard}>
+            <div className={styles.conversionHeader}>
+              <span className={styles.conversionTitle}>Convert & Fund USD</span>
+              <div className={styles.rateBadge}>
+                <span>$1.00 = ₦{fxData.ecobankRate.toLocaleString()}</span>
+                <button
+                  type="button"
+                  onClick={fetchLiveExchangeRate}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "#007749", padding: 0, fontSize: "0.75rem" }}
+                  title="Refresh live rate"
+                >
+                  {loadingFx ? "..." : "↻"}
+                </button>
+              </div>
             </div>
-          )}
-        </>
-      )}
+
+            <form onSubmit={handleConvertAndFund}>
+              <div className={styles.swapContainer}>
+                {/* You Pay (Naira) */}
+                <div className={styles.currencyBox}>
+                  <div className={styles.currencyTopRow}>
+                    <span className={styles.currencyLabel}>You pay</span>
+                    <span className={styles.currencyBalanceHint}>
+                      Balance: {formatKoboToNaira(user.balanceKobo)}
+                    </span>
+                  </div>
+                  <div className={styles.currencyInputRow}>
+                    <input
+                      type="number"
+                      step="any"
+                      min="1"
+                      required
+                      value={nairaAmount}
+                      onChange={(e) => handleNairaChange(e.target.value)}
+                      className={styles.currencyInput}
+                      placeholder="0.00"
+                    />
+                    <div className={styles.currencyPill}>
+                      <span style={{ fontSize: "0.9rem" }}>🇳🇬</span>
+                      <span>NGN</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Swap Divider */}
+                <div className={styles.swapDivider}>
+                  <div className={styles.swapIconBtn}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 10l5 5 5-5" />
+                      <path d="M12 15V3" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* You Receive (USD) */}
+                <div className={styles.currencyBox}>
+                  <div className={styles.currencyTopRow}>
+                    <span className={styles.currencyLabel}>You receive</span>
+                    <span className={styles.currencyBalanceHint}>
+                      Zero conversion fee
+                    </span>
+                  </div>
+                  <div className={styles.currencyInputRow}>
+                    <input
+                      type="number"
+                      step="any"
+                      min="1"
+                      required
+                      value={usdAmount}
+                      onChange={(e) => handleUsdChange(e.target.value)}
+                      className={styles.currencyInput}
+                      placeholder="0.00"
+                    />
+                    <div className={styles.currencyPill}>
+                      <span style={{ fontSize: "0.9rem" }}>🇺🇸</span>
+                      <span>USD</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isConverting}
+                className={styles.convertSubmitBtn}
+              >
+                {isConverting ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.55rem" }}>
+                    <span className={styles.spinner} />
+                    Converting via Ecobank FX Desk...
+                  </span>
+                ) : (
+                  <>Convert &amp; Fund USD Account &rarr;</>
+                )}
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      {/* ── Bottom Navigation ──────────────────────────────────────────── */}
+      <BottomNav />
     </main>
   );
 }

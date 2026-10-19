@@ -66,13 +66,13 @@ const SLIDES: SlideData[] = [
       },
       {
         heading: "The Post-Graduation NYSC Cliff:",
-        text: "350,000 annual corps members face an insufficient ₦33,000 monthly allowance with zero equipment financing to transition into remote technology or modern professional employment.",
+        text: "350,000 annual corps members face a federal ₦77,000 monthly allowance that is insufficient for rising urban living costs, with zero equipment financing to transition into remote technology or modern professional employment.",
       },
     ],
     visualSuggestion: "Left: High-contrast comparison metrics highlighting NELFUND's 3–6 month delay vs predatory 30% APR apps; Right: Red-accented problem matrix contrasting bureaucratic red-tape with campus commerce risks.",
     imageSrc: "/pitch/loans.png",
     imageCaption: "The Real Gap: NELFUND's 3-6 month delay vs EcoCampus 24-48hr disbursement",
-    script: "To understand why EcoCampus matters, look at the reality facing a 200-level student in a Nigerian public university today. When tuition deadlines approach, NELFUND takes three to six months to process applications—too late to sit for exams. Their only alternative? Digital loan sharks charging 30% monthly interest with ruthless public shaming. Meanwhile, campus commerce is entirely unprotected on WhatsApp groups, and fresh graduates entering NYSC are dumped into cities with a ₦33,000 allowance that cannot even cover a work laptop. This is not just a student problem; it is a structural crisis in human capital development.",
+    script: "To understand why EcoCampus matters, look at the reality facing a 200-level student in a Nigerian public university today. When tuition deadlines approach, NELFUND takes three to six months to process applications—too late to sit for exams. Their only alternative? Digital loan sharks charging 30% monthly interest with ruthless public shaming. Meanwhile, campus commerce is entirely unprotected on WhatsApp groups, and fresh graduates entering NYSC face urban living costs with a ₦77,000 allowance that cannot cover an essential work laptop. This is not just a student problem; it is a structural crisis in human capital development.",
   },
   {
     number: 3,
@@ -106,7 +106,7 @@ const SLIDES: SlideData[] = [
     bullets: [
       {
         heading: "Pillar 1: Zero-Interest 200L+ & NYSC Financing Engine:",
-        text: "Undergrads access ₦20,000 to ₦250,000 at 0.0% APR with 24–48 hour disbursement directly into the university bursary to eliminate fund diversion. NYSC corpers receive up to ₦500,000 equipment advances with automated splits from their ₦33k monthly allowance.",
+        text: "Undergrads access ₦20,000 to ₦250,000 at 0.0% APR with 24–48 hour disbursement directly into the university bursary to eliminate fund diversion. NYSC corpers receive up to ₦500,000 equipment advances with automated splits from their ₦77k monthly allowance.",
       },
       {
         heading: "Pillar 2: EcoMarketplace with Ecobank Smart Escrow:",

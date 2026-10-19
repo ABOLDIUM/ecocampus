@@ -58,6 +58,11 @@ export interface EcoUser {
   lastName: string;
   fullName: string;
   email: string;
+  password?: string;
+  phone?: string;
+  nin?: string;
+  bvn?: string;
+  dateOfBirth?: string;
   accountNumber: string;
   customerId: string;
   balanceKobo: number;
@@ -94,6 +99,9 @@ const DEFAULT_USERS: EcoUser[] = [
     lastName: "David",
     fullName: "Ajugu Boluwatife David",
     email: "ajugu.david@ecocampus.ng",
+    password: "ecocampus123",
+    phone: "08012345678",
+    nin: "12345678901",
     accountNumber: "2420347201",
     customerId: "UNIABUJA/2024/472",
     balanceKobo: 12450000,
@@ -152,6 +160,58 @@ const DEFAULT_USERS: EcoUser[] = [
       },
     ],
   },
+  {
+    id: "user-2",
+    firstName: "Chioma",
+    lastName: "Eze",
+    fullName: "Chioma Blessing Eze",
+    email: "chioma.eze@unilag.edu.ng",
+    password: "ecocampus123",
+    phone: "08023456789",
+    nin: "23456789012",
+    accountNumber: "2420881920",
+    customerId: "UNILAG/2023/182",
+    balanceKobo: 4500000,
+    usdBalanceCents: 5000,
+    cashbackKobo: 12000,
+    checkInStreak: 3,
+    unreadNotifications: 0,
+    institutionName: "University of Lagos",
+    academicLevel: "300 Level Pharmacy",
+    courseOfStudy: "Pharmacy",
+    accountType: "student",
+    memberNumber: 842,
+    campusScore: 780,
+    loanEligible: true,
+    loanLimitKobo: 10000000,
+    transactions: [],
+  },
+  {
+    id: "user-3",
+    firstName: "Tunde",
+    lastName: "Bakare",
+    fullName: "Tunde Emmanuel Bakare",
+    email: "tunde.bakare@oauife.edu.ng",
+    password: "ecocampus123",
+    phone: "08034567890",
+    nin: "34567890123",
+    accountNumber: "2420556677",
+    customerId: "OAU/2022/910",
+    balanceKobo: 2150000,
+    usdBalanceCents: 2000,
+    cashbackKobo: 8000,
+    checkInStreak: 7,
+    unreadNotifications: 1,
+    institutionName: "Obafemi Awolowo University",
+    academicLevel: "400 Level Computer Science",
+    courseOfStudy: "Computer Science",
+    accountType: "student",
+    memberNumber: 1104,
+    campusScore: 810,
+    loanEligible: true,
+    loanLimitKobo: 20000000,
+    transactions: [],
+  },
 ];
 
 export function getUsers(): EcoUser[] {
@@ -162,7 +222,18 @@ export function getUsers(): EcoUser[] {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
       return DEFAULT_USERS;
     }
-    return JSON.parse(raw);
+    const parsed: EcoUser[] = JSON.parse(raw);
+    let changed = false;
+    for (const def of DEFAULT_USERS) {
+      if (!parsed.some((u) => u.id === def.id || u.accountNumber === def.accountNumber)) {
+        parsed.push(def);
+        changed = true;
+      }
+    }
+    if (changed) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+    return parsed;
   } catch {
     return DEFAULT_USERS;
   }
@@ -187,10 +258,6 @@ export function getActiveUser(): EcoUser | null {
   if (activeId) {
     const found = users.find((u) => u.id === activeId);
     if (found) return found;
-  }
-  if (users.length > 0) {
-    localStorage.setItem(ACTIVE_USER_KEY, users[0].id);
-    return users[0];
   }
   return null;
 }
@@ -218,10 +285,48 @@ export function setActiveUser(userOrId: string | EcoUser): void {
   localStorage.setItem(ACTIVE_USER_KEY, userOrId.id);
 }
 
+export function clearActiveUser(): void {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(ACTIVE_USER_KEY);
+  }
+}
+
+export function updateUserPassword(emailOrPhone: string, newPassword: string): boolean {
+  if (typeof window === "undefined") return false;
+  const users = getUsers();
+  const q = emailOrPhone.trim().toLowerCase();
+  const cleanQ = q.replace(/[\s\-\+]/g, "");
+
+  const user = users.find((u) => {
+    if (u.email.toLowerCase() === q) return true;
+    if (u.phone && u.phone.replace(/[\s\-\+]/g, "") === cleanQ) return true;
+    return false;
+  });
+
+  if (!user) {
+    // If not found, update the first demo user for seamless mock testing
+    if (users.length > 0) {
+      users[0].password = newPassword;
+      saveUsers(users);
+      return true;
+    }
+    return false;
+  }
+
+  user.password = newPassword;
+  saveUsers(users);
+  return true;
+}
+
 export function registerNewUser(data: {
   fullName: string;
   firstName: string;
   email: string;
+  phone?: string;
+  dateOfBirth?: string;
+  nin?: string;
+  bvn?: string;
+  password?: string;
   accountType?: "student" | "cooper";
   institutionName?: string;
   courseOfStudy?: string;
@@ -240,6 +345,11 @@ export function registerNewUser(data: {
     lastName: data.fullName.split(" ").slice(1).join(" ") || "",
     fullName: data.fullName,
     email: data.email.toLowerCase(),
+    password: data.password || "ecocampus123",
+    phone: data.phone || "",
+    nin: data.nin || "",
+    bvn: data.bvn || "",
+    dateOfBirth: data.dateOfBirth || "",
     accountNumber: randomAcc,
     customerId: randomCustId,
     balanceKobo: 1500000,
@@ -460,7 +570,7 @@ export function disburseNyscLoan(
     counterpartyAccount: "ECO-NYSC-REVOLV",
     amountKobo: principalKobo,
     status: "SUCCESSFUL",
-    narration: `NYSC Advance (${data.nyscCode}) · Auto ₦33k allowance split · GSI: ${data.gsiMandateRef}`,
+    narration: `NYSC Advance (${data.nyscCode}) · Auto ₦77k allowance split · GSI: ${data.gsiMandateRef}`,
     createdAt: "Just now",
   });
 

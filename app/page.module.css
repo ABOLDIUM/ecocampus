@@ -119,13 +119,87 @@
 
 /* ── App Viewport ─────────────────────────────────────────────────────────── */
 .appViewport {
-  max-width: 430px;
+  max-width: 480px;
   margin: 0 auto;
   min-height: 100dvh;
   background: var(--ec-bg-page);
   padding: 1rem 1rem 6rem 1rem;
   position: relative;
+  box-sizing: border-box;
 }
+
+@media (min-width: 768px) {
+  .appViewport {
+    max-width: 1400px;
+    margin: 0;
+    margin-left: 250px;
+    padding: 2rem 2.5rem 4rem 2.5rem;
+    min-height: 100vh;
+  }
+}
+
+/* ── Responsive Dashboard 2-Column Grid ───────────────────────────────────── */
+.dashboardGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.dashboardColPrimary,
+.dashboardColSecondary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .dashboardGrid {
+    gap: 1.25rem;
+  }
+
+  .dashboardColPrimary,
+  .dashboardColSecondary {
+    display: contents;
+  }
+
+  /* Reset separate bottom margins to maintain uniform 1.25rem grid gap */
+  .opayHeroCard,
+  .opayActionsRow,
+  .communityStrip,
+  .opportunitySection,
+  .servicesCard,
+  .transferSection,
+  .transactionSection {
+    margin-bottom: 0 !important;
+  }
+
+  /* Explicit visual ordering: Services section directly follows Opportunity section on mobile */
+  .opayHeroCard { order: 1; }
+  .opayActionsRow { order: 2; }
+  .communityStrip { order: 3; }
+  .opportunitySection { order: 4; }
+  .servicesCard { order: 5; }
+  .transferSection { order: 6; }
+  .transactionSection { order: 7; }
+}
+
+@media (min-width: 1024px) {
+  .dashboardGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .dashboardColSecondary {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
 
 /* ── Toast / Alert ────────────────────────────────────────────────────────── */
 .toastAlert {
@@ -338,220 +412,296 @@
   border: 2px solid var(--ec-bg-page);
 }
 
-/* ── Balance Card ─────────────────────────────────────────────────────────── */
-.balanceCard {
-  background: var(--ec-gradient-balance);
-  border-radius: var(--ec-radius-xl);
-  padding: 1.5rem;
+/* ── OPay-Style Hero Balance Card ─────────────────────────────────────────── */
+.opayHeroCard {
+  background: linear-gradient(135deg, #015238 0%, #007A4D 50%, #00965E 100%);
+  border-radius: 20px;
+  padding: 1.35rem 1.25rem 1.15rem 1.25rem;
   margin-bottom: 1rem;
+  color: #ffffff;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 31, 63, 0.25), 0 4px 16px rgba(0, 31, 63, 0.15);
+  box-shadow: 0 14px 34px rgba(0, 122, 77, 0.28), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.balanceCard::before {
+.opayHeroCard::after {
   content: '';
   position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 200px;
-  height: 200px;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 230, 118, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.balanceCard::after {
-  content: '';
-  position: absolute;
-  bottom: -40px;
-  left: -40px;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(26, 92, 168, 0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.balanceTopRow {
+.opayHeroTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.65rem;
+  position: relative;
+  z-index: 1;
 }
 
-.balanceLabel {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+.opayBalanceHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
-.balanceUsdLink {
+.opayBalanceLabel {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.01em;
+}
+
+.opayEyeBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.2rem 0.55rem;
-  border-radius: var(--ec-radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all var(--ec-duration-fast) var(--ec-ease-smooth);
+  justify-content: center;
+  padding: 2px;
+  transition: opacity 0.2s;
 }
 
-.balanceUsdLink:hover {
-  background: rgba(255, 255, 255, 0.18);
+.opayEyeBtn:hover {
+  opacity: 1;
   color: #ffffff;
 }
 
-.balanceMainRow {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-.balanceAmountGroup {
-  flex: 1;
-}
-
-.balanceAmount {
-  font-family: var(--ec-font-display);
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  cursor: pointer;
-}
-
-.balanceHideRow {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.3rem;
-}
-
-.eyeToggleBtn {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.7);
-  border: none;
-  border-radius: var(--ec-radius-pill);
-  padding: 0.2rem 0.55rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
+.opayHistoryLink {
+  display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  transition: all var(--ec-duration-fast) var(--ec-ease-smooth);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: opacity 0.2s;
 }
 
-.eyeToggleBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
+.opayHistoryLink:hover {
+  opacity: 1;
   color: #ffffff;
 }
 
-.addMoneyBtn {
-  background: var(--ec-gradient-green);
-  color: var(--ec-navy-900);
-  border: none;
-  border-radius: var(--ec-radius-pill);
-  padding: 0.65rem 1.1rem;
+.opayBalanceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.95rem;
+  position: relative;
+  z-index: 1;
+}
+
+.opayBalanceAmount {
+  font-family: var(--ec-font-display, inherit);
+  font-size: 2.15rem;
   font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  user-select: none;
+}
+
+.opayAddMoneyBtn {
+  background: #ffffff;
+  color: #007A4D;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.52rem 1.05rem;
+  font-weight: 700;
   font-size: 0.8rem;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: var(--ec-shadow-green);
-  display: flex;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  transition: transform var(--ec-duration-fast) var(--ec-ease-bounce), box-shadow var(--ec-duration-fast);
+  gap: 0.25rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.addMoneyBtn:hover {
-  transform: translateY(-1px) scale(1.03);
-  box-shadow: 0 12px 32px rgba(0, 200, 83, 0.4);
+.opayAddMoneyBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
-.addMoneyBtn:active {
+.opayAddMoneyBtn:active {
   transform: scale(0.97);
 }
 
-/* Campus Score Ring */
-.campusScoreWrap {
+.opayAccountRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.72rem;
+  position: relative;
+  z-index: 1;
+}
+
+.opayAccountInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.opayAccountLabel {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.opayAccountNum {
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+}
+
+.opayCopyBtn {
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.opayCopyBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.opayCashbackBadge {
+  background: rgba(0, 0, 0, 0.2);
+  color: #A3FFCE;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+/* ── OPay Quick Actions Row ──────────────────────────────────────────────── */
+.opayActionsRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.25rem;
+  background: var(--ec-bg-surface);
+  border: 1px solid var(--ec-border-subtle);
+  border-radius: 16px;
+  padding: 0.95rem 0.35rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--ec-shadow-card);
+}
+
+.opayActionItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  flex-shrink: 0;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: var(--ec-text-primary);
+  transition: transform 0.15s ease;
 }
 
-.campusScoreRing {
-  position: relative;
-  width: 62px;
-  height: 62px;
+.opayActionItem:hover {
+  transform: translateY(-2px);
 }
 
-.campusScoreSvg {
-  transform: rotate(-90deg);
-  width: 62px;
-  height: 62px;
-}
-
-.campusScoreTrack {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 4;
-}
-
-.campusScoreFill {
-  fill: none;
-  stroke: var(--ec-green-neon);
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-dasharray: 163;
-  transition: stroke-dashoffset 1.2s var(--ec-ease-smooth);
-  filter: drop-shadow(0 0 4px rgba(0, 230, 118, 0.6));
-}
-
-.campusScoreCenter {
-  position: absolute;
-  inset: 0;
+.opayActionIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s ease;
 }
 
-.campusScoreNum {
-  font-family: var(--ec-font-display);
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1;
+.actionGreen {
+  background: rgba(0, 168, 89, 0.12);
+  color: #00875A;
 }
 
-.campusScoreLabel {
-  font-size: 0.48rem;
+.actionNavy {
+  background: rgba(14, 116, 144, 0.12);
+  color: #0E7490;
+}
+
+.actionCyan {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284C7;
+}
+
+.actionOrange {
+  background: rgba(249, 115, 22, 0.12);
+  color: #EA580C;
+}
+
+.actionPurple {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7C3AED;
+}
+
+.opayActionLabel {
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--ec-green-neon);
-  text-transform: uppercase;
-}
-
-.campusScoreCaption {
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
   text-align: center;
-  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
+
+/* Existing peers / accounts pills in Transfer section */
+.existingAccountsWrap {
+  margin-bottom: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  background: rgba(0, 135, 90, 0.05);
+  border: 1px dashed rgba(0, 135, 90, 0.3);
+  border-radius: 10px;
+}
+
+.existingAccountsLabel {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ec-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.existingAccountsPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.existingAccountChip {
+  background: var(--ec-bg-surface);
+  border: 1px solid var(--ec-border);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ec-text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.existingAccountChip:hover {
+  background: #00875A;
+  color: #ffffff;
+  border-color: #00875A;
+}
+
+
 
 /* Account Meta Bar */
 .accountMetaBar {

@@ -1,0 +1,401 @@
+/* ============================================================================
+   ECOCAMPUS RESPONSIVE NAVIGATION — BOTTOMNAV.MODULE.CSS
+   Mobile: Fixed Bottom Navigation Bar (< 768px)
+   Tablet & Desktop: Persistent Sleek Left Sidebar (≥ 768px)
+   Electric Green (#00E676) × Ecobank Teal (#007749) × Deep Navy (#0A1628)
+   ============================================================================ */
+
+/* ── Outer Shell ──────────────────────────────────────────────────────────── */
+.navigationShell {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 0.35rem;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 999;
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Brand & Desktop Header (Hidden on Mobile) ───────────────────────────── */
+.desktopBrand {
+  display: none;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brandLogoWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0A1628 0%, #007749 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-shadow: 0 4px 10px rgba(0, 119, 73, 0.2);
+}
+
+.brandLogoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brandTextWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandTitle {
+  font-family: var(--font-family-display, -apple-system, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0A1628;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.brandAccent {
+  color: #007749;
+}
+
+.brandSub {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ecobankPartnerBadge {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+}
+
+.partnerText {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #007749;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Nav Links Container ──────────────────────────────────────────────────── */
+.navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+}
+
+.desktopSectionLabel {
+  display: none;
+}
+
+.desktopOnly {
+  display: none !important;
+}
+
+.desktopBadge,
+.desktopZeroBadge {
+  display: none;
+}
+
+/* ── Individual Nav Item ──────────────────────────────────────────────────── */
+.navItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5px;
+  height: 100%;
+  color: #64748B;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 0;
+}
+
+.navIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.navItem:hover {
+  color: #0A1628;
+}
+
+.navItemActive {
+  color: #007749;
+}
+
+.navItemActive .navIconWrap {
+  transform: translateY(-1px);
+}
+
+.navLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.navItemActive .navLabel {
+  font-weight: 700;
+}
+
+/* ── Desktop Profile Card (Hidden on Mobile) ─────────────────────────────── */
+.desktopProfileCard {
+  display: none;
+}
+
+/* ── Small Mobile Tweaks ─────────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .navigationShell {
+    padding: 0 0.25rem;
+  }
+  .navLabel {
+    font-size: 0.62rem;
+  }
+}
+
+/* ============================================================================
+   TABLET & DESKTOP SIDEBAR STYLES (≥ 768px)
+   ============================================================================ */
+@media (min-width: 768px) {
+  .navigationShell {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    height: 100vh;
+    max-width: 250px;
+    background: #FFFFFF;
+    border-top: none;
+    border-right: 1px solid #E2E8F0;
+    border-radius: 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 1.5rem 1rem 1.25rem;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.03);
+    z-index: 900;
+    overflow-y: auto;
+  }
+
+  /* Desktop Brand Header */
+  .desktopBrand {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #F1F5F9;
+  }
+
+  /* Nav Container */
+  .navContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    height: auto;
+  }
+
+  .desktopSectionLabel {
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 800;
+    color: #94A3B8;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 0.75rem 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .desktopOnly {
+    display: flex !important;
+  }
+
+  /* Sidebar Links */
+  .navItem {
+    flex: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    height: auto;
+    border-radius: 0.65rem;
+    font-size: 0.88rem;
+    color: #475569;
+    border-left: 3px solid transparent;
+  }
+
+  .navItem:hover {
+    background: #F8FAFC;
+    color: #0A1628;
+    border-left-color: #CBD5E1;
+  }
+
+  .navItemActive {
+    background: rgba(0, 119, 73, 0.08);
+    color: #007749;
+    font-weight: 700;
+    border-left-color: #007749;
+  }
+
+  .navItemActive svg {
+    stroke: #007749;
+  }
+
+  .navLabel {
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .navItemActive .navLabel {
+    font-weight: 700;
+    color: #007749;
+  }
+
+  /* Pills */
+  .desktopBadge {
+    display: inline-block;
+    background: #ECFDF5;
+    color: #007749;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    margin-left: auto;
+    border: 1px solid #A7F3D0;
+  }
+
+  .desktopZeroBadge {
+    display: inline-block;
+    background: #FEF3C7;
+    color: #B45309;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    margin-left: auto;
+    border: 1px solid #FDE68A;
+  }
+
+  /* Desktop Profile Card */
+  .desktopProfileCard {
+    display: block;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #F1F5F9;
+  }
+
+  .profileLinkWrap {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.65rem;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    transition: all 0.15s ease;
+  }
+
+  .profileLinkWrap:hover {
+    background: #F1F5F9;
+    border-color: #CBD5E1;
+  }
+
+  .avatarWrap {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .avatarCircle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #007749;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: -0.01em;
+  }
+
+  .onlineDot {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #10B981;
+    border: 2px solid #FFFFFF;
+  }
+
+  .profileTextWrap {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .profileName {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0F172A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .profileSub {
+    font-size: 0.68rem;
+    color: #64748B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

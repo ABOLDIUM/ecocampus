@@ -6,9 +6,11 @@
 
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { formatCentsToUsd, formatKoboToNaira } from "@/lib/formatting/currency";
+import Link from "next/link";
+
+import { formatKoboToNaira } from "@/lib/formatting/currency";
 import {
   executeDynamicTransfer,
   getActiveUser,
@@ -18,6 +20,8 @@ import {
 } from "@/lib/database/user-store";
 import { NIGERIAN_BANKS } from "@/lib/data/nigerian-banks";
 import { resolveBankAccountNumber } from "@/lib/api/banking-services";
+import { BottomNav } from "@/components/navigation/BottomNav";
+import { CompanyLogo } from "@/components/brand/CompanyLogo";
 import styles from "./page.module.css";
 
 // ── Static mock data for demo sections ─────────────────────────────────────
@@ -42,7 +46,7 @@ const OPPORTUNITIES = [
     type: "NYSC",
     title: "NYSC Corp Member — Tech",
     location: "Abuja",
-    stipend: "₦33k/mo + Allowance",
+    stipend: "₦77k/mo + Allowance",
     deadline: "Rolling",
   },
   {
@@ -152,38 +156,7 @@ const IconSkills = () => (
   </svg>
 );
 
-// ── Campus Score Ring Component ─────────────────────────────────────────────
-function CampusScoreRing({ score = 720 }: { score: number }) {
-  const radius = 25;
-  const circumference = 2 * Math.PI * radius;
-  const maxScore = 1000;
-  const fillPercent = Math.min(score / maxScore, 1);
-  const dashOffset = circumference * (1 - fillPercent);
 
-  return (
-    <div className={styles.campusScoreWrap}>
-      <div className={styles.campusScoreRing}>
-        <svg className={styles.campusScoreSvg} viewBox="0 0 62 62">
-          <circle
-            className={styles.campusScoreTrack}
-            cx="31" cy="31" r={radius}
-          />
-          <circle
-            className={styles.campusScoreFill}
-            cx="31" cy="31" r={radius}
-            strokeDasharray={circumference}
-            strokeDashoffset={dashOffset}
-          />
-        </svg>
-        <div className={styles.campusScoreCenter}>
-          <span className={styles.campusScoreNum}>{score}</span>
-          <span className={styles.campusScoreLabel}>Score</span>
-        </div>
-      </div>
-      <span className={styles.campusScoreCaption}>Campus Score</span>
-    </div>
-  );
-}
 
 // ── Transaction Category Icon ───────────────────────────────────────────────
 function TxIcon({ category, type }: { category: string; type: "CREDIT" | "DEBIT" }) {
@@ -203,9 +176,8 @@ function TxIcon({ category, type }: { category: string; type: "CREDIT" | "DEBIT"
 // ── Main Dashboard Component ────────────────────────────────────────────────
 export default function EcoCampusDashboardPage() {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [showSplash, setShowSplash] = useState<boolean>(true);
+  const [showSplash, setShowSplash] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<EcoUser | null>(null);
   const [hideBalance, setHideBalance] = useState<boolean>(false);
   const [greetingText, setGreetingText] = useState<string>("Welcome");
@@ -224,16 +196,12 @@ export default function EcoCampusDashboardPage() {
   const [toastAlert, setToastAlert] = useState<{ title: string; message: string } | null>(null);
 
   const loadActiveUserData = useCallback(() => {
-    const loadedUsers = getUsers();
     const active = getActiveUser();
-    if (!active) { router.push("/login"); return; }
-    setCurrentUser(active);
-    const other = loadedUsers.find((u) => u.id !== active.id);
-    if (other && !recipientAccount) {
-      setRecipientAccount(other.accountNumber);
-      handleAccountInput(other.accountNumber, "ECOCAMPUS");
+    if (!active) {
+      router.replace("/landing");
+      return;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentUser(active);
   }, [router]);
 
   useEffect(() => {
@@ -243,8 +211,6 @@ export default function EcoCampusDashboardPage() {
     if (hour < 12) setGreetingText("Good morning");
     else if (hour < 17) setGreetingText("Good afternoon");
     else setGreetingText("Good evening");
-
-    const splashTimer = window.setTimeout(() => setShowSplash(false), 2200);
 
     // Animate community counter upward
     let count = COMMUNITY_COUNT_BASE;
@@ -258,7 +224,6 @@ export default function EcoCampusDashboardPage() {
     const backgroundPoller = setInterval(loadActiveUserData, 2000);
 
     return () => {
-      window.clearTimeout(splashTimer);
       clearInterval(counterInterval);
       window.removeEventListener("storage", handleStorageUpdate);
       clearInterval(backgroundPoller);
@@ -287,44 +252,27 @@ export default function EcoCampusDashboardPage() {
     setTimeout(() => setToastAlert(null), 4500);
   }
 
-  async function handleAccountInput(accNum: string, mode = transferMode, bankCode = selectedBankCode) {
+  async function handleAccountInput(rawVal: string, mode = transferMode, bankCode = selectedBankCode) {
+    const accNum = rawVal.replace(/\D/g, "").slice(0, 10);
     setRecipientAccount(accNum);
     setRecipientNameDisplay("");
+    setFeedback(null);
     if (accNum.length === 10) {
       setIsResolving(true);
       const codeToQuery = mode === "ECOCAMPUS" ? "ECO" : bankCode;
       const res = await resolveBankAccountNumber(accNum, codeToQuery);
       setIsResolving(false);
-      if (res.success) setRecipientNameDisplay(res.accountName);
+      if (res.success) {
+        setRecipientNameDisplay(res.accountName);
+      } else {
+        setRecipientNameDisplay("");
+        if (res.error) {
+          setFeedback({ type: "error", message: res.error });
+        }
+      }
     }
   }
 
-  function handleProfilePictureUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      const all = getUsers();
-      const idx = all.findIndex((u) => u.id === currentUser?.id);
-      if (idx === -1) return;
-      all[idx].profilePictureUrl = base64String;
-      saveUsers(all);
-      setCurrentUser(all[idx]);
-      triggerNotification("Profile Updated", "Your profile picture has been updated.");
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function handleClearHistory() {
-    const all = getUsers();
-    const idx = all.findIndex((u) => u.id === currentUser?.id);
-    if (idx === -1) return;
-    all[idx].transactions = [];
-    saveUsers(all);
-    setCurrentUser(all[idx]);
-    triggerNotification("History Cleared", "Transaction history has been cleared.");
-  }
 
   function handleTopUp() {
     const all = getUsers();
@@ -426,19 +374,6 @@ export default function EcoCampusDashboardPage() {
   if (!currentUser) return null;
 
   const memberNum = String(currentUser.memberNumber ?? 247).padStart(6, "0");
-  const campusScore = currentUser.campusScore ?? 720;
-  const loanLimitNaira = ((currentUser.loanLimitKobo ?? 15000000) / 100).toLocaleString();
-
-  // Streak formatting
-  const totalDays = currentUser.checkInStreak || 1;
-  const streakYears = Math.floor(totalDays / 365);
-  const streakMonths = Math.floor((totalDays % 365) / 30);
-  const streakDays = totalDays - streakYears * 365 - streakMonths * 30;
-  const streakString = [
-    streakYears > 0 ? `${streakYears}y` : "",
-    streakMonths > 0 ? `${streakMonths}mo` : "",
-    `${streakDays}d`,
-  ].filter(Boolean).join(" ");
 
   return (
     <main className={styles.appViewport}>
@@ -454,27 +389,13 @@ export default function EcoCampusDashboardPage() {
         </aside>
       )}
 
-      {/* ── Hidden file input for profile pic ──────────────────────────── */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleProfilePictureUpload}
-        accept="image/*"
-        style={{ display: "none" }}
-        aria-hidden="true"
-      />
-
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className={styles.topGreetingBar}>
         <div className={styles.greetingLeft}>
           {/* Avatar */}
-          <div className={styles.avatarWrap}>
+          <Link href="/profile" className={styles.avatarWrap} title="View Profile & Settings">
             <div
               className={styles.avatarRing}
-              onClick={() => fileInputRef.current?.click()}
-              title="Tap to change profile photo"
-              role="button"
-              tabIndex={0}
               aria-label="Profile picture"
             >
               <div className={styles.avatarInner}>
@@ -490,12 +411,12 @@ export default function EcoCampusDashboardPage() {
               </div>
             </div>
             <span className={styles.avatarOnline} aria-hidden="true" />
-          </div>
+          </Link>
 
           {/* Greeting text */}
           <div className={styles.greetingTextWrap}>
             <h1 className={styles.greetingTitle}>
-              {greetingText}, {currentUser.firstName} 👋
+              {greetingText}, {currentUser.firstName}
             </h1>
             <p className={styles.greetingSub}>
               {currentUser.institutionName ?? "EcoCampus Student"} · {currentUser.academicLevel ?? "Student"}
@@ -526,500 +447,412 @@ export default function EcoCampusDashboardPage() {
         </div>
       </header>
 
-      {/* ── Balance Card ────────────────────────────────────────────────── */}
-      <section className={styles.balanceCard} aria-label="Wallet Balance">
-        <div className={styles.balanceTopRow}>
-          <span className={styles.balanceLabel}>Available Balance</span>
-          <a
-            href="/usd-account"
-            className={styles.balanceUsdLink}
-            aria-label="View USD account"
-          >
-            USD {formatCentsToUsd(currentUser.usdBalanceCents, hideBalance)} →
-          </a>
-        </div>
+      {/* ── Responsive Dashboard 2-Column Grid (Desktop ≥ 1024px) ── */}
+      <div className={styles.dashboardGrid}>
+        {/* ── Left Column (~65% Desktop): Wallet & Transfers ── */}
+        <div className={styles.dashboardColPrimary}>
+          {/* ── OPay-Style Hero ──────────────────────────────────────────────── */}
+          <section className={styles.opayHeroCard} aria-label="Wallet Balance">
+            {/* Top row: label + eye + history link */}
+            <div className={styles.opayHeroTop}>
+              <div className={styles.opayBalanceHeader}>
+                <span className={styles.opayBalanceLabel}>Available Balance</span>
+                <button
+                  type="button"
+                  className={styles.opayEyeBtn}
+                  onClick={() => setHideBalance((p) => !p)}
+                  aria-label={hideBalance ? "Show balance" : "Hide balance"}
+                >
+                  {hideBalance ? (
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                  ) : (
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                  )}
+                </button>
+              </div>
+              <a href="#transactions" className={styles.opayHistoryLink} aria-label="View transaction history">
+                History
+                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </a>
+            </div>
 
-        <div className={styles.balanceMainRow}>
-          <div className={styles.balanceAmountGroup}>
-            <p
-              className={styles.balanceAmount}
-              onClick={() => setHideBalance((p) => !p)}
-              style={{ cursor: "pointer" }}
-              aria-label="Tap to toggle balance visibility"
-            >
-              {formatKoboToNaira(currentUser.balanceKobo, hideBalance)}
-            </p>
-            <div className={styles.balanceHideRow}>
+            {/* Balance + Add Money */}
+            <div className={styles.opayBalanceRow}>
+              <p className={styles.opayBalanceAmount} aria-label="Wallet balance">
+                {formatKoboToNaira(currentUser.balanceKobo, hideBalance)}
+              </p>
               <button
                 type="button"
-                onClick={() => setHideBalance((p) => !p)}
-                className={styles.eyeToggleBtn}
-                aria-label={hideBalance ? "Show balance" : "Hide balance"}
+                onClick={handleTopUp}
+                className={styles.opayAddMoneyBtn}
+                aria-label="Add money to wallet"
               >
-                {hideBalance ? "👁 Show" : "🙈 Hide"}
+                + Add Money
               </button>
             </div>
-          </div>
 
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
-            {/* Campus Score Ring */}
-            <CampusScoreRing score={campusScore} />
+            {/* Account number row */}
+            <div className={styles.opayAccountRow}>
+              <div className={styles.opayAccountInfo}>
+                <span className={styles.opayAccountLabel}>Acc:</span>
+                <span className={styles.opayAccountNum}>{currentUser.accountNumber}</span>
+                <button
+                  type="button"
+                  className={styles.opayCopyBtn}
+                  onClick={() => { navigator.clipboard?.writeText(currentUser.accountNumber); triggerNotification("Copied", "Account number copied to clipboard."); }}
+                  aria-label="Copy account number"
+                >
+                  Copy
+                </button>
+              </div>
+              {currentUser.cashbackKobo > 0 && (
+                <span className={styles.opayCashbackBadge}>
+                  +{formatKoboToNaira(currentUser.cashbackKobo, hideBalance)} cashback
+                </span>
+              )}
+            </div>
+          </section>
 
-            {/* Add Money button */}
-            <button
-              type="button"
-              onClick={handleTopUp}
-              className={styles.addMoneyBtn}
-              aria-label="Add money to wallet"
+          {/* ── Quick Actions Row (OPay style) ───────────────────────────────── */}
+          <div className={styles.opayActionsRow} role="navigation" aria-label="Quick actions">
+            <a
+              href="#transfer"
+              onClick={() => setTransferMode("ECOCAMPUS")}
+              className={styles.opayActionItem}
+              aria-label="Transfer to EcoCampus"
             >
-              + Add Money
-            </button>
+              <div className={`${styles.opayActionIconCircle} ${styles.actionGreen}`}>
+                <IconTransfer />
+              </div>
+              <span className={styles.opayActionLabel}>Transfer</span>
+            </a>
+
+            <a
+              href="#transfer"
+              onClick={() => setTransferMode("OTHER_BANKS")}
+              className={styles.opayActionItem}
+              aria-label="Send to other banks"
+            >
+              <div className={`${styles.opayActionIconCircle} ${styles.actionNavy}`}>
+                <IconBank />
+              </div>
+              <span className={styles.opayActionLabel}>To Bank</span>
+            </a>
+
+            <a
+              href="/usd-account"
+              className={styles.opayActionItem}
+              aria-label="USD Account & Card"
+            >
+              <div className={`${styles.opayActionIconCircle} ${styles.actionCyan}`}>
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              </div>
+              <span className={styles.opayActionLabel}>USD Card</span>
+            </a>
+
+            <a
+              href="/cards"
+              className={styles.opayActionItem}
+              aria-label="NGN Card"
+            >
+              <div className={`${styles.opayActionIconCircle} ${styles.actionPurple}`}>
+                <IconCard />
+              </div>
+              <span className={styles.opayActionLabel}>NGN Card</span>
+            </a>
+
+            <a
+              href="/loans"
+              className={styles.opayActionItem}
+              aria-label="Apply for a loan"
+            >
+              <div className={`${styles.opayActionIconCircle} ${styles.actionOrange}`}>
+                <IconLoan />
+              </div>
+              <span className={styles.opayActionLabel}>Loan</span>
+            </a>
           </div>
+
+           {/* ── Community Counter ───────────────────────────────────────────── */}
+          <div className={styles.communityStrip} aria-label="EcoCampus community size">
+            <div className={styles.communityAvatars} aria-hidden="true">
+              {["AJ", "EM", "TF", "BI"].map((initials) => (
+                <div key={initials} className={styles.communityAvatar}>{initials}</div>
+              ))}
+            </div>
+            <p className={styles.communityText}>
+              <span className={styles.communityCountLive}>
+                <span className={styles.liveDot} />
+                <span className={styles.communityCount}>
+                  {communityCount.toLocaleString()}+
+                </span>
+              </span>
+              {" "}students on EcoCampus
+            </p>
+          </div>
+
+          {/* ── Opportunity Hub Preview ─────────────────────────────────────── */}
+          <section className={styles.opportunitySection} aria-label="Opportunity Hub">
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Opportunity Hub</h2>
+              <a href="/opportunities" className={styles.sectionLink} aria-label="See all opportunities">
+                See all →
+              </a>
+            </div>
+
+            <div className={styles.opportunityScroll} role="list">
+              {OPPORTUNITIES.map((opp) => (
+                <a
+                  key={opp.id}
+                  href="/opportunities"
+                  className={styles.opportunityCard}
+                  aria-label={`${opp.title} at ${opp.company}`}
+                  role="listitem"
+                >
+                  <div className={styles.oppCardTop}>
+                    <div className={styles.oppCompanyBadge}>
+                      <CompanyLogo company={opp.company} size={28} />
+                      <span className={styles.oppCompanyName}>{opp.company}</span>
+                    </div>
+                    <span
+                      className={`${styles.oppTypeBadge} ${
+                        opp.type === "INTERN"
+                          ? styles.oppTypeBadgeIntern
+                          : opp.type === "NYSC"
+                          ? styles.oppTypeBadgeNYSC
+                          : styles.oppTypeBadgeGrad
+                      }`}
+                    >
+                      {opp.type === "INTERN" ? "Internship"
+                        : opp.type === "NYSC" ? "NYSC" : "Graduate"}
+                    </span>
+                  </div>
+
+                  <p className={styles.oppTitle}>{opp.title}</p>
+
+                  <div className={styles.oppMeta}>
+                    <span className={styles.oppMetaItem}>
+                      {opp.location}
+                    </span>
+                    <span className={styles.oppMetaItem}>
+                      {opp.stipend}
+                    </span>
+                    <span className={styles.oppMetaItem}>
+                      Closes {opp.deadline}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* ── Fund Transfer Panel ────────────────────────────────────────── */}
+          <section className={styles.transferSection} id="transfer" aria-label="Fund Transfer">
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.cardSectionTitle}>Fund Transfer</h2>
+            </div>
+
+            {/* Mode toggle tabs */}
+            <div className={styles.transferTabGroup} role="tablist" aria-label="Transfer mode">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={transferMode === "ECOCAMPUS"}
+                onClick={() => {
+                  setTransferMode("ECOCAMPUS");
+                  setRecipientNameDisplay("");
+                  setRecipientAccount("");
+                }}
+                className={`${styles.transferTab} ${transferMode === "ECOCAMPUS" ? styles.transferTabActive : ""}`}
+              >
+                EcoCampus
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={transferMode === "OTHER_BANKS"}
+                onClick={() => {
+                  setTransferMode("OTHER_BANKS");
+                  setRecipientNameDisplay("");
+                  setRecipientAccount("");
+                }}
+                className={`${styles.transferTab} ${transferMode === "OTHER_BANKS" ? styles.transferTabActive : ""}`}
+              >
+                Other Banks
+              </button>
+            </div>
+
+            <form onSubmit={handleTransfer}>
+              {transferMode === "OTHER_BANKS" && (
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel} htmlFor="bankSelect">Select Bank</label>
+                  <select
+                    id="bankSelect"
+                    className={styles.formInput}
+                    value={selectedBankCode}
+                    onChange={(e) => {
+                      setSelectedBankCode(e.target.value);
+                      if (recipientAccount.length === 10) {
+                        handleAccountInput(recipientAccount, "OTHER_BANKS", e.target.value);
+                      }
+                    }}
+                  >
+                    {NIGERIAN_BANKS.map((b) => (
+                      <option key={b.code} value={b.code}>{b.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="recipientAccount">
+                  {transferMode === "ECOCAMPUS" ? "EcoCampus Account Number" : "Account Number"}
+                </label>
+                <input
+                  id="recipientAccount"
+                  type="text"
+                  maxLength={10}
+                  required
+                  className={styles.formInput}
+                  placeholder="Enter 10-digit account number"
+                  value={recipientAccount}
+                  onChange={(e) => handleAccountInput(e.target.value)}
+                  autoComplete="off"
+                  inputMode="numeric"
+                />
+              </div>
+
+              {isResolving && (
+                <div className={styles.resolvingBanner}>
+                  <div className={styles.spinner} aria-hidden="true" />
+                  Verifying via NIBSS...
+                </div>
+              )}
+
+              {recipientNameDisplay && !isResolving && (
+                <div className={styles.recipientBanner}>
+                  <IconCheck />
+                  {recipientNameDisplay}
+                </div>
+              )}
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="amount">Amount (₦)</label>
+                <input
+                  id="amount"
+                  type="number"
+                  min="50"
+                  required
+                  className={styles.formInput}
+                  placeholder="0.00"
+                  value={transferNaira}
+                  onChange={(e) => setTransferNaira(e.target.value)}
+                  inputMode="decimal"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel} htmlFor="narration">Narration</label>
+                <input
+                  id="narration"
+                  type="text"
+                  required
+                  className={styles.formInput}
+                  placeholder="What is this transfer for?"
+                  value={narration}
+                  onChange={(e) => setNarration(e.target.value)}
+                />
+              </div>
+
+              {feedback && (
+                <div className={feedback.type === "success" ? styles.resolvedBanner : styles.errorBanner} role="alert">
+                  {feedback.message}
+                </div>
+              )}
+
+              <button type="submit" className={styles.submitBtn} id="sendFundsBtn">
+                Send Funds Instantly →
+              </button>
+            </form>
+          </section>
+
+
         </div>
 
-        {/* Account meta bar */}
-        <div className={styles.accountMetaBar}>
-          <div className={styles.metaItem}>
-            <span className={styles.metaItemLabel}>Account</span>
-            <span className={styles.metaItemValue}>{currentUser.accountNumber}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaItemLabel}>Cashback</span>
-            <span className={styles.metaItemValue}>{formatKoboToNaira(currentUser.cashbackKobo, hideBalance)}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaItemLabel}>Streak</span>
-            <span className={`${styles.metaItemValue} ${styles.metaStreakValue}`}>
-              🔥 {streakString}
-            </span>
-          </div>
-        </div>
-      </section>
+        {/* ── Right Column (~35% Desktop): Score, Services & History ── */}
+        <div className={styles.dashboardColSecondary}>
 
-      {/* ── Loan / Credit Status Banner ─────────────────────────────────── */}
-      {currentUser.activeLoan && currentUser.activeLoan.status === "ACTIVE" ? (
-        <a
-          href="/loans"
-          className={styles.loanBanner}
-          style={{ background: "linear-gradient(135deg, #0A1628 0%, #001F3F 100%)", borderColor: "rgba(0, 230, 118, 0.4)" }}
-          aria-label="Manage active loan"
-          role="link"
-        >
-          <div className={styles.loanBannerIcon} style={{ background: "rgba(0, 230, 118, 0.2)", color: "#00E676" }}>
-            <IconLoan />
-          </div>
-          <div className={styles.loanBannerText}>
-            <p className={styles.loanBannerTitle} style={{ color: "#00E676" }}>
-              Active Facility: {formatKoboToNaira(currentUser.activeLoan.remainingKobo)}
-            </p>
-            <p className={styles.loanBannerSub} style={{ color: "#CBD5E1" }}>
-              Next GSI auto-deduction: {currentUser.activeLoan.nextDeductionDate}
-            </p>
-          </div>
-          <span className={styles.loanBannerCta} style={{ background: "#00E676", color: "#001F3F", fontWeight: 800 }}>
-            Manage <IconChevronRight />
-          </span>
-        </a>
-      ) : currentUser.loanEligible ? (
-        <a
-          href="/loans"
-          className={styles.loanBanner}
-          aria-label="Apply for zero-interest loan"
-          role="link"
-        >
-          <div className={styles.loanBannerIcon}>
-            <IconLoan />
-          </div>
-          <div className={styles.loanBannerText}>
-            <p className={styles.loanBannerTitle}>
-              You qualify for ₦{loanLimitNaira} · Zero Interest
-            </p>
-            <p className={styles.loanBannerSub}>
-              24–48hr disbursement · GSI-secured · No stress
-            </p>
-          </div>
-          <span className={styles.loanBannerCta}>
-            Apply <IconChevronRight />
-          </span>
-        </a>
-      ) : null}
 
-      {/* ── Community Counter ───────────────────────────────────────────── */}
-      <div className={styles.communityStrip} aria-label="EcoCampus community size">
-        <div className={styles.communityAvatars} aria-hidden="true">
-          {["AJ", "EM", "TF", "BI"].map((initials) => (
-            <div key={initials} className={styles.communityAvatar}>{initials}</div>
-          ))}
+          {/* ── Services Grid ───────────────────────────────────────────────── */}
+          <section aria-label="All services" className={styles.servicesCard}>
+            <div className={styles.sectionHeader} style={{ marginBottom: "0.85rem" }}>
+              <h2 className={styles.sectionTitle}>Services</h2>
+            </div>
+            <div className={styles.servicesGrid}>
+              {[
+                { href: "/airtime-data", label: "Airtime",      icon: <IconAirtime />,  cls: "stiGreen"  },
+                { href: "/airtime-data", label: "Data",         icon: <IconData />,     cls: "stiBlue"   },
+                { href: "/utility",     label: "Utility",      icon: <IconUtility />,  cls: "stiOrange" },
+                { href: "/rewards",     label: "EcoRewards",   icon: <IconRewards />,  cls: "stiGold"   },
+                { href: "/cards",       label: "NGN Card",     icon: <IconCard />,     cls: "stiPurple" },
+                { href: "/investments", label: "EcoInvest",    icon: <IconInvest />,   cls: "stiTeal"   },
+                { href: "/marketplace", label: "EcoMarket",    icon: <IconMarket />,   cls: "stiPink"   },
+                { href: "/usd-account", label: "USD Account",  icon: <IconUSD />,      cls: "stiRed"    },
+                { href: "/training",    label: "EcoSkills",    icon: <IconSkills />,   cls: "stiBlue"   },
+                { href: "/loans",       label: "Loan",         icon: <IconLoan />,     cls: "stiGold"   },
+                { href: "/transfers",   label: "Transfer",     icon: <IconTransfer />, cls: "stiGreen"  },
+                { href: "/usd-account", label: "FX",           icon: <IconUSD />,      cls: "stiOrange" },
+              ].map(({ href, label, icon, cls }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className={styles.serviceTile}
+                  aria-label={label}
+                >
+                  <div className={`${styles.serviceTileIcon} ${styles[cls as keyof typeof styles]}`}>
+                    {icon}
+                  </div>
+                  <span className={styles.serviceTileLabel}>{label}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* ── Transaction History ─────────────────────────────────────────── */}
+          <section className={styles.transactionSection} id="transactions" aria-label="Transaction History">
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.cardSectionTitle}>Transactions</h2>
+            </div>
+
+            <div className={styles.txList}>
+              {currentUser.transactions.length === 0 ? (
+                <div className={styles.txEmptyState}>
+                  <div className={styles.txEmptyIcon}>🧾</div>
+                  <p className={styles.txEmptyText}>No transactions yet</p>
+                </div>
+              ) : (
+                currentUser.transactions.map((tx) => (
+                  <div key={tx.id} className={styles.txItem}>
+                    <TxIcon category={tx.category} type={tx.type} />
+                    <div className={styles.txContent}>
+                      <p className={styles.txTitle}>{tx.title}</p>
+                      <p className={styles.txMeta}>{tx.createdAt} · {tx.reference}</p>
+                    </div>
+                    <span className={`${styles.txAmount} ${tx.type === "CREDIT" ? styles.txCredit : styles.txDebit}`}>
+                      {tx.type === "CREDIT" ? "+" : "−"}{formatKoboToNaira(tx.amountKobo, hideBalance)}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
         </div>
-        <p className={styles.communityText}>
-          <span className={styles.communityCountLive}>
-            <span className={styles.liveDot} />
-            <span className={styles.communityCount}>
-              {communityCount.toLocaleString()}+
-            </span>
-          </span>
-          {" "}students on EcoCampus
-        </p>
       </div>
 
-      {/* ── Quick Actions ───────────────────────────────────────────────── */}
-      <section aria-label="Quick actions" className={styles.quickActionsCard}>
-        <div className={styles.sectionHeader} style={{ marginBottom: "0.85rem" }}>
-          <h2 className={styles.sectionTitle}>Quick Actions</h2>
-        </div>
-        <div className={styles.quickActionsGrid}>
-          <a
-            href="#transfer"
-            onClick={() => setTransferMode("ECOCAMPUS")}
-            className={styles.quickTile}
-            aria-label="Transfer to EcoCampus"
-          >
-            <div className={`${styles.quickTileIcon} ${styles.quickTileIconGreen}`}>
-              <IconTransfer />
-            </div>
-            <span className={styles.quickTileLabel}>Transfer</span>
-          </a>
-
-          <a
-            href="#transfer"
-            onClick={() => setTransferMode("OTHER_BANKS")}
-            className={styles.quickTile}
-            aria-label="Send to other banks"
-          >
-            <div className={`${styles.quickTileIcon} ${styles.quickTileIconNavy}`}>
-              <IconBank />
-            </div>
-            <span className={styles.quickTileLabel}>To Bank</span>
-          </a>
-
-          <a
-            href="/loans"
-            className={styles.quickTile}
-            aria-label="Apply for a loan"
-          >
-            <div className={`${styles.quickTileIcon} ${styles.quickTileIconGold}`}>
-              <IconLoan />
-            </div>
-            <span className={styles.quickTileLabel}>Loan</span>
-          </a>
-
-          <a
-            href="/marketplace"
-            className={styles.quickTile}
-            aria-label="Visit campus marketplace"
-          >
-            <div className={`${styles.quickTileIcon} ${styles.quickTileIconPurple}`}>
-              <IconMarket />
-            </div>
-            <span className={styles.quickTileLabel}>Marketplace</span>
-          </a>
-        </div>
-      </section>
-
-      {/* ── Opportunity Hub Preview ─────────────────────────────────────── */}
-      <section className={styles.opportunitySection} aria-label="Opportunity Hub">
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Opportunity Hub</h2>
-          <a href="/opportunities" className={styles.sectionLink} aria-label="See all opportunities">
-            See all →
-          </a>
-        </div>
-
-        <div className={styles.opportunityScroll} role="list">
-          {OPPORTUNITIES.map((opp) => (
-            <a
-              key={opp.id}
-              href="/opportunities"
-              className={styles.opportunityCard}
-              aria-label={`${opp.title} at ${opp.company}`}
-              role="listitem"
-            >
-              <div className={styles.oppCardTop}>
-                <div className={styles.oppCompanyBadge}>
-                  <div
-                    className={styles.oppCompanyLogo}
-                    style={{ background: opp.logoColor }}
-                    aria-hidden="true"
-                  >
-                    {opp.logo}
-                  </div>
-                  <span className={styles.oppCompanyName}>{opp.company}</span>
-                </div>
-                <span
-                  className={`${styles.oppTypeBadge} ${
-                    opp.type === "INTERN"
-                      ? styles.oppTypeBadgeIntern
-                      : opp.type === "NYSC"
-                      ? styles.oppTypeBadgeNYSC
-                      : styles.oppTypeBadgeGrad
-                  }`}
-                >
-                  {opp.type === "INTERN" ? "Internship"
-                    : opp.type === "NYSC" ? "NYSC" : "Graduate"}
-                </span>
-              </div>
-
-              <p className={styles.oppTitle}>{opp.title}</p>
-
-              <div className={styles.oppMeta}>
-                <span className={styles.oppMetaItem}>
-                  📍 {opp.location}
-                </span>
-                <span className={styles.oppMetaItem}>
-                  💰 {opp.stipend}
-                </span>
-                <span className={styles.oppMetaItem}>
-                  🗓 Closes {opp.deadline}
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Services Grid ───────────────────────────────────────────────── */}
-      <section aria-label="All services" className={styles.servicesCard}>
-        <div className={styles.sectionHeader} style={{ marginBottom: "0.85rem" }}>
-          <h2 className={styles.sectionTitle}>Services</h2>
-        </div>
-        <div className={styles.servicesGrid}>
-          {[
-            { href: "/airtime-data", label: "Airtime",      icon: <IconAirtime />,  cls: "stiGreen"  },
-            { href: "/airtime-data", label: "Data",         icon: <IconData />,     cls: "stiBlue"   },
-            { href: "/utility",     label: "Utility",      icon: <IconUtility />,  cls: "stiOrange" },
-            { href: "/rewards",     label: "EcoRewards",   icon: <IconRewards />,  cls: "stiGold"   },
-            { href: "/cards",       label: "NGN Card",     icon: <IconCard />,     cls: "stiPurple" },
-            { href: "/investments", label: "EcoInvest",    icon: <IconInvest />,   cls: "stiTeal"   },
-            { href: "/marketplace", label: "EcoMarket",    icon: <IconMarket />,   cls: "stiPink"   },
-            { href: "/usd-account", label: "USD Account",  icon: <IconUSD />,      cls: "stiRed"    },
-            { href: "/training",    label: "EcoSkills",    icon: <IconSkills />,   cls: "stiBlue"   },
-            { href: "/loans",       label: "Loan",         icon: <IconLoan />,     cls: "stiGold"   },
-            { href: "/transfers",   label: "Transfer",     icon: <IconTransfer />, cls: "stiGreen"  },
-            { href: "/usd-account", label: "FX",           icon: <IconUSD />,      cls: "stiOrange" },
-          ].map(({ href, label, icon, cls }) => (
-            <a
-              key={label}
-              href={href}
-              className={styles.serviceTile}
-              aria-label={label}
-            >
-              <div className={`${styles.serviceTileIcon} ${styles[cls as keyof typeof styles]}`}>
-                {icon}
-              </div>
-              <span className={styles.serviceTileLabel}>{label}</span>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Fund Transfer Panel ────────────────────────────────────────── */}
-      <section className={styles.transferSection} id="transfer" aria-label="Fund Transfer">
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.cardSectionTitle}>Fund Transfer</h2>
-        </div>
-
-        {/* Mode toggle tabs */}
-        <div className={styles.transferTabGroup} role="tablist" aria-label="Transfer mode">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={transferMode === "ECOCAMPUS"}
-            onClick={() => {
-              setTransferMode("ECOCAMPUS");
-              setRecipientNameDisplay("");
-              setRecipientAccount("");
-            }}
-            className={`${styles.transferTab} ${transferMode === "ECOCAMPUS" ? styles.transferTabActive : ""}`}
-          >
-            EcoCampus
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={transferMode === "OTHER_BANKS"}
-            onClick={() => {
-              setTransferMode("OTHER_BANKS");
-              setRecipientNameDisplay("");
-              setRecipientAccount("");
-            }}
-            className={`${styles.transferTab} ${transferMode === "OTHER_BANKS" ? styles.transferTabActive : ""}`}
-          >
-            Other Banks
-          </button>
-        </div>
-
-        <form onSubmit={handleTransfer}>
-          {transferMode === "OTHER_BANKS" && (
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel} htmlFor="bankSelect">Select Bank</label>
-              <select
-                id="bankSelect"
-                className={styles.formInput}
-                value={selectedBankCode}
-                onChange={(e) => {
-                  setSelectedBankCode(e.target.value);
-                  if (recipientAccount.length === 10) {
-                    handleAccountInput(recipientAccount, "OTHER_BANKS", e.target.value);
-                  }
-                }}
-              >
-                {NIGERIAN_BANKS.map((b) => (
-                  <option key={b.code} value={b.code}>{b.name}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel} htmlFor="recipientAccount">
-              {transferMode === "ECOCAMPUS" ? "EcoCampus Account Number" : "Account Number"}
-            </label>
-            <input
-              id="recipientAccount"
-              type="text"
-              maxLength={10}
-              required
-              className={styles.formInput}
-              placeholder="10-digit account number"
-              value={recipientAccount}
-              onChange={(e) => handleAccountInput(e.target.value)}
-              autoComplete="off"
-              inputMode="numeric"
-            />
-          </div>
-
-          {isResolving && (
-            <div className={styles.resolvingBanner}>
-              <div className={styles.spinner} aria-hidden="true" />
-              Verifying via NIBSS...
-            </div>
-          )}
-
-          {recipientNameDisplay && !isResolving && (
-            <div className={styles.recipientBanner}>
-              <IconCheck />
-              {recipientNameDisplay}
-            </div>
-          )}
-
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel} htmlFor="amount">Amount (₦)</label>
-            <input
-              id="amount"
-              type="number"
-              min="50"
-              required
-              className={styles.formInput}
-              placeholder="0.00"
-              value={transferNaira}
-              onChange={(e) => setTransferNaira(e.target.value)}
-              inputMode="decimal"
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel} htmlFor="narration">Narration</label>
-            <input
-              id="narration"
-              type="text"
-              required
-              className={styles.formInput}
-              placeholder="What is this transfer for?"
-              value={narration}
-              onChange={(e) => setNarration(e.target.value)}
-            />
-          </div>
-
-          {feedback && (
-            <div className={feedback.type === "success" ? styles.resolvedBanner : styles.errorBanner} role="alert">
-              {feedback.message}
-            </div>
-          )}
-
-          <button type="submit" className={styles.submitBtn} id="sendFundsBtn">
-            Send Funds Instantly →
-          </button>
-        </form>
-      </section>
-
-      {/* ── Transaction History ─────────────────────────────────────────── */}
-      <section className={styles.transactionSection} aria-label="Transaction History">
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.cardSectionTitle}>Transactions</h2>
-          {currentUser.transactions.length > 0 && (
-            <button
-              type="button"
-              onClick={handleClearHistory}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#CC0000",
-                fontSize: "0.72rem",
-                fontWeight: 700,
-                cursor: "pointer",
-                padding: "0.2rem 0.4rem",
-              }}
-              aria-label="Clear transaction history"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-
-        <div className={styles.txList}>
-          {currentUser.transactions.length === 0 ? (
-            <div className={styles.txEmptyState}>
-              <div className={styles.txEmptyIcon}>🧾</div>
-              <p className={styles.txEmptyText}>No transactions yet</p>
-            </div>
-          ) : (
-            currentUser.transactions.map((tx) => (
-              <div key={tx.id} className={styles.txItem}>
-                <TxIcon category={tx.category} type={tx.type} />
-                <div className={styles.txContent}>
-                  <p className={styles.txTitle}>{tx.title}</p>
-                  <p className={styles.txMeta}>{tx.createdAt} · {tx.reference}</p>
-                </div>
-                <span className={`${styles.txAmount} ${tx.type === "CREDIT" ? styles.txCredit : styles.txDebit}`}>
-                  {tx.type === "CREDIT" ? "+" : "−"}{formatKoboToNaira(tx.amountKobo, hideBalance)}
-                </span>
-              </div>
-            ))
-          )}
-        </div>
-      </section>
-
-      {/* ── Bottom Navigation ───────────────────────────────────────────── */}
-      <nav className={styles.bottomNav} aria-label="Main navigation">
-        <a href="/" className={`${styles.bottomNavItem} ${styles.bottomNavActive}`} aria-current="page">
-          <div className={styles.bottomNavActiveIcon}><IconHome /></div>
-          <span>Home</span>
-        </a>
-        <a href="/marketplace" className={styles.bottomNavItem} aria-label="Campus Marketplace">
-          <IconMarket />
-          <span>Market</span>
-        </a>
-        <a href="/opportunities" className={styles.bottomNavItem} aria-label="Opportunity Hub">
-          <IconOpportunity />
-          <span>Opportunities</span>
-        </a>
-        <a href="/loans" className={styles.bottomNavItem} aria-label="Loan Services">
-          <IconLoan />
-          <span>Loans</span>
-        </a>
-        <button
-          type="button"
-          className={styles.bottomNavItem}
-          aria-label="Profile and settings"
-          onClick={() => {
-            localStorage.removeItem("ecocampus_active_user_id_v5");
-            router.push("/login");
-          }}
-        >
-          <IconProfile />
-          <span>Profile</span>
-        </button>
-      </nav>
+      {/* ── Persistent Bottom Navigation ───────────────────────────── */}
+      <BottomNav activeTab="home" />
 
     </main>
   );

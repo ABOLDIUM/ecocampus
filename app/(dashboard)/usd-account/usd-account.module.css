@@ -1,0 +1,610 @@
+/* ============================================================================
+   ECOCAMPUS USD DOMICILIARY ACCOUNT & VIRTUAL CARD — CSS MODULE
+   Electric Green (#00E676) × Deep Navy (#001F3F) | LEARN. GROW. ACHIEVE.
+   ============================================================================ */
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background-color: var(--color-bg-base, #F8FAFC);
+  padding: 1.25rem 1rem 6.5rem;
+  font-family: var(--font-family-body, 'Inter', -apple-system, sans-serif);
+  color: var(--color-text-primary, #0A1628);
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 1400px;
+    margin: 0;
+    margin-left: 250px;
+    padding: 2rem 2.5rem 4rem 2.5rem;
+    min-height: 100vh;
+  }
+}
+
+/* ── Responsive Dual-Column Grid ──────────────────────────────────────────── */
+.usdGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.usdColPrimary,
+.usdColSecondary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .usdGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .usdColSecondary {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+
+/* ── Top Header ───────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 0.5rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  border: 1px solid rgba(0, 31, 63, 0.1);
+  color: var(--color-navy-900, #001F3F);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.backBtn:hover {
+  background: #f1f5f9;
+  transform: translateX(-2px);
+}
+
+.headerTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-navy-900, #001F3F);
+  letter-spacing: -0.02em;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+}
+
+.cbnBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #007749;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ── Feedback Notification ────────────────────────────────────────────────── */
+.toastAlert {
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.toastSuccess {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1.5px solid #00E676;
+}
+
+.toastError {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1.5px solid #EF4444;
+}
+
+/* ── Stylistic Minimal Account Details Strip ──────────────────────────────── */
+.minimalAccountStrip {
+  background: white;
+  border-radius: 18px;
+  padding: 0.9rem 1.15rem;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.acctBalanceCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.acctBalanceLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.acctBalanceValue {
+  font-size: 1.45rem;
+  font-weight: 900;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+  color: #007749;
+  line-height: 1.2;
+}
+
+.acctDetailsCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+.acctNumberBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #001F3F;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.acctNumberBadge:hover {
+  background: #001F3F;
+  color: white;
+  border-color: #001F3F;
+}
+
+.swiftCode {
+  font-size: 0.65rem;
+  color: #64748B;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* ── USD Card Hero (Primary Element) ──────────────────────────────────────── */
+.cardHeroSection {
+  margin-bottom: 1.35rem;
+}
+
+.cardHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.cardSectionTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #001F3F;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardFlipHint {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #007749;
+  background: #ECFDF5;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid #A7F3D0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cardFlipHint:hover {
+  background: #007749;
+  color: white;
+}
+
+/* 3D Virtual Card Component */
+.cardPerspective {
+  perspective: 1200px;
+  width: 100%;
+  height: 224px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+  box-shadow: 0 16px 36px rgba(0, 31, 63, 0.22);
+}
+
+.cardFlipped {
+  transform: rotateY(180deg);
+}
+
+.cardFront, .cardBack {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 20px;
+  padding: 1.35rem 1.45rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #001F3F 0%, #003366 50%, #007749 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  padding: 0;
+  overflow: hidden;
+}
+
+.cardTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardChip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.16);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  backdrop-filter: blur(4px);
+}
+
+.cardNumberDisplay {
+  font-size: 1.25rem;
+  font-family: var(--font-family-display, 'Space Grotesk', monospace);
+  letter-spacing: 2.8px;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.cardBottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cardHolderName {
+  margin: 0;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.cardExpiry {
+  font-size: 0.62rem;
+  opacity: 0.85;
+  font-family: monospace;
+  margin-bottom: 0.15rem;
+}
+
+.cardNetworkPill {
+  background: white;
+  color: #001F3F;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+}
+
+/* Card Back Styles */
+.magStripe {
+  width: 100%;
+  height: 44px;
+  background: #0A1128;
+  margin-top: 1.25rem;
+}
+
+.cvvContainer {
+  padding: 0 1.5rem;
+}
+
+.cvvLabel {
+  font-size: 0.62rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cvvBox {
+  background: #F8FAFC;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  text-align: right;
+  margin-top: 0.25rem;
+  border: 1px solid #CBD5E1;
+}
+
+.cvvValue {
+  color: #0F172A;
+  font-family: monospace;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  font-weight: 900;
+}
+
+.cardBackFooter {
+  padding: 0 1.5rem 1.15rem;
+  font-size: 0.62rem;
+  opacity: 0.8;
+}
+
+/* Issue Card Fallback Card */
+.issueCardPrompt {
+  background: white;
+  border-radius: 20px;
+  padding: 1.35rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+
+.networkSelectorRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.85rem 0 1rem;
+}
+
+.networkSelectBtn {
+  padding: 0.65rem;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  border: 1.5px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.networkSelectActive {
+  border-color: #001F3F;
+  background: #EFF6FF;
+  color: #001F3F;
+}
+
+.activateCardBtn {
+  width: 100%;
+  background: #001F3F;
+  color: #00E676;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  padding: 0.8rem;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activateCardBtn:hover {
+  background: #0A1628;
+  border-color: #00E676;
+}
+
+/* ── Simplified Wise/Revolut-Style FX Conversion Section ─────────────────── */
+.conversionCard {
+  background: white;
+  border-radius: 20px;
+  padding: 1.25rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.conversionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.95rem;
+}
+
+.conversionTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #001F3F;
+}
+
+.rateBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #007749;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.swapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  position: relative;
+  margin-bottom: 1.15rem;
+}
+
+.currencyBox {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.currencyBox:focus-within {
+  border-color: #007749;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 119, 73, 0.1);
+}
+
+.currencyTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.currencyLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.currencyBalanceHint {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+.currencyInputRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.currencyInput {
+  border: none;
+  background: transparent;
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: var(--font-family-display, 'Space Grotesk', sans-serif);
+  color: #001F3F;
+  width: 100%;
+  outline: none;
+  padding: 0;
+}
+
+.currencyPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  border: 1px solid #CBD5E1;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #001F3F;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.swapDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -0.45rem 0;
+  z-index: 2;
+}
+
+.swapIconBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid #CBD5E1;
+  color: #007749;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.convertSubmitBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #00E676 0%, #00C853 100%);
+  color: #001F3F;
+  border: none;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 230, 118, 0.25);
+  font-family: inherit;
+}
+
+.convertSubmitBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 230, 118, 0.35);
+}
+
+.convertSubmitBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 31, 63, 0.25);
+  border-top-color: #001F3F;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+

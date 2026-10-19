@@ -1,6 +1,6 @@
 // ============================================================================
-// ECOCAMPUS LIVE STOCK EXCHANGE INVESTMENT MODULE — APP/(DASHBOARD)/INVESTMENTS/PAGE.TSX
-// Live NGX Equities Desk with Ecobank Transnational Inc. (ETI) Ranked #1
+// ECOCAMPUS INVESTMENT & WEALTH DESK — APP/(DASHBOARD)/INVESTMENTS/PAGE.TSX
+// Professional Stock Exchange Investment leading with Ecobank Capital EDC Fund
 // Official Motto: LEARN. GROW. ACHIEVE.
 // ============================================================================
 
@@ -8,75 +8,83 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { formatKoboToNaira } from "@/lib/formatting/currency";
 import { getActiveUser, getUsers, saveUsers, EcoUser } from "@/lib/database/user-store";
-import styles from "../transfers/transfer.module.css";
+import { BottomNav } from "@/components/navigation/BottomNav";
+import styles from "./investments.module.css";
 
 interface StockListing {
   rank: number;
   ticker: string;
   name: string;
   exchange: string;
+  category: "ecobank" | "banking" | "tech" | "industrial";
   priceNaira: number;
   changePercent: number;
   dividendYield: string;
   marketCap: string;
-  isFeaturedEcobank?: boolean;
+  isLeadEcobank?: boolean;
 }
 
 interface HoldingMap {
-  [ticker: string]: number; // number of shares held
+  [ticker: string]: number;
 }
 
-const INITIAL_STOCKS: StockListing[] = [
+const STOCK_CATALOG: StockListing[] = [
   {
     rank: 1,
     ticker: "ETI",
     name: "Ecobank Transnational Inc.",
     exchange: "NGX / BRVM",
+    category: "ecobank",
     priceNaira: 26.85,
     changePercent: +4.68,
     dividendYield: "6.4%",
     marketCap: "₦492.8B",
-    isFeaturedEcobank: true,
+    isLeadEcobank: true,
   },
   {
     rank: 2,
-    ticker: "MTNN",
-    name: "MTN Nigeria Communications PLC",
-    exchange: "NGX",
-    priceNaira: 218.5,
-    changePercent: +1.92,
-    dividendYield: "5.8%",
-    marketCap: "₦4.58T",
-  },
-  {
-    rank: 3,
     ticker: "GTCO",
     name: "Guaranty Trust Holding Co. PLC",
     exchange: "NGX",
-    priceNaira: 48.2,
+    category: "banking",
+    priceNaira: 48.20,
     changePercent: +2.15,
     dividendYield: "7.1%",
     marketCap: "₦1.42T",
   },
   {
-    rank: 4,
+    rank: 3,
     ticker: "ZENITHBANK",
     name: "Zenith Bank PLC",
     exchange: "NGX",
+    category: "banking",
     priceNaira: 39.75,
     changePercent: +1.45,
     dividendYield: "8.2%",
     marketCap: "₦1.24T",
   },
   {
+    rank: 4,
+    ticker: "MTNN",
+    name: "MTN Nigeria Communications PLC",
+    exchange: "NGX",
+    category: "tech",
+    priceNaira: 218.50,
+    changePercent: +1.92,
+    dividendYield: "5.8%",
+    marketCap: "₦4.58T",
+  },
+  {
     rank: 5,
     ticker: "DANGCEM",
     name: "Dangote Cement PLC",
     exchange: "NGX",
-    priceNaira: 590.0,
+    category: "industrial",
+    priceNaira: 590.00,
     changePercent: -0.42,
     dividendYield: "4.9%",
     marketCap: "₦10.05T",
@@ -86,20 +94,23 @@ const INITIAL_STOCKS: StockListing[] = [
     ticker: "ACCESSCORP",
     name: "Access Holdings PLC",
     exchange: "NGX",
-    priceNaira: 22.4,
+    category: "banking",
+    priceNaira: 22.40,
     changePercent: +3.11,
     dividendYield: "7.5%",
     marketCap: "₦796.2B",
   },
 ];
 
-export default function StockInvestmentPage() {
+export default function InvestmentsPage() {
   const router = useRouter();
   const [user, setUser] = useState<EcoUser | null>(null);
-  const [stocks, setStocks] = useState<StockListing[]>(INITIAL_STOCKS);
-  const [selectedStock, setSelectedStock] = useState<StockListing>(INITIAL_STOCKS[0]);
+  const [stocks, setStocks] = useState<StockListing[]>(STOCK_CATALOG);
+  const [selectedStock, setSelectedStock] = useState<StockListing>(STOCK_CATALOG[0]);
+  const [activeFilter, setActiveFilter] = useState<"ALL" | "ECOBANK" | "BANKING" | "TECH" | "BLUE_CHIPS">("ALL");
   const [sharesToTrade, setSharesToTrade] = useState<string>("50");
-  const [holdings, setHoldings] = useState<HoldingMap>({ ETI: 120 }); // Pre-seeded with 120 Ecobank shares
+  const [holdings, setHoldings] = useState<HoldingMap>({ ETI: 150 });
+  const [edcFundBalanceNaira, setEdcFundBalanceNaira] = useState<number>(25000);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
@@ -110,46 +121,115 @@ export default function StockInvestmentPage() {
     }
     setUser(active);
 
-    const savedHoldings = localStorage.getItem(`ecocampus_ngx_holdings_${active.id}`);
+    const savedHoldings = localStorage.getItem(`ecocampus_invest_holdings_${active.id}`);
     if (savedHoldings) {
       try {
         setHoldings(JSON.parse(savedHoldings));
-      } catch {
-        // Use default
-      }
+      } catch { /* use default */ }
     }
 
-    // Simulate live NGX orderbook micro-ticks every 4 seconds
-    const tickerInterval = window.setInterval(() => {
+    const savedEdc = localStorage.getItem(`ecocampus_edc_fund_${active.id}`);
+    if (savedEdc) {
+      try {
+        setEdcFundBalanceNaira(Number(savedEdc) || 25000);
+      } catch { /* use default */ }
+    }
+
+    // Live micro-ticks for NGX stocks
+    const interval = window.setInterval(() => {
       setStocks((prev) =>
-        prev.map((st) => {
-          const delta = (Math.random() - 0.46) * 0.25;
-          const updatedPrice = Math.max(5, Math.round((st.priceNaira + delta) * 100) / 100);
-          const updatedChange = Math.round((st.changePercent + delta * 0.2) * 100) / 100;
-          return { ...st, priceNaira: updatedPrice, changePercent: updatedChange };
+        prev.map((s) => {
+          const delta = (Math.random() - 0.47) * 0.2;
+          const updatedPrice = Math.max(5, Math.round((s.priceNaira + delta) * 100) / 100);
+          const updatedChange = Math.round((s.changePercent + delta * 0.15) * 100) / 100;
+          return { ...s, priceNaira: updatedPrice, changePercent: updatedChange };
         })
       );
-    }, 4000);
+    }, 4500);
 
-    return () => window.clearInterval(tickerInterval);
+    return () => window.clearInterval(interval);
   }, [router]);
 
   useEffect(() => {
-    const current = stocks.find((s) => s.ticker === selectedStock.ticker);
-    if (current) setSelectedStock(current);
+    const fresh = stocks.find((s) => s.ticker === selectedStock.ticker);
+    if (fresh) setSelectedStock(fresh);
   }, [stocks, selectedStock.ticker]);
+
+  function playAlertSound() {
+    try {
+      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.4);
+    } catch { /* AudioContext unsupported */ }
+  }
 
   if (!user) return null;
 
-  function saveHoldingsMap(updated: HoldingMap) {
+  function saveHoldings(updated: HoldingMap) {
     setHoldings(updated);
-    localStorage.setItem(`ecocampus_ngx_holdings_${user!.id}`, JSON.stringify(updated));
+    localStorage.setItem(`ecocampus_invest_holdings_${user!.id}`, JSON.stringify(updated));
   }
 
-  const totalPortfolioNaira = stocks.reduce((sum, st) => {
+  // Calculate total portfolio
+  const equitiesValuationNaira = stocks.reduce((sum, st) => {
     const qty = holdings[st.ticker] || 0;
     return sum + qty * st.priceNaira;
   }, 0);
+
+  const totalWealthNaira = equitiesValuationNaira + edcFundBalanceNaira;
+
+  function handleInvestInEdcFund() {
+    const investAmountNaira = 5000;
+    const investKobo = investAmountNaira * 100;
+
+    if (user!.balanceKobo < investKobo) {
+      setFeedback({
+        type: "error",
+        message: `Insufficient wallet balance. You need at least ₦5,000.00 to top up Ecobank Capital Fund.`,
+      });
+      return;
+    }
+
+    const all = getUsers();
+    const idx = all.findIndex((u) => u.id === user!.id);
+    if (idx === -1) return;
+
+    all[idx].balanceKobo -= investKobo;
+    all[idx].transactions.unshift({
+      id: `tx-edc-${Date.now()}`,
+      reference: `EDC-FND-${Math.floor(100000 + Math.random() * 900000)}`,
+      type: "DEBIT",
+      category: "TRANSFER",
+      title: "Ecobank EDC Sovereign Fund Top-Up",
+      counterpartyName: "Ecobank Asset Management",
+      counterpartyAccount: "EDC-TREASURY-01",
+      amountKobo: investKobo,
+      status: "SUCCESSFUL",
+      narration: "Fixed Income Fund @ 18.75% p.a.",
+      createdAt: "Just now",
+    });
+
+    saveUsers(all);
+    setUser({ ...all[idx] });
+
+    const newEdcBal = edcFundBalanceNaira + investAmountNaira;
+    setEdcFundBalanceNaira(newEdcBal);
+    localStorage.setItem(`ecocampus_edc_fund_${user!.id}`, String(newEdcBal));
+
+    playAlertSound();
+    setFeedback({
+      type: "success",
+      message: `Successfully invested ₦5,000.00 in Ecobank EDC Sovereign Fund. Yield: 18.75% p.a.`,
+    });
+  }
 
   function handleBuyShares(e: React.FormEvent) {
     e.preventDefault();
@@ -165,7 +245,7 @@ export default function StockInvestmentPage() {
     if (user!.balanceKobo < totalCostKobo) {
       setFeedback({
         type: "error",
-        message: `Insufficient Naira wallet balance. Required: ${formatKoboToNaira(totalCostKobo)}.`,
+        message: `Insufficient wallet balance. Required: ${formatKoboToNaira(totalCostKobo)}.`,
       });
       return;
     }
@@ -190,17 +270,18 @@ export default function StockInvestmentPage() {
     });
 
     saveUsers(all);
-    setUser(all[idx]);
+    setUser({ ...all[idx] });
 
     const nextHoldings = {
       ...holdings,
       [selectedStock.ticker]: (holdings[selectedStock.ticker] || 0) + qty,
     };
-    saveHoldingsMap(nextHoldings);
+    saveHoldings(nextHoldings);
 
+    playAlertSound();
     setFeedback({
       type: "success",
-      message: `Order Executed: Bought ${qty} shares of ${selectedStock.name} (${selectedStock.ticker}) for ${formatKoboToNaira(totalCostKobo)}.`,
+      message: `Executed: Bought ${qty} units of ${selectedStock.name} (${selectedStock.ticker}) for ${formatKoboToNaira(totalCostKobo)}.`,
     });
   }
 
@@ -237,93 +318,157 @@ export default function StockInvestmentPage() {
     });
 
     saveUsers(all);
-    setUser(all[idx]);
+    setUser({ ...all[idx] });
 
     const nextHoldings = {
       ...holdings,
       [selectedStock.ticker]: currentOwned - qty,
     };
-    saveHoldingsMap(nextHoldings);
+    saveHoldings(nextHoldings);
 
+    playAlertSound();
     setFeedback({
       type: "success",
       message: `Sold ${qty} shares of ${selectedStock.ticker}. ${formatKoboToNaira(proceedsKobo)} credited to your wallet.`,
     });
   }
 
+  const filteredStocks = stocks.filter((s) => {
+    if (activeFilter === "ALL") return true;
+    if (activeFilter === "ECOBANK") return s.category === "ecobank";
+    if (activeFilter === "BANKING") return s.category === "banking" || s.category === "ecobank";
+    if (activeFilter === "TECH") return s.category === "tech";
+    if (activeFilter === "BLUE_CHIPS") return s.category === "industrial" || s.isLeadEcobank;
+    return true;
+  });
+
   return (
-    <main className={styles.transferContainer} style={{ maxWidth: "480px", margin: "0 auto", padding: "1.25rem", minHeight: "100dvh" }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-        <a
-          href="/"
-          style={{
-            textDecoration: "none",
-            color: "#007749",
-            fontWeight: 700,
-            fontSize: "0.85rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.3rem",
-          }}
-        >
-          &larr; Dashboard
-        </a>
-        <h1 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-          Stock Exchange Investment
-        </h1>
-        <span
-          style={{
-            fontSize: "0.65rem",
-            fontWeight: 800,
-            color: "#059669",
-            background: "#ecfdf5",
-            padding: "0.2rem 0.5rem",
-            borderRadius: "999px",
-          }}
-        >
-          ● NGX LIVE
-        </span>
+    <main className={styles.investContainer}>
+      {/* Header */}
+      <header className={styles.investHeader}>
+        <Link href="/" className={styles.backBtn} aria-label="Back to dashboard">
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Dashboard
+        </Link>
+        <h1 className={styles.headerTitle}>EcoInvest</h1>
+        <div className={styles.marketStatusPill}>
+          <span className={styles.pulseDot} />
+          NGX LIVE
+        </div>
       </header>
 
-      {/* Portfolio Valuation Banner */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #033121 0%, #007749 100%)",
-          borderRadius: "1.25rem",
-          padding: "1.35rem",
-          color: "#ffffff",
-          marginBottom: "1.15rem",
-          boxShadow: "0 12px 26px rgba(0, 119, 73, 0.25)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.35rem" }}>
-          <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.8px", opacity: 0.85 }}>
-            CSCS Equities Portfolio Value
+      {/* ── Responsive Dual-Column Investment Desk ── */}
+      <div className={styles.investGrid}>
+        {/* ── Left Column: Funds & Watchlist ── */}
+        <div className={styles.investColPrimary}>
+          {/* Primary Leading Element: Ecobank Capital Sovereign Fund */}
+          <section className={styles.ecobankHeroCard} aria-label="Ecobank Capital Sovereign Fund">
+        <div className={styles.ecobankCardTop}>
+          <div className={styles.ecobankBadgeWrap}>
+            <Image
+              src="/brand/ecobank.png"
+              alt="Ecobank Nigeria"
+              width={88}
+              height={26}
+              style={{ width: "auto", height: "22px", objectFit: "contain", filter: "brightness(0) invert(1)" }}
+            />
+            <span className={styles.ecobankTag}>Featured #1</span>
+          </div>
+          <span style={{ fontSize: "0.68rem", color: "#a7f3d0", fontWeight: 700 }}>
+            SEC &amp; CBN Regulated
           </span>
-          <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "#a7f3d0" }}>
-            Cash: {formatKoboToNaira(user.balanceKobo)}
-          </span>
-        </div>
-        <div style={{ fontSize: "1.7rem", fontWeight: 900, fontFamily: "monospace", marginBottom: "0.5rem" }}>
-          ₦{totalPortfolioNaira.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-        </div>
-        <div style={{ fontSize: "0.74rem", opacity: 0.9, display: "flex", justifyContent: "space-between" }}>
-          <span>Ecobank (ETI) Shares Held: <strong>{holdings["ETI"] || 0} Units</strong></span>
-          <span style={{ color: "#a7f3d0", fontWeight: 700 }}>SEC / NGX Regulated</span>
-        </div>
-      </div>
-
-      {/* Live Stock Exchange List (#1 Ecobank ETI) */}
-      <section style={{ marginBottom: "1.25rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.65rem" }}>
-          <h2 style={{ fontSize: "0.88rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-            Top Listed Equities (NGX / Pan-African)
-          </h2>
-          <span style={{ fontSize: "0.7rem", color: "#64748b", fontWeight: 600 }}>Tap stock to trade</span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-          {stocks.map((st) => {
+        <h2 className={styles.fundTitle}>
+          Ecobank Money Market Fund
+        </h2>
+        <p className={styles.fundSub}>
+          Fixed-income treasury fund offering 18.75% annual yield.
+        </p>
+
+        <div className={styles.fundMetricsGrid}>
+          <div className={styles.fundMetricItem}>
+            <span className={styles.fundMetricLabel}>Annual Yield</span>
+            <span className={styles.fundMetricVal} style={{ color: "#a7f3d0" }}>18.75%</span>
+          </div>
+          <div className={styles.fundMetricItem}>
+            <span className={styles.fundMetricLabel}>Your Invested</span>
+            <span className={styles.fundMetricVal}>₦{edcFundBalanceNaira.toLocaleString()}</span>
+          </div>
+          <div className={styles.fundMetricItem}>
+            <span className={styles.fundMetricLabel}>Min. Entry</span>
+            <span className={styles.fundMetricVal}>₦1,000</span>
+          </div>
+        </div>
+
+        <div className={styles.fundActionRow}>
+          <button
+            type="button"
+            className={styles.fundInvestBtn}
+            onClick={handleInvestInEdcFund}
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Invest ₦5,000 Now
+          </button>
+        </div>
+      </section>
+
+      {/* Portfolio Overview */}
+      <section className={styles.portfolioCard}>
+        <div className={styles.portfolioHeader}>
+          <span className={styles.portfolioLabel}>Total Portfolio</span>
+          <span className={styles.gainBadge}>
+            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+            +12.4% Overall
+          </span>
+        </div>
+
+        <div className={styles.portfolioValue}>
+          ₦{totalWealthNaira.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+
+        <div className={styles.portfolioSubRow}>
+          <span>Ecobank Fund: <strong>₦{edcFundBalanceNaira.toLocaleString()}</strong></span>
+          <span>NGX Equities: <strong>₦{equitiesValuationNaira.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></span>
+        </div>
+      </section>
+
+      {/* NGX Equities Watchlist */}
+      <section className={styles.marketSection}>
+        <div className={styles.marketSectionHeader}>
+          <h2 className={styles.marketSectionTitle}>Stocks (NGX)</h2>
+          <span style={{ fontSize: "0.7rem", color: "#64748b" }}>Select to trade</span>
+        </div>
+
+        {/* Filter Scroll */}
+        <div className={styles.filterScroll} role="tablist">
+          {[
+            { id: "ALL", label: "All" },
+            { id: "ECOBANK", label: "Ecobank" },
+            { id: "BANKING", label: "Banking" },
+            { id: "TECH", label: "Tech" },
+            { id: "BLUE_CHIPS", label: "Blue Chips" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`${styles.filterChip} ${activeFilter === tab.id ? styles.filterChipActive : ""}`}
+              onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Stock List */}
+        <div className={styles.stockList}>
+          {filteredStocks.map((st) => {
             const isSelected = selectedStock.ticker === st.ticker;
             const userUnits = holdings[st.ticker] || 0;
             return (
@@ -333,89 +478,42 @@ export default function StockInvestmentPage() {
                   setSelectedStock(st);
                   setFeedback(null);
                 }}
-                style={{
-                  background: st.isFeaturedEcobank
-                    ? "linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)"
-                    : "#ffffff",
-                  border: isSelected
-                    ? "2px solid #007749"
-                    : st.isFeaturedEcobank
-                    ? "1.5px solid #6ee7b7"
-                    : "1px solid #e2e8f0",
-                  borderRadius: "0.95rem",
-                  padding: "0.85rem 1rem",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  transition: "all 0.15s ease",
-                }}
+                className={`${styles.stockCard} ${
+                  isSelected ? styles.stockCardSelected : ""
+                } ${st.isLeadEcobank ? styles.stockCardEcobank : ""}`}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <div className={styles.stockLeft}>
                   <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      borderRadius: "10px",
-                      background: st.isFeaturedEcobank ? "#007749" : "#0f172a",
-                      color: "#ffffff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 900,
-                      fontSize: "0.75rem",
-                    }}
+                    className={`${styles.stockRankBadge} ${
+                      st.isLeadEcobank ? styles.stockRankBadgeEcobank : ""
+                    }`}
                   >
                     #{st.rank}
                   </div>
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                      <strong style={{ fontSize: "0.86rem", color: "#0f172a" }}>{st.ticker}</strong>
-                      {st.isFeaturedEcobank && (
-                        <span
-                          style={{
-                            background: "#007749",
-                            color: "#ffffff",
-                            fontSize: "0.58rem",
-                            fontWeight: 800,
-                            padding: "0.1rem 0.45rem",
-                            borderRadius: "999px",
-                          }}
-                        >
-                          #1 TOP PICK
-                        </span>
+                    <div className={styles.stockTickerRow}>
+                      <span className={styles.stockTicker}>{st.ticker}</span>
+                      {st.isLeadEcobank && (
+                        <span className={styles.stockLeadBadge}>#1 PICK</span>
                       )}
                       {userUnits > 0 && (
-                        <span
-                          style={{
-                            background: "#e0f2fe",
-                            color: "#0369a1",
-                            fontSize: "0.6rem",
-                            fontWeight: 800,
-                            padding: "0.1rem 0.4rem",
-                            borderRadius: "4px",
-                          }}
-                        >
-                          {userUnits} shs
-                        </span>
+                        <span className={styles.stockHoldingBadge}>{userUnits} shs</span>
                       )}
                     </div>
-                    <p style={{ margin: 0, fontSize: "0.73rem", color: "#475569" }}>
-                      {st.name} • Yield {st.dividendYield}
+                    <p className={styles.stockName}>
+                      {st.name} &middot; Yield {st.dividendYield}
                     </p>
                   </div>
                 </div>
 
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontWeight: 900, fontSize: "0.9rem", color: "#0f172a", fontFamily: "monospace" }}>
+                <div className={styles.stockRight}>
+                  <div className={styles.stockPrice}>
                     ₦{st.priceNaira.toFixed(2)}
                   </div>
                   <div
-                    style={{
-                      fontSize: "0.7rem",
-                      fontWeight: 800,
-                      color: st.changePercent >= 0 ? "#059669" : "#dc2626",
-                    }}
+                    className={`${styles.stockChange} ${
+                      st.changePercent >= 0 ? styles.stockChangePositive : styles.stockChangeNegative
+                    }`}
                   >
                     {st.changePercent >= 0 ? "▲ +" : "▼ "}
                     {st.changePercent.toFixed(2)}%
@@ -426,118 +524,88 @@ export default function StockInvestmentPage() {
           })}
         </div>
       </section>
+    </div>
 
-      {/* Instant Order Execution Ticket */}
-      <section
-        style={{
-          background: "#ffffff",
-          borderRadius: "1.25rem",
-          padding: "1.25rem",
-          border: "1px solid #e2e8f0",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+    {/* ── Right Column: Sticky Order Ticket & Feedback ── */}
+    <div className={styles.investColSecondary}>
+      {/* Feedback Banner */}
+      {feedback && (
+        <div
+          className={`${styles.feedbackBanner} ${
+            feedback.type === "success" ? styles.feedbackSuccess : styles.feedbackError
+          }`}
+        >
+          {feedback.type === "success" ? (
+            <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )}
+          {feedback.message}
+        </div>
+      )}
+
+      {/* Instant Order Ticket */}
+      <section className={styles.tradeCard}>
+        <div className={styles.tradeCardHeader}>
           <div>
-            <h3 style={{ fontSize: "0.92rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-              Trade {selectedStock.name} ({selectedStock.ticker})
+            <h3 className={styles.tradeTitle}>
+              Trade {selectedStock.ticker}
             </h3>
-            <p style={{ fontSize: "0.72rem", color: "#64748b", margin: 0 }}>
-              Market Cap: {selectedStock.marketCap} • Owned: {holdings[selectedStock.ticker] || 0} shares
+            <p className={styles.tradeSub}>
+              Owned: {holdings[selectedStock.ticker] || 0} shares &middot; Div: {selectedStock.dividendYield}
             </p>
           </div>
-          {selectedStock.isFeaturedEcobank && (
-            <Image src="/brand/ecobank.png" alt="Ecobank" width={80} height={26} style={{ width: "auto", height: "24px", objectFit: "contain" }} />
+          {selectedStock.isLeadEcobank && (
+            <span className={styles.stockLeadBadge}>ECOBANK LEAD</span>
           )}
         </div>
 
         <form onSubmit={handleBuyShares}>
-          <div className={styles.formGroup} style={{ marginBottom: "0.75rem" }}>
-            <label className={styles.formLabel}>Number of Shares (Units)</label>
+          <div className={styles.tradeFormGroup}>
+            <label className={styles.tradeLabel} htmlFor="sharesInput">
+              Shares
+            </label>
             <input
+              id="sharesInput"
               type="number"
               min="1"
               max="100000"
               required
-              className={styles.formInput}
+              className={styles.tradeInput}
               value={sharesToTrade}
               onChange={(e) => setSharesToTrade(e.target.value)}
             />
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "0.8rem",
-              color: "#334155",
-              marginBottom: "0.9rem",
-              background: "#f8fafc",
-              padding: "0.65rem 0.85rem",
-              borderRadius: "0.65rem",
-            }}
-          >
-            <span>Estimated Order Value:</span>
-            <strong>
+          <div className={styles.tradeSummaryBox}>
+            <span>Total:</span>
+            <span className={styles.tradeSummaryVal}>
               ₦{(Number(sharesToTrade || 0) * selectedStock.priceNaira).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
-            </strong>
+            </span>
           </div>
 
-          {feedback && (
-            <div
-              style={{
-                padding: "0.65rem 0.85rem",
-                borderRadius: "0.75rem",
-                fontSize: "0.76rem",
-                fontWeight: 700,
-                marginBottom: "0.85rem",
-                background: feedback.type === "success" ? "#ecfdf5" : "#fef2f2",
-                color: feedback.type === "success" ? "#065f46" : "#b91c1c",
-                border: `1px solid ${feedback.type === "success" ? "#10b981" : "#f87171"}`,
-              }}
-            >
-              {feedback.message}
-            </div>
-          )}
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.65rem" }}>
-            <button
-              type="submit"
-              style={{
-                backgroundColor: "#007749",
-                color: "#ffffff",
-                padding: "0.75rem",
-                borderRadius: "0.75rem",
-                fontWeight: 800,
-                fontSize: "0.8rem",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Buy {selectedStock.ticker} Shares
+          <div className={styles.tradeBtnGrid}>
+            <button type="submit" className={styles.buyBtn}>
+              Buy {selectedStock.ticker}
             </button>
-            <button
-              type="button"
-              onClick={handleSellShares}
-              style={{
-                backgroundColor: "#f1f5f9",
-                color: "#0f172a",
-                padding: "0.75rem",
-                borderRadius: "0.75rem",
-                fontWeight: 800,
-                fontSize: "0.8rem",
-                border: "1px solid #cbd5e1",
-                cursor: "pointer",
-              }}
-            >
-              Sell Shares
+            <button type="button" onClick={handleSellShares} className={styles.sellBtn}>
+              Sell {selectedStock.ticker}
             </button>
           </div>
         </form>
       </section>
-    </main>
+    </div>
+  </div>
+
+  {/* Persistent Bottom Navigation */}
+  <BottomNav activeTab="invest" />
+</main>
   );
 }

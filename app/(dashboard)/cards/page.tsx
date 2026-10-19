@@ -17,6 +17,7 @@ import {
   getUserBankingProducts,
   createLocalVirtualCard,
 } from "@/lib/api/banking-services";
+import { BottomNav } from "@/components/navigation/BottomNav";
 import styles from "../transfers/transfer.module.css";
 
 export default function LocalNairaCardPage() {
@@ -56,7 +57,6 @@ export default function LocalNairaCardPage() {
     if (products?.localCard.isProvisioned) {
       const updated = createLocalVirtualCard(user!, net);
       setProducts({ ...updated });
-      setFeedback(`Switched local Naira card network to ${net}.`);
     }
   }
 
@@ -510,59 +510,141 @@ export default function LocalNairaCardPage() {
             </button>
           </div>
 
+          {/* ── STYLIZED CARD SCHEME SELECTOR (Revolut / Apple Wallet style) ── */}
           <div
             style={{
               background: "#ffffff",
               borderRadius: "1.25rem",
               padding: "1.25rem",
-              border: "1px solid #f1f5f9",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.02)",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.03)",
+              marginBottom: "1.5rem",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-              <h3 style={{ fontSize: "0.88rem", fontWeight: 800, color: "#0f172a", margin: 0 }}>
-                Switch Naira Card Scheme
-              </h3>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.85rem" }}>
+              <div>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: "#0f172a", margin: "0 0 0.15rem 0" }}>
+                  Payment Scheme
+                </h3>
+                <p style={{ fontSize: "0.72rem", color: "#64748b", margin: 0 }}>
+                  Switch network instantaneously without changing wallet link
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setMaskCardPan((p) => !p)}
                 style={{
-                  background: "none",
-                  border: "none",
-                  color: "#007749",
-                  fontSize: "0.75rem",
+                  background: "#f1f5f9",
+                  border: "1px solid #cbd5e1",
+                  color: "#0f172a",
+                  fontSize: "0.72rem",
                   fontWeight: 700,
+                  padding: "0.25rem 0.55rem",
+                  borderRadius: "6px",
                   cursor: "pointer",
                 }}
               >
-                {maskCardPan ? "Unmask Digits" : "Mask Digits"}
+                {maskCardPan ? "Unmask PAN" : "Mask PAN"}
               </button>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem" }}>
-              {(["VERVE", "VISA", "MASTERCARD"] as CardNetwork[]).map((net) => (
-                <button
-                  key={net}
-                  type="button"
-                  onClick={() => handleSwitchNetwork(net)}
-                  style={{
-                    padding: "0.55rem",
-                    borderRadius: "0.65rem",
-                    fontWeight: 800,
-                    fontSize: "0.72rem",
-                    border: products.localCard.network === net ? "2px solid #007749" : "1px solid #cbd5e1",
-                    background: products.localCard.network === net ? "#ecfdf5" : "#ffffff",
-                    color: products.localCard.network === net ? "#007749" : "#475569",
-                    cursor: "pointer",
-                  }}
-                >
-                  {net}
-                </button>
-              ))}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.6rem" }}>
+              {[
+                {
+                  id: "VERVE" as CardNetwork,
+                  name: "Verve",
+                  subtitle: "Local NGN",
+                  icon: (
+                    <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                      <span style={{ width: "9px", height: "9px", borderRadius: "50%", background: "#ef4444" }} />
+                      <span style={{ fontSize: "0.76rem", fontWeight: 900, color: "#0f172a", fontStyle: "italic" }}>Verve</span>
+                    </div>
+                  ),
+                },
+                {
+                  id: "VISA" as CardNetwork,
+                  name: "Visa",
+                  subtitle: "Global / 3DS",
+                  icon: (
+                    <span style={{ fontSize: "0.82rem", fontWeight: 900, color: "#1d4ed8", fontStyle: "italic", letterSpacing: "0.5px" }}>
+                      VISA
+                    </span>
+                  ),
+                },
+                {
+                  id: "MASTERCARD" as CardNetwork,
+                  name: "Mastercard",
+                  subtitle: "Global / ID Check",
+                  icon: (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ width: "13px", height: "13px", borderRadius: "50%", background: "#ef4444" }} />
+                      <div style={{ width: "13px", height: "13px", borderRadius: "50%", background: "#f59e0b", marginLeft: "-6px", opacity: 0.95 }} />
+                    </div>
+                  ),
+                },
+              ].map(({ id, name, subtitle, icon }) => {
+                const isActive = products.localCard.network === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => handleSwitchNetwork(id)}
+                    style={{
+                      padding: "0.75rem 0.5rem",
+                      borderRadius: "0.85rem",
+                      border: isActive ? "2px solid #007749" : "1.5px solid #e2e8f0",
+                      background: isActive ? "#f0fdf4" : "#ffffff",
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      textAlign: "center",
+                      gap: "0.35rem",
+                      position: "relative",
+                      transition: "all 0.15s ease",
+                      boxShadow: isActive ? "0 2px 8px rgba(0, 119, 73, 0.12)" : "none",
+                    }}
+                  >
+                    {isActive && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "4px",
+                          right: "4px",
+                          width: "14px",
+                          height: "14px",
+                          borderRadius: "50%",
+                          background: "#007749",
+                          color: "#ffffff",
+                          fontSize: "0.55rem",
+                          fontWeight: 900,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        ✓
+                      </span>
+                    )}
+                    <div style={{ height: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {icon}
+                    </div>
+                    <span style={{ fontSize: "0.76rem", fontWeight: 800, color: isActive ? "#007749" : "#0f172a" }}>
+                      {name}
+                    </span>
+                    <span style={{ fontSize: "0.62rem", color: "#64748b", fontWeight: 600 }}>
+                      {subtitle}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </>
       )}
+
+      {/* Persistent Bottom Navigation */}
+      <BottomNav />
     </main>
   );
 }

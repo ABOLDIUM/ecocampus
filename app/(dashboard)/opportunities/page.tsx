@@ -16,6 +16,8 @@ import {
   saveUsers,
   EcoUser,
 } from "@/lib/database/user-store";
+import { BottomNav } from "@/components/navigation/BottomNav";
+import { CompanyLogo } from "@/components/brand/CompanyLogo";
 import styles from "./opportunities.module.css";
 
 interface JobOpportunity {
@@ -55,12 +57,12 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     logoBg: "#007749",
     title: "Graduate FinTech Trainee & Systems Analyst",
     category: "fasttrack",
-    typeBadge: "⭐ Ecobank FastTrack",
+    typeBadge: "Ecobank FastTrack",
     stipend: "₦180,000/mo",
     location: "Abuja / Lagos (Hybrid)",
     deadline: "Nov 30, 2026",
-    perks: ["Direct Full-Time Conversion", "Official Work Laptop", "Ecobank Healthcare"],
-    description: "Join ADEBANKE Oladejo's enterprise technology team building the next-generation omni-channel core banking services for Africa.",
+    perks: ["Full-Time Conversion", "Work Laptop", "Healthcare"],
+    description: "Enterprise fintech and omnichannel core banking systems engineering.",
   },
   {
     id: "opp-2",
@@ -69,12 +71,12 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     logoBg: "#00C3F8",
     title: "Core Backend & Payment Systems Intern",
     category: "tech",
-    typeBadge: "🚀 Tech Internship",
+    typeBadge: "Tech Internship",
     stipend: "₦160,000/mo",
     location: "Lagos (Remote Friendly)",
     deadline: "Dec 15, 2026",
-    perks: ["Babawale John's Team Mentorship", "Learning Stipend", "Flexible Hours"],
-    description: "Design high-concurrency payment switches, webhooks, and direct debit integrations for Nigeria's leading merchant ecosystem.",
+    perks: ["Team Mentorship", "Learning Stipend", "Flexible Hours"],
+    description: "High-performance payment switches, webhooks, and direct debit integrations.",
   },
   {
     id: "opp-3",
@@ -83,13 +85,13 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     logoBg: "#059669",
     title: "NYSC Digital Economy Research Fellow",
     category: "nysc",
-    typeBadge: "🇳🇬 NYSC High-Allowance PPA",
+    typeBadge: "NYSC PPA",
     isNysc: true,
-    stipend: "₦33k Fed + ₦65k Allowance",
+    stipend: "₦77k Fed + ₦65k Allowance",
     location: "Abuja (FCT)",
     deadline: "Batch A 2026",
-    perks: ["🏠 Free Corper Housing Included", "Research Grant", "Certificate of Commendation"],
-    description: "Place of Primary Assignment (PPA) with free furnished quarters, monthly agency top-up allowance, and equipment financing.",
+    perks: ["Housing Included", "Research Grant", "Commendation"],
+    description: "Place of Primary Assignment (PPA) with monthly agency allowance and quarters.",
   },
   {
     id: "opp-4",
@@ -98,12 +100,12 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     logoBg: "#FF6600",
     title: "Product Design & FinTech UX Apprentice",
     category: "tech",
-    typeBadge: "🎨 Product Internship",
+    typeBadge: "Product Internship",
     stipend: "₦150,000/mo",
     location: "Remote (Nigeria)",
     deadline: "Nov 28, 2026",
-    perks: ["Direct Ecobank Deposit", "Global Design Network", "Design Tool Licenses"],
-    description: "Craft friction-free digital checkout experiences, micro-animations, and accessible mobile banking interfaces for millions.",
+    perks: ["Direct Deposit", "Global Design Network", "Software Licenses"],
+    description: "Digital checkout design, user experience flows, and mobile banking interfaces.",
   },
   {
     id: "opp-5",
@@ -112,12 +114,12 @@ const OPPORTUNITIES_LIST: JobOpportunity[] = [
     logoBg: "#335EEA",
     title: "Cloud Infrastructure & DevOps Engineer Apprentice",
     category: "tech",
-    typeBadge: "☁️ Cloud Apprentice",
+    typeBadge: "Cloud Apprentice",
     stipend: "₦175,000/mo",
     location: "Remote",
     deadline: "Dec 05, 2026",
-    perks: ["M3 MacBook Pro Provided", "AWS Certification Voucher", "Global Placement"],
-    description: "Hands-on container orchestration, Kubernetes, CI/CD pipelines, and multi-cloud resilience with world-class tech leads.",
+    perks: ["MacBook Provided", "AWS Certification Voucher", "Placement"],
+    description: "Container orchestration, CI/CD pipelines, and cloud systems engineering.",
   },
 ];
 
@@ -126,13 +128,13 @@ const SKILL_COURSES: SkillCourse[] = [
     id: "crs-1",
     title: "AWS Cloud Solutions Architecture & DevOps",
     provider: "AWS × Ecobank Tech Academy",
-    duration: "6 Weeks (Self-paced)",
+    duration: "6 Weeks",
     subsidizedPriceNaira: 4500,
     retailPriceNaira: 65000,
     scoreBoost: 50,
-    badge: "☁️ 93% Subsidized",
-    description: "Master cloud security, serverless compute, and microservices architecture. Fully accredited by Amazon Web Services.",
-    skills: ["AWS Lambda", "Docker", "CloudFront", "Terraform"],
+    badge: "93% Subsidized",
+    description: "Cloud security, serverless compute, and microservices architecture.",
+    skills: ["☁️ AWS Lambda", "🐳 Docker", "⚡ CloudFront", "🏗️ Terraform"],
   },
   {
     id: "crs-2",
@@ -142,9 +144,9 @@ const SKILL_COURSES: SkillCourse[] = [
     subsidizedPriceNaira: 0,
     retailPriceNaira: 40000,
     scoreBoost: 40,
-    badge: "🎁 100% Free for 200L+",
-    description: "Direct curriculum by Victor Yalokwu's data analytics group. Learn cohort analysis, LTV prediction, and automated risk scoring.",
-    skills: ["SQL", "Cohort Analysis", "PowerBI", "Credit Scoring"],
+    badge: "Free for 200L+",
+    description: "Cohort analysis, customer lifetime value, and automated risk scoring models.",
+    skills: ["📊 SQL", "📈 Cohort Analytics", "📉 PowerBI", "💳 Credit Scoring"],
   },
   {
     id: "crs-3",
@@ -154,11 +156,34 @@ const SKILL_COURSES: SkillCourse[] = [
     subsidizedPriceNaira: 3500,
     retailPriceNaira: 45000,
     scoreBoost: 50,
-    badge: "⚡ Subsidized",
-    description: "Build robust, SSR-powered financial applications with React 19, TypeScript, secure webhooks, and NIBSS API standards.",
-    skills: ["Next.js 15", "TypeScript", "Tailwind/CSS Modules", "NIBSS Rails"],
+    badge: "Subsidized",
+    description: "Financial application architecture with TypeScript, React, and NIBSS standards.",
+    skills: ["⚡ Next.js 15", "🔷 TypeScript", "🎨 CSS Modules", "🏦 NIBSS Rails"],
   },
 ];
+
+function playSuccessSound() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, now); // D5
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.38);
+  } catch {
+    // Audio unsupported or blocked by browser policy
+  }
+}
 
 export default function OpportunitiesHubPage() {
   const router = useRouter();
@@ -177,8 +202,12 @@ export default function OpportunitiesHubPage() {
   const [selectedCourse, setSelectedCourse] = useState<SkillCourse | null>(null);
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState<boolean>(false);
 
-  // Feedback toast
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  // In-viewport Floating Feedback Toast
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    title: string;
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     const active = getActiveUser();
@@ -215,12 +244,14 @@ export default function OpportunitiesHubPage() {
         setUser(all[idx]);
       }
 
+      playSuccessSound();
       setFeedback({
         type: "success",
-        message: `🎉 Application for ${selectedJob.title} at ${selectedJob.company} submitted! FastTrack verified credentials delivered (+${boost} Campus Score)!`,
+        title: "FastTrack Application Submitted!",
+        message: `Your verified institutional credentials for ${selectedJob.title} were delivered to ${selectedJob.company} (+${boost} Campus Score)!`,
       });
       setTimeout(() => setFeedback(null), 6000);
-    }, 1200);
+    }, 1000);
   }
 
   // Handle Course Enrollment & Score Boost
@@ -231,8 +262,10 @@ export default function OpportunitiesHubPage() {
     if (user!.balanceKobo < costKobo) {
       setFeedback({
         type: "error",
+        title: "Insufficient Balance",
         message: "Insufficient account balance to enroll in this subsidized course.",
       });
+      setTimeout(() => setFeedback(null), 5000);
       return;
     }
 
@@ -241,7 +274,7 @@ export default function OpportunitiesHubPage() {
     if (idx !== -1) {
       all[idx].balanceKobo -= costKobo;
       all[idx].campusScore = Math.min(1000, (all[idx].campusScore || 700) + selectedCourse.scoreBoost);
-      all[idx].loanLimitKobo = (all[idx].loanLimitKobo || 15000000) + 5000000; // unlocks +₦50,000 credit limit!
+      all[idx].loanLimitKobo = (all[idx].loanLimitKobo || 15000000) + 5000000;
 
       const ref = `ECO-CRS-${Math.floor(100000 + Math.random() * 900000)}`;
       all[idx].transactions.unshift({
@@ -263,9 +296,11 @@ export default function OpportunitiesHubPage() {
     }
 
     setIsEnrollModalOpen(false);
+    playSuccessSound();
     setFeedback({
       type: "success",
-      message: `✨ Enrolled in ${selectedCourse.title}! You gained +${selectedCourse.scoreBoost} Campus Score and your credit limit unlocked to ₦200,000!`,
+      title: "Enrollment Confirmed!",
+      message: `Enrolled in ${selectedCourse.title}! You gained +${selectedCourse.scoreBoost} Campus Score points and unlocked extra loan capacity!`,
     });
     setTimeout(() => setFeedback(null), 6000);
   }
@@ -274,62 +309,13 @@ export default function OpportunitiesHubPage() {
     <main className={styles.container}>
       {/* ── Top Header ─────────────────────────────────────────────────── */}
       <header className={styles.header}>
-        <a href="/" className={styles.backBtn}>
-          <span>&larr;</span> Dashboard
-        </a>
-        <h1 className={styles.headerTitle}>Opportunity Hub</h1>
-        <div className={styles.talentBadge}>
-          <span>🚀</span> Ecobank FastTrack
+        <div className={styles.headerLeft}>
+          <a href="/" className={styles.backBtn}>
+            <span>&larr;</span> Dashboard
+          </a>
+          <h1 className={styles.headerTitle}>Opportunities</h1>
         </div>
       </header>
-
-      {/* ── Feedback Toast ──────────────────────────────────────────────── */}
-      {feedback && (
-        <div
-          style={{
-            background: feedback.type === "success" ? "#ECFDF5" : "#FEF2F2",
-            border: `1.5px solid ${feedback.type === "success" ? "#00E676" : "#EF4444"}`,
-            color: feedback.type === "success" ? "#065F46" : "#991B1B",
-            borderRadius: "14px",
-            padding: "0.85rem 1rem",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            marginBottom: "1.25rem",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-          }}
-        >
-          {feedback.message}
-        </div>
-      )}
-
-      {/* ── Hero Strategic Banner ───────────────────────────────────────── */}
-      <section className={styles.heroBanner}>
-        <div className={styles.heroTagRow}>
-          <span className={styles.heroTag}>Ecobank Talent Engine</span>
-          <span className={styles.heroStipendAvg}>
-            Avg Stipend: <strong>₦165,000/mo</strong>
-          </span>
-        </div>
-        <h2 className={styles.heroTitle}>Launch Your Career While in School & NYSC</h2>
-        <p className={styles.heroSub}>
-          Land verified fintech internships, secure top-paying NYSC PPAs with free accommodation, and master high-demand digital skills subsidized by Ecobank.
-        </p>
-
-        <div className={styles.heroPerksRow}>
-          <div className={styles.perkItem}>
-            <span className={styles.perkVal}>420+</span>
-            <span className={styles.perkLabel}>Open Roles</span>
-          </div>
-          <div className={styles.perkItem}>
-            <span className={styles.perkVal}>Direct Pay</span>
-            <span className={styles.perkLabel}>In-App Stipends</span>
-          </div>
-          <div className={styles.perkItem}>
-            <span className={styles.perkVal}>+50 pts</span>
-            <span className={styles.perkLabel}>Campus Score Boost</span>
-          </div>
-        </div>
-      </section>
 
       {/* ── Track Switcher ──────────────────────────────────────────────── */}
       <div className={styles.tabRow}>
@@ -337,13 +323,13 @@ export default function OpportunitiesHubPage() {
           className={`${styles.tabBtn} ${activeTrack === "jobs" ? styles.tabBtnActive : ""}`}
           onClick={() => setActiveTrack("jobs")}
         >
-          <span>💼</span> Internships & NYSC PPAs
+          Internships & NYSC PPAs
         </button>
         <button
           className={`${styles.tabBtn} ${activeTrack === "skills" ? styles.tabBtnActive : ""}`}
           onClick={() => setActiveTrack("skills")}
         >
-          <span>⚡</span> Subsidized Digital Skills
+          Subsidized Digital Skills
         </button>
       </div>
 
@@ -353,10 +339,10 @@ export default function OpportunitiesHubPage() {
           {/* Category Filter Pills */}
           <div className={styles.categoryPills}>
             {[
-              { id: "all", label: "🌟 All Roles" },
-              { id: "fasttrack", label: "⭐ Ecobank FastTrack" },
-              { id: "tech", label: "💻 Tech & Product" },
-              { id: "nysc", label: "🇳🇬 NYSC PPAs" },
+              { id: "all", label: "All" },
+              { id: "fasttrack", label: "FastTrack" },
+              { id: "tech", label: "Tech" },
+              { id: "nysc", label: "NYSC" },
             ].map((cat) => (
               <button
                 key={cat.id}
@@ -373,27 +359,23 @@ export default function OpportunitiesHubPage() {
               <article key={job.id} className={styles.oppCard}>
                 <div className={styles.oppCardHeader}>
                   <div className={styles.companyBadge}>
-                    <div className={styles.companyLogoBox} style={{ background: job.logoBg }}>
-                      {job.logoText}
-                    </div>
+                    <CompanyLogo company={job.company} size={36} />
                     <div>
                       <div className={styles.companyName}>{job.company}</div>
                       <div style={{ fontSize: "0.68rem", color: "#64748B" }}>{job.location}</div>
                     </div>
                   </div>
-                  <span className={`${styles.oppTypeBadge} ${job.isNysc ? styles.oppTypeNysc : ""}`}>
-                    {job.typeBadge}
-                  </span>
                 </div>
 
                 <h3 className={styles.oppTitle}>{job.title}</h3>
                 <p className={styles.oppDesc}>{job.description}</p>
 
-                <div className={styles.oppDetailsStrip}>
+                {/* Minimalist Tags without tick bullet marks */}
+                <div className={styles.tagsRow}>
                   {job.perks.map((p, idx) => (
-                    <div key={idx} className={styles.detailChip}>
-                      <span>✓</span> {p}
-                    </div>
+                    <span key={idx} className={styles.tagPill}>
+                      {p}
+                    </span>
                   ))}
                 </div>
 
@@ -410,7 +392,7 @@ export default function OpportunitiesHubPage() {
                       setIsApplyModalOpen(true);
                     }}
                   >
-                    <span>⚡</span> One-Click FastTrack
+                    Apply
                   </button>
                 </div>
               </article>
@@ -422,32 +404,20 @@ export default function OpportunitiesHubPage() {
       {/* ── Track 2: Subsidized Digital Skills ("Learn & Earn") ─────────── */}
       {activeTrack === "skills" && (
         <div className={styles.cardsList}>
-          <div style={{ background: "#F0FDF4", border: "1px solid #86EFAC", borderRadius: "14px", padding: "0.85rem 1rem", fontSize: "0.74rem", color: "#065F46", lineHeight: 1.45, marginBottom: "0.5rem" }}>
-            🎓 <strong>Ecobank "Learn & Earn" Incentive:</strong> Complete any accredited certification below to boost your Campus Score by up to <strong>+50 pts</strong> and immediately unlock higher zero-interest loan eligibility!
-          </div>
-
           {SKILL_COURSES.map((course) => (
             <article key={course.id} className={styles.courseCard}>
-              <div className={styles.courseHeader}>
-                <span className={styles.courseScoreBoostTag}>
-                  ⭐ +{course.scoreBoost} Campus Score
-                </span>
-                <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "#007749" }}>
-                  {course.badge}
-                </span>
-              </div>
-
               <h3 className={styles.oppTitle}>{course.title}</h3>
               <div style={{ fontSize: "0.72rem", color: "#64748B", marginBottom: "0.5rem" }}>
-                Provider: <strong>{course.provider}</strong> · {course.duration}
+                {course.provider} · {course.duration}
               </div>
               <p className={styles.oppDesc}>{course.description}</p>
 
-              <div className={styles.oppDetailsStrip}>
+              {/* Minimalist Tags with Skills Emojis */}
+              <div className={styles.tagsRow}>
                 {course.skills.map((s, idx) => (
-                  <div key={idx} className={styles.detailChip}>
-                    <span>🔹</span> {s}
-                  </div>
+                  <span key={idx} className={styles.skillTagPill}>
+                    {s}
+                  </span>
                 ))}
               </div>
 
@@ -471,7 +441,7 @@ export default function OpportunitiesHubPage() {
                     setIsEnrollModalOpen(true);
                   }}
                 >
-                  <span>⚡</span> Enroll Now
+                  Apply
                 </button>
               </div>
             </article>
@@ -499,7 +469,7 @@ export default function OpportunitiesHubPage() {
 
             <div className={styles.fastTrackCredentialsBox}>
               <div style={{ fontSize: "0.68rem", fontWeight: 800, color: "#007749", textTransform: "uppercase", marginBottom: "0.6rem" }}>
-                ✓ Verified Institutional Credentials
+                Institutional Credentials
               </div>
 
               <div className={styles.credentialRow}>
@@ -533,7 +503,7 @@ export default function OpportunitiesHubPage() {
               disabled={isSubmittingApp}
               onClick={handleConfirmFastTrack}
             >
-              {isSubmittingApp ? "Submitting Verified Credentials..." : "Submit FastTrack Application &rarr;"}
+              {isSubmittingApp ? "Submitting Application..." : "Submit Application"}
             </button>
           </div>
         </div>
@@ -544,7 +514,7 @@ export default function OpportunitiesHubPage() {
         <div className={styles.modalOverlay}>
           <div className={styles.modalCard}>
             <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>Subsidized Course Enrollment</h3>
+              <h3 className={styles.modalTitle}>Course Application</h3>
               <button
                 className={styles.closeModalBtn}
                 onClick={() => setIsEnrollModalOpen(false)}
@@ -564,55 +534,51 @@ export default function OpportunitiesHubPage() {
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", fontWeight: 800 }}>
                 <span>Subsidized Amount:</span>
                 <span style={{ color: "#007749" }}>
-                  {selectedCourse.subsidizedPriceNaira === 0 ? "FREE (100% Ecobank Sponsored)" : `₦${selectedCourse.subsidizedPriceNaira.toLocaleString()}`}
+                  {selectedCourse.subsidizedPriceNaira === 0 ? "FREE (Ecobank Sponsored)" : `₦${selectedCourse.subsidizedPriceNaira.toLocaleString()}`}
                 </span>
               </div>
             </div>
 
             <div style={{ background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: "12px", padding: "0.75rem", marginBottom: "1.25rem", fontSize: "0.74rem", color: "#065F46" }}>
-              🚀 Enrolling awards <strong>+{selectedCourse.scoreBoost} Campus Score</strong> points to your account and unlocks +₦50,000 extra loan capacity!
+              Enrolling awards <strong>+{selectedCourse.scoreBoost} Campus Score</strong> points to your account and unlocks +₦50,000 extra loan capacity.
             </div>
 
             <button
               className={styles.primaryModalBtn}
               onClick={handleConfirmEnrollment}
             >
-              Confirm Enrollment &rarr;
+              Confirm Application
             </button>
           </div>
         </div>
       )}
 
+      {/* ── Fixed Floating In-Viewport Success Notification ─────────────── */}
+      {feedback && (
+        <div className={styles.fixedSuccessToast} role="status">
+          <div className={styles.toastLeft}>
+            <div className={styles.toastIconBox}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </div>
+            <div>
+              <div className={styles.toastTitle}>{feedback.title}</div>
+              <div className={styles.toastSub}>{feedback.message}</div>
+            </div>
+          </div>
+          <button
+            className={styles.toastCloseBtn}
+            onClick={() => setFeedback(null)}
+            aria-label="Close notification"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* ── Bottom Navigation ────────────────────────────────────────────── */}
-      <nav className={styles.bottomNav} aria-label="Main navigation">
-        <a href="/" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🏠</span>
-          <span>Home</span>
-        </a>
-        <a href="/marketplace" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🛍️</span>
-          <span>Market</span>
-        </a>
-        <a href="/opportunities" className={`${styles.bottomNavItem} ${styles.bottomNavItemActive}`}>
-          <span style={{ fontSize: "1.1rem" }}>💼</span>
-          <span>Opportunities</span>
-        </a>
-        <a href="/loans" className={styles.bottomNavItem}>
-          <span style={{ fontSize: "1.1rem" }}>🎓</span>
-          <span>Loans</span>
-        </a>
-        <button
-          type="button"
-          className={styles.bottomNavItem}
-          onClick={() => {
-            localStorage.removeItem("ecocampus_active_user_id_v5");
-            router.push("/login");
-          }}
-        >
-          <span style={{ fontSize: "1.1rem" }}>👤</span>
-          <span>Profile</span>
-        </button>
-      </nav>
+      <BottomNav activeTab="opportunities" />
     </main>
   );
 }
