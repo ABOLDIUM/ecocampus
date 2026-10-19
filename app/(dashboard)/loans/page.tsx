@@ -224,10 +224,10 @@ export default function LoansMasterPage() {
           </div>
           <div className={`${styles.compCol} ${styles.compColNel}`}>
             <span className={styles.compColTitle}>❌ Traditional / NELFUND</span>
-            <span className={`${styles.compItem} ${styles.compItem.dim}`}>⏳ 3–6 Months Wait Time</span>
-            <span className={`${styles.compItem} ${styles.compItem.dim}`}>📄 Tedious Paperwork</span>
-            <span className={`${styles.compItem} ${styles.compItem.dim}`}>🚫 Tuition Only</span>
-            <span className={`${styles.compItem} ${styles.compItem.dim}`}>⚠️ High Default Risk</span>
+            <span className={`${styles.compItem} ${styles.dim}`}>⏳ 3–6 Months Wait Time</span>
+            <span className={`${styles.compItem} ${styles.dim}`}>📄 Tedious Paperwork</span>
+            <span className={`${styles.compItem} ${styles.dim}`}>🚫 Tuition Only</span>
+            <span className={`${styles.compItem} ${styles.dim}`}>⚠️ High Default Risk</span>
           </div>
         </div>
       </section>
