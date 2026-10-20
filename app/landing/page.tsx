@@ -343,7 +343,9 @@ export default function LandingPage() {
               <p className={styles.footerTagline}>The financial operating system for Nigerian students and NYSC corps members. Built on Ecobank. Secured by CBN.</p>
               <div className={styles.footerEcobank}>
                 <span className={styles.footerEcobankLabel}>Powered by</span>
-                <Image src="/brand/ecobank.png" alt="Ecobank" width={80} height={28} />
+                <span style={{ background: "#ffffff", padding: "2px 8px", borderRadius: "999px", display: "inline-flex", alignItems: "center" }}>
+                  <Image src="/brand/q.png" alt="Ecobank" width={76} height={22} style={{ objectFit: "contain", height: "auto" }} />
+                </span>
               </div>
             </div>
             <div className={styles.footerLinks}>

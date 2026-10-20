@@ -20,7 +20,8 @@ export function CompanyLogo({ company, size = 32, className = "" }: CompanyLogoP
           width: size,
           height: size,
           borderRadius: Math.round(size * 0.25),
-          background: "#002844",
+          background: "#FFFFFF",
+          border: "1px solid #E2E8F0",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -31,7 +32,7 @@ export function CompanyLogo({ company, size = 32, className = "" }: CompanyLogoP
         title="Ecobank Nigeria"
       >
         <img
-          src="/brand/q.png"
+          src="/brand/ecobank.png"
           alt="Ecobank"
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />

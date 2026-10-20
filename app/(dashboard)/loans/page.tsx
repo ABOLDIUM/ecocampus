@@ -170,13 +170,15 @@ export default function LoansMasterPage() {
     <main className={styles.container}>
       {/* ── Top Header ─────────────────────────────────────────────────── */}
       <header className={styles.header}>
-        <a href="/" className={styles.backBtn}>
-          <span>&larr;</span> Dashboard
-        </a>
-        <h1 className={styles.headerTitle}>EcoCampus Credit</h1>
+        <div className={styles.headerLeft}>
+          <a href="/" className={styles.backBtn}>
+            <span>&larr;</span> Dashboard
+          </a>
+          <h1 className={styles.headerTitle}>EcoCampus Credit</h1>
+        </div>
         <div className={styles.cbnBadge} title="Regulated by Central Bank of Nigeria">
           <IconCbnEmblem />
-          <span>CBN & NIBSS GSI</span>
+          <span>CBN NIBSS GSI</span>
         </div>
       </header>
 

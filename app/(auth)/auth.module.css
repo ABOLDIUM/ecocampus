@@ -1,4 +1,4 @@
-﻿/* ============================================================================
+/* ============================================================================
    ECOCAMPUS AUTH PAGES — AUTH.MODULE.CSS (REBUILT)
    Split-Panel Layout | Light Right Panel | Learn. Grow. Achieve.
    ============================================================================ */
@@ -130,14 +130,52 @@
 .brandPillarSub { font-size: 0.72rem; color: rgba(255, 255, 255, 0.5); }
 
 .brandFooterBadge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
   position: relative;
   z-index: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
 }
 
-.brandEcoLabel { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; }
+.brandEcoLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.brandEcoLogoWrap {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.mobileBrandFooter {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.mobileBrandLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 
 /* ── Right Form Panel ────────────────────────────────────────────────────── */
 .formPanel {
@@ -514,6 +552,7 @@
   .brandPanel { display: none; }
   .formPanel { padding: 2rem 1.25rem; background: #ffffff; }
   .formCard { max-width: 100%; }
+  .mobileBrandFooter { display: flex; }
 }
 
 /* ── Keyframes ─────────────────────────────────────────────────────────── */

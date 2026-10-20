@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -118,7 +118,15 @@ export default function VerifyOtpPage() {
         </div>
         <div className={styles.brandFooterBadge}>
           <span className={styles.brandEcoLabel}>Powered by</span>
-          <Image src="/brand/ecobank.png" alt="Ecobank" width={80} height={28} style={{ objectFit: "contain", filter: "brightness(0) invert(1) opacity(0.5)" }} />
+          <div className={styles.brandEcoLogoWrap}>
+            <Image
+              src="/brand/q.png"
+              alt="Ecobank"
+              width={76}
+              height={22}
+              style={{ objectFit: "contain", height: "auto" }}
+            />
+          </div>
         </div>
       </div>
 
@@ -186,6 +194,17 @@ export default function VerifyOtpPage() {
           <p className={styles.formFooter}>
             <Link href="/login">Already verified? Sign in instead</Link>
           </p>
+
+          <div className={styles.mobileBrandFooter}>
+            <span className={styles.mobileBrandLabel}>Powered by</span>
+            <Image
+              src="/brand/q.png"
+              alt="Ecobank"
+              width={76}
+              height={22}
+              style={{ objectFit: "contain", height: "auto" }}
+            />
+          </div>
         </div>
       </div>
     </div>

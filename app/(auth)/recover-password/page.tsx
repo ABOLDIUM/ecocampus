@@ -63,13 +63,15 @@ function BrandPanel() {
       </div>
       <div className={styles.brandFooterBadge}>
         <span className={styles.brandEcoLabel}>Powered by</span>
-        <Image
-          src="/brand/ecobank.png"
-          alt="Ecobank"
-          width={80}
-          height={28}
-          style={{ objectFit: "contain", filter: "brightness(0) invert(1) opacity(0.5)" }}
-        />
+        <div className={styles.brandEcoLogoWrap}>
+          <Image
+            src="/brand/ecobank.png"
+            alt="Ecobank"
+            width={78}
+            height={24}
+            style={{ objectFit: "contain", height: "auto" }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -491,6 +493,17 @@ export default function RecoverPasswordPage() {
               </Link>
             </div>
           )}
+
+          <div className={styles.mobileBrandFooter}>
+            <span className={styles.mobileBrandLabel}>Powered by</span>
+            <Image
+              src="/brand/ecobank.png"
+              alt="Ecobank"
+              width={78}
+              height={24}
+              style={{ objectFit: "contain", height: "auto" }}
+            />
+          </div>
         </div>
       </div>
     </div>
